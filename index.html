@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>矢作SC U-9 記録</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@700&family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&family=Oswald:wght@600;700&display=swap');
+
+:root {
+  --red: #c0392b;
+  --red-dark: #922b21;
+  --red-light: #fdecea;
+  --navy: #1a2744;
+  --navy-light: #2c3e6b;
+  --gold: #e8a900;
+  --gold-light: #fef6d6;
+  --green: #27ae60;
+  --green-light: #d5f5e3;
+  --bg: #f4f6f9;
+  --white: #fff;
+  --text: #1a1a2e;
+  --muted: #7986a3;
+  --border: #e2e6ee;
+  --shadow: 0 4px 20px rgba(26,39,68,0.08);
+  --shadow-lg: 0 8px 30px rgba(26,39,68,0.15);
+  --radius: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'M PLUS Rounded 1c', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+
+/* ===== ヘッダー ===== */
+header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 60%, #3a5180 100%);
+  color: white; position: sticky; top: 0; z-index: 200;
+  box-shadow: 0 3px 20px rgba(26,39,68,0.4);
+}
+.header-top { padding: 14px 16px 10px; display: flex; align-items: center; gap: 12px; }
+.club-emblem {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--red), var(--red-dark));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(192,57,43,0.6);
+}
+.header-title { flex: 1; }
+.header-title h1 { font-family: 'Kaisei Decol', serif; font-size: 1.05rem; line-height: 1.2; font-weight: 700; }
+.header-title .sub {
+  font-size: 0.65rem; opacity: 0.7; margin-top: 2px;
+  display: flex; align-items: center; gap: 6px;
+}
+.year-badge { background: var(--gold); color: var(--navy); padding: 2px 8px; border-radius: 10px; font-weight: 800; font-size: 0.65rem; }
+
+/* ===== ボトムタブ ===== */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: white;
+  display: flex; justify-content: space-around;
+  box-shadow: 0 -3px 20px rgba(0,0,0,0.08);
+  z-index: 200; padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+}
+.nav-btn {
+  flex: 1; padding: 8px 4px;
+  background: none; border: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  color: var(--muted); transition: color 0.2s;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+.nav-btn .ico { font-size: 1.4rem; line-height: 1; }
+.nav-btn .lbl { font-size: 0.65rem; font-weight: 800; }
+.nav-btn.active { color: var(--red); }
+.nav-btn.active .ico { transform: scale(1.1); transition: transform 0.2s; }
+
+/* ===== 画面 ===== */
+.screen { display: none; padding: 14px; }
+.screen.active { display: block; animation: slideIn 0.25s ease; }
+@keyframes slideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+
+.sec-title {
+  font-family: 'Oswald', sans-serif; font-size: 1.05rem;
+  color: var(--navy); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px;
+}
+.sec-title::after { content:''; flex:1; height:2px; background: linear-gradient(90deg, var(--red), transparent); border-radius:2px; }
+
+.card { background: white; border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
+
+/* ===== ホーム画面（ダッシュボード） ===== */
+.greeting {
+  background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+  color: white; border-radius: var(--radius);
+  padding: 18px 18px 16px; margin-bottom: 14px;
+  position: relative; overflow: hidden;
+  box-shadow: 0 6px 24px rgba(192,57,43,0.3);
+}
+.greeting::before {
+  content: '⚽'; position: absolute; right: -10px; bottom: -20px;
+  font-size: 6rem; opacity: 0.15;
+}
+.greeting h2 { font-family: 'Kaisei Decol', serif; font-size: 1.15rem; margin-bottom: 4px; position: relative; z-index: 1; }
+.greeting p { font-size: 0.78rem; opacity: 0.9; position: relative; z-index: 1; }
+
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.stat-card {
+  background: white; border-radius: 14px; padding: 14px;
+  box-shadow: var(--shadow); position: relative; overflow: hidden;
+}
+.stat-card::before { content:''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent, var(--red)); }
+.stat-card .ico { font-size: 1.4rem; margin-bottom: 4px; }
+.stat-card .num { font-family: 'Oswald', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--navy); line-height: 1; }
+.stat-card .lbl { font-size: 0.7rem; color: var(--muted); margin-top: 2px; font-weight: 700; }
+.stat-card.acc-red { --accent: var(--red); }
+.stat-card.acc-green { --accent: var(--green); }
+.stat-card.acc-gold { --accent: var(--gold); }
+.stat-card.acc-navy { --accent: var(--navy); }
+
+.quick-action {
+  display: flex; align-items: center; gap: 12px;
+  background: white; border-radius: 14px; padding: 14px;
+  box-shadow: var(--shadow); cursor: pointer;
+  margin-bottom: 8px; border: none; width: 100%;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  text-align: left; transition: transform 0.15s;
+}
+.quick-action:active { transform: scale(0.98); }
+.quick-action .qa-ico {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: var(--red-light); color: var(--red);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; flex-shrink: 0;
+}
+.quick-action.alt .qa-ico { background: var(--gold-light); color: #b7770d; }
+.quick-action.alt2 .qa-ico { background: var(--green-light); color: var(--green); }
+.qa-text { flex: 1; }
+.qa-text .qa-title { font-weight: 800; font-size: 0.88rem; }
+.qa-text .qa-sub { font-size: 0.7rem; color: var(--muted); margin-top: 1px; }
+.qa-arrow { color: #ccc; font-size: 1.1rem; }
+
+.recent-match {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.recent-match:last-child { border-bottom: none; }
+.rm-result {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 0.72rem; flex-shrink: 0;
+}
+.rm-info { flex: 1; min-width: 0; }
+.rm-vs { font-weight: 700; font-size: 0.85rem; }
+.rm-meta { font-size: 0.7rem; color: var(--muted); }
+.rm-score { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--navy); }
+
+/* ===== 入力フォーム ===== */
+label { display: block; font-size: 0.76rem; font-weight: 800; color: var(--muted); margin-top: 12px; margin-bottom: 4px; }
+label:first-of-type { margin-top: 0; }
+input[type=text], input[type=date], input[type=number], select, textarea {
+  width: 100%; padding: 11px 13px;
+  border: 2px solid var(--border); border-radius: 10px;
+  font-size: 0.92rem; font-family: 'M PLUS Rounded 1c', sans-serif;
+  color: var(--text); background: var(--bg); transition: all 0.15s;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--red); background: white; }
+
+.score-input-row {
+  display: grid; grid-template-columns: 1fr 28px 1fr;
+  gap: 8px; align-items: center; margin: 10px 0;
+}
+.score-input-row input {
+  text-align: center; font-size: 1.8rem; font-weight: 900;
+  font-family: 'Oswald', sans-serif; padding: 12px 6px;
+}
+.vs-x { text-align: center; font-weight: 800; color: #ccc; font-size: 1.2rem; }
+.team-lbl { text-align: center; font-size: 0.72rem; color: var(--muted); margin-top: 4px; font-weight: 700; }
+
+.btn {
+  width: 100%; padding: 14px; border: none; border-radius: 12px;
+  font-size: 0.95rem; font-weight: 800;
+  font-family: 'M PLUS Rounded 1c', sans-serif; cursor: pointer;
+  margin-top: 14px; transition: all 0.15s;
+}
+.btn-red { background: linear-gradient(135deg, var(--red), var(--red-dark)); color: white; }
+.btn-red:active { transform: scale(0.97); }
+.btn-outline { background: white; border: 2px solid var(--border); color: var(--navy); }
+
+/* ===== 得点者入力 ===== */
+.scorer-section {
+  background: var(--bg); border-radius: 12px; padding: 12px;
+  margin-top: 12px;
+}
+.scorer-row {
+  display: flex; gap: 6px; align-items: center;
+  background: white; border-radius: 10px; padding: 8px;
+  margin-bottom: 6px;
+}
+.scorer-row select {
+  flex: 1; padding: 6px 8px; font-size: 0.85rem;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: white;
+}
+.scorer-row input { width: 50px; padding: 6px; text-align: center; font-weight: 700; border: 1px solid var(--border); border-radius: 8px; background: white; }
+.scorer-row .del { background: none; border: none; color: #ccc; font-size: 1rem; cursor: pointer; padding: 4px 6px; }
+.add-scorer-btn {
+  width: 100%; padding: 10px;
+  background: white; border: 2px dashed var(--border);
+  border-radius: 10px; cursor: pointer;
+  color: var(--muted); font-weight: 700; font-size: 0.85rem;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  margin-top: 4px;
+}
+.add-scorer-btn:active { background: var(--bg); }
+
+/* ===== 検索バー ===== */
+.search-bar {
+  position: relative; margin-bottom: 12px;
+}
+.search-bar input {
+  padding-left: 38px; background: white;
+  box-shadow: var(--shadow);
+}
+.search-bar::before {
+  content: '🔍'; position: absolute; left: 12px; top: 50%;
+  transform: translateY(-50%); font-size: 0.95rem; opacity: 0.5;
+}
+.filter-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; scrollbar-width: none; }
+.filter-pills::-webkit-scrollbar { display: none; }
+.pill {
+  flex: 0 0 auto; padding: 6px 14px; border-radius: 20px;
+  border: 2px solid var(--border); background: white;
+  font-size: 0.76rem; font-weight: 700; cursor: pointer;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  white-space: nowrap; color: var(--muted);
+}
+.pill.active { background: var(--red); color: white; border-color: var(--red); }
+
+/* ===== 試合カード ===== */
+.match-card {
+  background: white; border-radius: 14px;
+  margin-bottom: 10px; box-shadow: var(--shadow);
+  overflow: hidden; cursor: pointer;
+  animation: fadeUp 0.25s ease both;
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+.match-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px;
+}
+.match-result-badge {
+  width: 38px; height: 38px; border-radius: 10px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 0.85rem; flex-shrink: 0; line-height: 1;
+}
+.bg-win { background: var(--green-light); color: var(--green); }
+.bg-lose { background: var(--red-light); color: var(--red); }
+.bg-draw { background: var(--gold-light); color: #b7770d; }
+.match-body { flex: 1; min-width: 0; }
+.match-tournament { font-weight: 800; font-size: 0.88rem; color: var(--navy); }
+.match-detail { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+.match-score-big {
+  font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: 1.5rem; color: var(--navy); margin-left: 4px;
+}
+.expand-section {
+  display: none; padding: 0 14px 12px;
+  border-top: 1px solid var(--border); padding-top: 10px;
+}
+.match-card.expanded .expand-section { display: block; animation: fadeUp 0.2s ease; }
+.scorer-list { font-size: 0.8rem; line-height: 1.8; color: #444; }
+.scorer-tag {
+  display: inline-block; background: var(--gold-light);
+  color: #7d5a00; border-radius: 12px; padding: 2px 9px;
+  font-size: 0.74rem; font-weight: 700; margin: 2px 3px 2px 0;
+}
+.match-memo { background: var(--bg); border-radius: 8px; padding: 8px 10px; font-size: 0.78rem; color: #555; margin-top: 6px; }
+.match-actions { display: flex; gap: 6px; margin-top: 10px; }
+.action-btn {
+  flex: 1; padding: 7px; border: 1px solid var(--border);
+  background: white; border-radius: 8px; cursor: pointer;
+  font-size: 0.75rem; font-weight: 700; color: var(--muted);
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+.action-btn:active { background: var(--bg); }
+.action-btn.danger { color: var(--red); border-color: var(--red-light); }
+
+/* ===== 選手成績 ===== */
+.player-stat-card {
+  background: white; border-radius: 14px; padding: 14px;
+  margin-bottom: 8px; box-shadow: var(--shadow);
+  display: flex; align-items: center; gap: 12px;
+}
+.player-rank {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--bg); color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 0.95rem;
+  flex-shrink: 0;
+}
+.player-rank.top1 { background: linear-gradient(135deg, #ffd700, #f0a500); color: white; }
+.player-rank.top2 { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); color: white; }
+.player-rank.top3 { background: linear-gradient(135deg, #cd7f32, #a05a25); color: white; }
+.player-info { flex: 1; min-width: 0; }
+.player-name { font-weight: 800; font-size: 0.92rem; }
+.player-games { font-size: 0.7rem; color: var(--muted); }
+.player-goals {
+  font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: 1.4rem; color: var(--red);
+}
+.player-goals small { font-size: 0.65rem; color: var(--muted); margin-left: 2px; font-weight: 700; }
+
+/* ===== 共有モーダル ===== */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  display: none; align-items: flex-end; z-index: 500;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.modal-overlay.show { display: flex; }
+.modal {
+  background: white; border-radius: 20px 20px 0 0;
+  width: 100%; max-height: 85vh; overflow-y: auto;
+  padding: 20px 18px calc(20px + env(safe-area-inset-bottom));
+  animation: slideUp 0.25s ease;
+}
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:none} }
+.modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: -8px auto 14px; }
+.modal-title { font-weight: 800; font-size: 1rem; margin-bottom: 12px; color: var(--navy); }
+.share-text {
+  background: var(--bg); border-radius: 10px;
+  padding: 14px; font-size: 0.85rem; line-height: 1.7;
+  white-space: pre-wrap; word-wrap: break-word;
+  color: var(--text); border: 2px solid var(--border);
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+.copy-btn {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, #06c755, #00a040);
+  color: white; border: none; border-radius: 12px;
+  font-weight: 800; font-size: 0.95rem; cursor: pointer;
+  margin-top: 12px; font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+.copy-btn:active { transform: scale(0.97); }
+
+/* ===== 名簿管理 ===== */
+.player-chip-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+.player-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--red-light); color: var(--red-dark);
+  border-radius: 20px; padding: 6px 12px;
+  font-size: 0.82rem; font-weight: 700;
+}
+.player-chip button { background: none; border: none; cursor: pointer; color: #999; font-size: 0.85rem; }
+.add-row { display: flex; gap: 8px; }
+.add-row input { flex: 1; }
+.add-row button { background: var(--red); color: white; border: none; border-radius: 10px; padding: 0 16px; font-size: 1.2rem; cursor: pointer; font-weight: 800; }
+
+/* ===== 共通 ===== */
+.toast {
+  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+  background: var(--navy); color: white;
+  padding: 11px 22px; border-radius: 30px;
+  font-size: 0.85rem; font-weight: 700;
+  z-index: 999; opacity: 0; transition: opacity 0.3s;
+  pointer-events: none; white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.toast.show { opacity: 1; }
+
+.empty-state { text-align: center; padding: 40px 20px; color: #bbb; }
+.empty-state .emo { font-size: 3rem; margin-bottom: 10px; }
+.empty-state p { font-size: 0.88rem; }
+
+.danger-zone { background: var(--red-light); border-radius: 12px; padding: 14px; margin-top: 6px; }
+.danger-title { color: var(--red-dark); font-weight: 800; font-size: 0.88rem; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="club-emblem">⚽</div>
+    <div class="header-title">
+      <h1>矢作SC U-9 記録</h1>
+      <div class="sub">
+        <span class="year-badge">2026</span>
+        <span>3年生大会記録</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== ホーム ===== -->
+<div id="screen-home" class="screen active">
+  <div class="greeting">
+    <h2 id="greetingTitle">こんにちは！</h2>
+    <p id="greetingSub">今シーズンの活躍を記録していきましょう</p>
+  </div>
+
+  <div class="stats-grid" id="statsGrid"></div>
+
+  <div class="sec-title"><span>⚡</span>クイック操作</div>
+  <button class="quick-action" onclick="goTab('input')">
+    <div class="qa-ico">✏️</div>
+    <div class="qa-text">
+      <div class="qa-title">試合結果を入力</div>
+      <div class="qa-sub">スコア・得点者をすぐ記録</div>
+    </div>
+    <div class="qa-arrow">›</div>
+  </button>
+  <button class="quick-action alt" onclick="goTab('records')">
+    <div class="qa-ico">🔍</div>
+    <div class="qa-text">
+      <div class="qa-title">過去の試合を検索</div>
+      <div class="qa-sub">大会名・相手・結果で絞り込み</div>
+    </div>
+    <div class="qa-arrow">›</div>
+  </button>
+
+  <div class="sec-title" style="margin-top:20px"><span>📋</span>最近の試合</div>
+  <div class="card" id="recentMatches"></div>
+</div>
+
+<!-- ===== 入力 ===== -->
+<div id="screen-input" class="screen">
+  <div class="sec-title"><span>✏️</span>試合結果を入力</div>
+  <div class="card">
+    <label>📅 日付</label>
+    <input type="date" id="iDate">
+
+    <label>🏆 大会・試合名</label>
+    <input type="text" id="iTournament" placeholder="例：渋沢カップ、矢作カップ" list="tournamentList">
+    <datalist id="tournamentList"></datalist>
+
+    <label>👥 相手チーム</label>
+    <input type="text" id="iOpponent" placeholder="例：渋沢SC" list="opponentList">
+    <datalist id="opponentList"></datalist>
+
+    <label>⚽ スコア</label>
+    <div class="score-input-row">
+      <div>
+        <input type="number" id="iMyScore" min="0" placeholder="0">
+        <div class="team-lbl">矢作SC</div>
+      </div>
+      <div class="vs-x">−</div>
+      <div>
+        <input type="number" id="iOppScore" min="0" placeholder="0">
+        <div class="team-lbl">相手</div>
+      </div>
+    </div>
+
+    <label>🎯 試合の種類</label>
+    <select id="iMatchType">
+      <option value="public">公式戦・カップ戦</option>
+      <option value="friendly">練習試合</option>
+      <option value="tournament">トーナメント</option>
+      <option value="league">リーグ戦</option>
+    </select>
+
+    <label>🏠 ホーム / アウェイ</label>
+    <select id="iHomeAway">
+      <option value="home">🏠 ホーム</option>
+      <option value="away">✈️ アウェイ</option>
+    </select>
+
+    <label>⚽ 得点者（任意）</label>
+    <div class="scorer-section">
+      <div id="scorerList"></div>
+      <button class="add-scorer-btn" onclick="addScorerRow()">＋ 得点者を追加</button>
+    </div>
+
+    <label>📝 メモ（任意）</label>
+    <textarea id="iMemo" rows="3" placeholder="MVP、コメント、印象的なプレーなど…" style="resize:none"></textarea>
+
+    <button class="btn btn-red" onclick="saveMatch()">💾 保存する</button>
+  </div>
+</div>
+
+<!-- ===== 記録（検索） ===== -->
+<div id="screen-records" class="screen">
+  <div class="sec-title"><span>🔍</span>試合記録</div>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="大会名・相手チームで検索…" oninput="renderRecords()">
+  </div>
+
+  <div class="filter-pills">
+    <button class="pill active" data-f="all" onclick="setFilter(this,'all')">すべて</button>
+    <button class="pill" data-f="win" onclick="setFilter(this,'win')">✅ 勝</button>
+    <button class="pill" data-f="draw" onclick="setFilter(this,'draw')">🤝 分</button>
+    <button class="pill" data-f="lose" onclick="setFilter(this,'lose')">❌ 負</button>
+    <button class="pill" data-f="public" onclick="setFilter(this,'public')">🏆 公式</button>
+    <button class="pill" data-f="friendly" onclick="setFilter(this,'friendly')">⚽ 練習</button>
+  </div>
+
+  <div id="recordsList"></div>
+</div>
+
+<!-- ===== 選手 ===== -->
+<div id="screen-players" class="screen">
+  <div class="sec-title"><span>👥</span>選手一覧</div>
+  <div id="playerList"></div>
+</div>
+
+<!-- ===== 設定 ===== -->
+<div id="screen-settings" class="screen">
+  <div class="sec-title"><span>⚙️</span>選手名簿の管理</div>
+  <div class="card">
+    <p style="font-size:0.8rem;color:var(--muted);margin-bottom:10px">
+      得点者を選択肢から選べるように、選手を登録しておきましょう。
+    </p>
+    <div class="player-chip-list" id="playerChips"></div>
+    <div class="add-row">
+      <input type="text" id="newPlayerInput" placeholder="選手名を入力" onkeydown="if(event.key==='Enter')addPlayer()">
+      <button onclick="addPlayer()">＋</button>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:18px"><span>📤</span>データの管理</div>
+  <div class="card">
+    <button class="btn btn-outline" style="margin-top:0" onclick="exportData()">📥 データをエクスポート（JSON）</button>
+    <button class="btn btn-outline" style="margin-top:8px" onclick="document.getElementById('importFile').click()">📤 データをインポート</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
+
+  <div class="card">
+    <div class="danger-zone">
+      <div class="danger-title">⚠️ データを削除</div>
+      <p style="font-size:0.78rem;color:#999;margin-bottom:10px">入力した試合データを全て削除します。</p>
+      <button class="btn btn-red" style="margin-top:0" onclick="clearAll()">🗑️ 全データを削除</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 順位表・成績表 ===== -->
+<div id="screen-standings" class="screen">
+  <div class="sec-title"><span>🏆</span>大会別 順位表・成績</div>
+
+  <!-- 大会セレクター -->
+  <div class="card" style="padding:12px">
+    <select id="standingsTournamentSelect" onchange="renderStandings()" style="font-weight:800;font-size:0.9rem">
+      <option value="">大会を選んでください</option>
+    </select>
+  </div>
+
+  <!-- 矢作SC成績サマリー -->
+  <div id="standingsSummary"></div>
+
+  <!-- 大会順位表 -->
+  <div id="standingsBlock"></div>
+
+  <!-- 試合成績表 -->
+  <div id="standingsMatchTable"></div>
+
+  <!-- 大会写真 -->
+  <div id="standingsPhotoSection"></div>
+
+  <!-- 大会動画 -->
+  <div id="standingsVideoSection"></div>
+</div>
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="goTab('home')"><span class="ico">🏠</span><span class="lbl">ホーム</span></button>
+  <button class="nav-btn" onclick="goTab('input')"><span class="ico">✏️</span><span class="lbl">入力</span></button>
+  <button class="nav-btn" onclick="goTab('records')"><span class="ico">🔍</span><span class="lbl">検索</span></button>
+  <button class="nav-btn" onclick="goTab('standings')"><span class="ico">🏆</span><span class="lbl">順位表</span></button>
+  <button class="nav-btn" onclick="goTab('players')"><span class="ico">👥</span><span class="lbl">選手</span></button>
+  <button class="nav-btn" onclick="goTab('settings')"><span class="ico">⚙️</span><span class="lbl">設定</span></button>
+</nav>
+
+<!-- ===== 写真モーダル ===== -->
+<div class="modal-overlay" id="photoModal" onclick="if(event.target===this)closePhotoModal()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📸 写真を追加</div>
+    <div id="photoModalTournamentLabel" style="font-size:0.8rem;color:var(--muted);margin-bottom:10px"></div>
+    <div id="photoPreviewWrap" style="display:none;margin-bottom:10px">
+      <div style="border-radius:12px;overflow:hidden;box-shadow:var(--shadow)">
+        <img id="photoPreviewImg" src="" style="width:100%;max-height:220px;object-fit:cover;display:block">
+      </div>
+    </div>
+    <div id="photoUploadArea" style="border:3px dashed var(--border);border-radius:12px;padding:24px;text-align:center;cursor:pointer;background:var(--bg);margin-bottom:10px" onclick="document.getElementById('photoFileIn').click()">
+      <div style="font-size:2.2rem;margin-bottom:6px">📷</div>
+      <p style="font-size:0.82rem;color:var(--muted);font-weight:700">タップして写真を選ぶ</p>
+    </div>
+    <input type="file" id="photoFileIn" accept="image/*" style="display:none">
+    <input type="text" id="photoCaptionIn" placeholder="コメント（例：試合前集合写真）" style="margin-bottom:10px">
+    <button class="btn btn-red" style="margin-top:0" onclick="savePhoto()">💾 保存する</button>
+    <button class="btn btn-outline" onclick="closePhotoModal()">閉じる</button>
+  </div>
+</div>
+
+<!-- ===== 写真ビューモーダル ===== -->
+<div class="modal-overlay" id="photoViewModal" onclick="if(event.target===this)closePhotoView()">
+  <div class="modal" style="padding:0;border-radius:20px 20px 0 0;overflow:hidden">
+    <img id="photoViewImg" src="" style="width:100%;max-height:70vh;object-fit:contain;background:#000;display:block">
+    <div style="padding:14px 18px 24px">
+      <div id="photoViewCaption" style="font-weight:700;font-size:0.9rem;margin-bottom:4px"></div>
+      <div id="photoViewDate" style="font-size:0.72rem;color:var(--muted);margin-bottom:14px"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline" style="margin-top:0" onclick="closePhotoView()">閉じる</button>
+        <button class="btn btn-red" style="margin-top:0;background:var(--red-light);color:var(--red)" onclick="deletePhotoById()">🗑 削除</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== 動画モーダル ===== -->
+<div class="modal-overlay" id="videoModal" onclick="if(event.target===this)closeVideoModal()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🎬 動画を追加</div>
+    <div id="videoModalTournamentLabel" style="font-size:0.8rem;color:var(--muted);margin-bottom:12px"></div>
+    <label style="margin-top:0">YouTube URL</label>
+    <input type="text" id="videoUrlIn" placeholder="https://www.youtube.com/watch?v=..." style="margin-bottom:4px">
+    <p style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">YouTubeの「共有」→「リンクをコピー」したURLを貼り付けてください</p>
+    <div id="videoPreviewWrap" style="display:none;margin-bottom:12px">
+      <div style="border-radius:12px;overflow:hidden;box-shadow:var(--shadow);background:#000;position:relative;padding-top:56.25%">
+        <iframe id="videoPreviewFrame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none" allowfullscreen></iframe>
+      </div>
+    </div>
+    <label>タイトル（任意）</label>
+    <input type="text" id="videoTitleIn" placeholder="例：レオーネ戦 ハイライト" style="margin-bottom:10px">
+    <button class="btn btn-outline" style="margin-top:0;margin-bottom:8px" onclick="previewVideo()">👁 プレビュー確認</button>
+    <button class="btn btn-red" style="margin-top:0" onclick="saveVideo()">💾 保存する</button>
+    <button class="btn btn-outline" onclick="closeVideoModal()">閉じる</button>
+  </div>
+</div>
+
+<!-- ===== 動画ビューモーダル ===== -->
+<div class="modal-overlay" id="videoViewModal" onclick="if(event.target===this)closeVideoView()">
+  <div class="modal" style="padding:16px 16px calc(20px + env(safe-area-inset-bottom))">
+    <div class="modal-handle"></div>
+    <div id="videoViewTitle" style="font-weight:800;font-size:0.95rem;margin-bottom:10px"></div>
+    <div style="border-radius:12px;overflow:hidden;background:#000;position:relative;padding-top:56.25%;margin-bottom:14px">
+      <iframe id="videoViewFrame" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none" allowfullscreen></iframe>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline" style="margin-top:0" onclick="closeVideoView()">閉じる</button>
+      <button class="btn btn-red" style="margin-top:0;background:var(--red-light);color:var(--red)" onclick="deleteVideoById()">🗑 削除</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="shareModal" onclick="if(event.target===this)closeShare()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📤 LINE用テキスト</div>
+    <p style="font-size:0.78rem;color:var(--muted);margin-bottom:10px">下のテキストをコピーしてLINEに貼り付けられます</p>
+    <div class="share-text" id="shareText"></div>
+    <button class="copy-btn" onclick="copyShare()">📋 コピーする</button>
+    <button class="btn btn-outline" onclick="closeShare()">閉じる</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== データ =====
+// ===== 初期データ =====
+const INIT_PLAYERS = [
+  '石井 聡一郎（いしい そういちろう）',
+  '石井 佑空（いしい ゆら）',
+  '遠藤 碧人（えんどう あいと）',
+  '尾崎 蒼（おざき そう）',
+  '香川 紡希（かがわ つむぎ）',
+  '柏木 陸人（かしわぎ りと）',
+  '澤地 玲臣（さわじ れお）',
+  '高野 珀翔（たかの はくと）',
+  '田中 瑛就（たなか えいしゅう）',
+  '玉木 洸人（たまき ひろと）',
+  '西村 春真（にしむら はるま）',
+  '平城 岳（ひらき がく）',
+  '増田 朔大（ますだ さくた）'
+];
+
+const INIT_MATCHES = [
+  {
+    id: 1000001, date: '2026-05-05',
+    tournament: 'U-9 鶴が台鯉のぼりカップ',
+    opponent: '湘南レオーネ',
+    myScore: 7, oppScore: 0,
+    matchType: 'public', homeAway: 'away',
+    scorers: [
+      { player: '高野 珀翔（たかの はくと）', goals: 3 },
+      { player: '増田 朔大（ますだ さくた）', goals: 3 },
+      { player: '澤地 玲臣（さわじ れお）',   goals: 1 }
+    ],
+    memo: '', result: 'win'
+  },
+  {
+    id: 1000002, date: '2026-05-05',
+    tournament: 'U-9 鶴が台鯉のぼりカップ',
+    opponent: 'FC小坂（予選）',
+    myScore: 3, oppScore: 1,
+    matchType: 'public', homeAway: 'away',
+    scorers: [
+      { player: '平城 岳（ひらき がく）',         goals: 1 },
+      { player: '高野 珀翔（たかの はくと）',       goals: 1 },
+      { player: '田中 瑛就（たなか えいしゅう）',   goals: 1 }
+    ],
+    memo: '', result: 'win'
+  },
+  {
+    id: 1000003, date: '2026-05-05',
+    tournament: 'U-9 鶴が台鯉のぼりカップ',
+    opponent: 'FC相模野',
+    myScore: 0, oppScore: 2,
+    matchType: 'public', homeAway: 'away',
+    scorers: [], memo: '', result: 'lose'
+  },
+  {
+    id: 1000004, date: '2026-05-05',
+    tournament: 'U-9 鶴が台鯉のぼりカップ',
+    opponent: 'FC小坂（3位決定戦）',
+    myScore: 1, oppScore: 0,
+    matchType: 'public', homeAway: 'away',
+    scorers: [
+      { player: '田中 瑛就（たなか えいしゅう）', goals: 1 }
+    ],
+    memo: '', result: 'win'
+  },
+  // ===== 第23回 海老名さつき杯 =====
+  {
+    id: 1000005, date: '2026-05-16',
+    tournament: '第23回 海老名さつき杯',
+    opponent: '中新田FC',
+    myScore: 0, oppScore: 1,
+    matchType: 'public', homeAway: 'away',
+    scorers: [],
+    memo: '', result: 'lose'
+  },
+  {
+    id: 1000006, date: '2026-05-16',
+    tournament: '第23回 海老名さつき杯',
+    opponent: 'KS.FC',
+    myScore: 0, oppScore: 6,
+    matchType: 'public', homeAway: 'away',
+    scorers: [],
+    memo: '', result: 'lose'
+  },
+  {
+    id: 1000007, date: '2026-05-16',
+    tournament: '第23回 海老名さつき杯',
+    opponent: 'FC山下',
+    myScore: 3, oppScore: 0,
+    matchType: 'public', homeAway: 'away',
+    scorers: [
+      { player: '高野 珀翔（たかの はくと）', goals: 2 },
+      { player: '柏木 陸人（かしわぎ りと）', goals: 1 }
+    ],
+    memo: '', result: 'win'
+  }
+];
+
+// ===== データ初期化戦略 =====
+// 選手名簿：常に最新に更新
+try { localStorage.setItem('yhg9_players', JSON.stringify(INIT_PLAYERS)); } catch(e) {}
+
+// 試合データ：初回のみセット（手動入力・写真を保持するため上書きしない）
+try {
+  if (!localStorage.getItem('yhg9_matches')) {
+    localStorage.setItem('yhg9_matches', JSON.stringify(INIT_MATCHES));
+  } else {
+    // 既存データにINIT_MATCHESのIDが無ければ追加（新大会データのみ追記）
+    const existing = JSON.parse(localStorage.getItem('yhg9_matches')) || [];
+    const existingIds = existing.map(m => m.id);
+    const toAdd = INIT_MATCHES.filter(m => !existingIds.includes(m.id));
+    if (toAdd.length > 0) {
+      const merged = [...existing, ...toAdd].sort((a,b) => new Date(b.date) - new Date(a.date));
+      localStorage.setItem('yhg9_matches', JSON.stringify(merged));
+    }
+  }
+} catch(e) {}
+
+// 写真・動画：一切触らない（localStorage に既存データを保持）
+
+let matches = (() => { try { return JSON.parse(localStorage.getItem('yhg9_matches')) || INIT_MATCHES; } catch(e) { return INIT_MATCHES; } })();
+let players = (() => { try { return JSON.parse(localStorage.getItem('yhg9_players')) || INIT_PLAYERS; } catch(e) { return INIT_PLAYERS; } })();
+let curFilter = 'all';
+let scorerRows = [];
+
+let photos = (() => { try { return JSON.parse(localStorage.getItem('yhg9_photos')) || []; } catch(e) { return []; } })();
+let videos = (() => { try { return JSON.parse(localStorage.getItem('yhg9_videos')) || []; } catch(e) { return []; } })();
+let pendingPhotoData = null;
+let currentPhotoTournament = '';
+let currentVideoTournament = '';
+let viewingPhotoId = null;
+let viewingVideoId = null;
+
+function persist() {
+  try { localStorage.setItem('yhg9_matches', JSON.stringify(matches)); } catch(e) {}
+  try { localStorage.setItem('yhg9_players', JSON.stringify(players)); } catch(e) {}
+  try { localStorage.setItem('yhg9_photos',  JSON.stringify(photos));  } catch(e) { throw e; } // 写真は呼び元でハンドル
+  try { localStorage.setItem('yhg9_videos',  JSON.stringify(videos));  } catch(e) {}
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ===== タブ =====
+const tabOrder = ['home','input','records','standings','players','settings'];
+function goTab(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(t => t.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  document.querySelectorAll('.nav-btn')[tabOrder.indexOf(name)].classList.add('active');
+  if (name === 'home') renderHome();
+  if (name === 'input') prepareInput();
+  if (name === 'records') renderRecords();
+  if (name === 'standings') initStandings();
+  if (name === 'players') renderPlayerRanking();
+  if (name === 'settings') renderSettings();
+  window.scrollTo(0, 0);
+}
+
+// ===== ホーム =====
+function renderHome() {
+  const total = matches.length;
+  const wins = matches.filter(m => m.result === 'win').length;
+  const draws = matches.filter(m => m.result === 'draw').length;
+  const loses = matches.filter(m => m.result === 'lose').length;
+  const gf = matches.reduce((s,m)=>s+m.myScore,0);
+  const ga = matches.reduce((s,m)=>s+m.oppScore,0);
+  const winRate = total > 0 ? Math.round(wins / total * 100) : 0;
+
+  document.getElementById('greetingTitle').textContent = total === 0 ? 'はじめまして！' : `今シーズン ${total}試合 戦いました！`;
+  document.getElementById('greetingSub').textContent = total === 0 ? '最初の試合結果を記録しましょう' : `${wins}勝${draws}分${loses}敗 / 勝率 ${winRate}%`;
+
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-card acc-red">
+      <div class="ico">🏆</div>
+      <div class="num">${wins}<small style="font-size:0.85rem;color:var(--muted)">勝</small></div>
+      <div class="lbl">勝利数</div>
+    </div>
+    <div class="stat-card acc-gold">
+      <div class="ico">⚽</div>
+      <div class="num">${gf}</div>
+      <div class="lbl">総得点</div>
+    </div>
+    <div class="stat-card acc-navy">
+      <div class="ico">📊</div>
+      <div class="num">${total}</div>
+      <div class="lbl">試合数</div>
+    </div>
+    <div class="stat-card acc-green">
+      <div class="ico">📈</div>
+      <div class="num">${winRate}<small style="font-size:0.85rem;color:var(--muted)">%</small></div>
+      <div class="lbl">勝率</div>
+    </div>
+  `;
+
+  // 最近の試合（日付降順で最新3件）
+  const recent = [...matches].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
+  if (recent.length === 0) {
+    document.getElementById('recentMatches').innerHTML = '<div class="empty-state"><div class="emo">📋</div><p>まだ試合がありません</p></div>';
+  } else {
+    const bMap = { win:['bg-win','勝'], lose:['bg-lose','負'], draw:['bg-draw','分'] };
+    document.getElementById('recentMatches').innerHTML = recent.map(m => {
+      const [cls,lbl] = bMap[m.result];
+      const d = m.date ? new Date(m.date+'T00:00:00').toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'}) : '';
+      return `<div class="recent-match" onclick="goTab('records')">
+        <div class="rm-result ${cls}">${lbl}</div>
+        <div class="rm-info">
+          <div class="rm-vs">vs ${m.opponent}</div>
+          <div class="rm-meta">${d} · ${m.tournament || '練習試合'}</div>
+        </div>
+        <div class="rm-score">${m.myScore}-${m.oppScore}</div>
+      </div>`;
+    }).join('');
+  }
+}
+
+// ===== 入力 =====
+function prepareInput() {
+  if (!document.getElementById('iDate').value) {
+    document.getElementById('iDate').value = new Date().toISOString().split('T')[0];
+  }
+  // 過去の大会名・相手をdatalistに
+  const tournaments = [...new Set(matches.map(m=>m.tournament).filter(Boolean))];
+  const opponents = [...new Set(matches.map(m=>m.opponent).filter(Boolean))];
+  document.getElementById('tournamentList').innerHTML = tournaments.map(t=>`<option value="${t}">`).join('');
+  document.getElementById('opponentList').innerHTML = opponents.map(o=>`<option value="${o}">`).join('');
+  if (scorerRows.length === 0) {
+    addScorerRow();
+  }
+}
+
+function addScorerRow() {
+  scorerRows.push({ player: '', goals: 1 });
+  renderScorers();
+}
+
+function removeScorerRow(idx) {
+  scorerRows.splice(idx, 1);
+  renderScorers();
+}
+
+function updateScorer(idx, field, val) {
+  scorerRows[idx][field] = val;
+}
+
+function renderScorers() {
+  const list = document.getElementById('scorerList');
+  if (scorerRows.length === 0) {
+    list.innerHTML = '';
+    return;
+  }
+  const opts = ['<option value="">選手を選択</option>'].concat(
+    players.map(p => `<option value="${p}">${p}</option>`)
+  ).join('');
+  list.innerHTML = scorerRows.map((s, i) => `
+    <div class="scorer-row">
+      <select onchange="updateScorer(${i},'player',this.value)">
+        ${opts.replace(`value="${s.player}"`, `value="${s.player}" selected`)}
+      </select>
+      <input type="number" min="1" max="20" value="${s.goals}" onchange="updateScorer(${i},'goals',parseInt(this.value)||1)">
+      <span style="font-size:0.7rem;color:var(--muted);font-weight:700">点</span>
+      <button class="del" onclick="removeScorerRow(${i})">✕</button>
+    </div>
+  `).join('');
+}
+
+function saveMatch() {
+  const date = document.getElementById('iDate').value;
+  const tournament = document.getElementById('iTournament').value.trim();
+  const opponent = document.getElementById('iOpponent').value.trim();
+  const myScore = document.getElementById('iMyScore').value;
+  const oppScore = document.getElementById('iOppScore').value;
+  const matchType = document.getElementById('iMatchType').value;
+  const homeAway = document.getElementById('iHomeAway').value;
+  const memo = document.getElementById('iMemo').value.trim();
+
+  if (!date) { toast('📅 日付を入力してください'); return; }
+  if (!opponent) { toast('👥 相手チームを入力してください'); return; }
+  if (myScore === '' || oppScore === '') { toast('⚽ スコアを入力してください'); return; }
+
+  const ms = parseInt(myScore), os = parseInt(oppScore);
+  const result = ms > os ? 'win' : ms < os ? 'lose' : 'draw';
+  const validScorers = scorerRows.filter(s => s.player && s.goals > 0);
+
+  matches.unshift({
+    id: Date.now(), date, tournament, opponent,
+    myScore: ms, oppScore: os, matchType, homeAway,
+    scorers: validScorers, memo, result
+  });
+
+  // 得点者を選手名簿に自動追加
+  validScorers.forEach(s => { if (s.player && !players.includes(s.player)) players.push(s.player); });
+
+  persist();
+
+  // フォームリセット
+  document.getElementById('iTournament').value = '';
+  document.getElementById('iOpponent').value = '';
+  document.getElementById('iMyScore').value = '';
+  document.getElementById('iOppScore').value = '';
+  document.getElementById('iMemo').value = '';
+  scorerRows = [];
+  addScorerRow();
+
+  const msg = result==='win' ? '🎉 勝利！保存しました' : result==='draw' ? '🤝 引き分け。保存しました' : '💪 次は勝とう！保存しました';
+  toast(msg);
+  setTimeout(() => goTab('home'), 800);
+}
+
+// ===== 記録（検索） =====
+function setFilter(el, f) {
+  curFilter = f;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderRecords();
+}
+
+function renderRecords() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  let filtered = matches;
+  if (['win','draw','lose'].includes(curFilter)) {
+    filtered = filtered.filter(m => m.result === curFilter);
+  } else if (['public','friendly','tournament','league'].includes(curFilter)) {
+    filtered = filtered.filter(m => m.matchType === curFilter);
+  }
+  if (q) {
+    filtered = filtered.filter(m =>
+      (m.tournament||'').toLowerCase().includes(q) ||
+      (m.opponent||'').toLowerCase().includes(q) ||
+      (m.memo||'').toLowerCase().includes(q) ||
+      (m.scorers||[]).some(s => (s.player||'').toLowerCase().includes(q))
+    );
+  }
+
+  const list = document.getElementById('recordsList');
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="emo">${matches.length===0?'📋':'🔍'}</div><p>${matches.length===0?'入力タブから試合を登録しましょう':'該当する試合がありません'}</p></div>`;
+    return;
+  }
+
+  const bMap = { win:['bg-win','勝'], lose:['bg-lose','負'], draw:['bg-draw','分'] };
+  list.innerHTML = filtered.map((m, i) => {
+    const [cls, lbl] = bMap[m.result];
+    const d = m.date ? new Date(m.date+'T00:00:00').toLocaleDateString('ja-JP',{year:'2-digit',month:'numeric',day:'numeric',weekday:'short'}) : '';
+    const scorers = (m.scorers || []).filter(s => s.player);
+    const haIcon = m.homeAway === 'home' ? '🏠' : '✈️';
+    return `<div class="match-card" id="card-${m.id}" style="animation-delay:${i*0.04}s">
+      <div class="match-head" onclick="toggleCard(${m.id})">
+        <div class="match-result-badge ${cls}">${lbl}</div>
+        <div class="match-body">
+          <div class="match-tournament">${m.tournament || '練習試合'}</div>
+          <div class="match-detail">${d} · vs ${m.opponent} ${haIcon}</div>
+        </div>
+        <div class="match-score-big">${m.myScore}-${m.oppScore}</div>
+      </div>
+      <div class="expand-section">
+        ${scorers.length > 0 ? `
+          <div style="font-size:0.78rem;color:var(--muted);font-weight:700;margin-bottom:4px">⚽ 得点者</div>
+          <div class="scorer-list">
+            ${scorers.map(s => `<span class="scorer-tag">${s.player} ${s.goals > 1 ? '×'+s.goals : ''}</span>`).join('')}
+          </div>
+        ` : '<div style="font-size:0.78rem;color:#bbb">得点者の記録なし</div>'}
+        ${m.memo ? `<div class="match-memo">📝 ${m.memo}</div>` : ''}
+        <div class="match-actions">
+          <button class="action-btn" onclick="event.stopPropagation();shareMatch(${m.id})">📤 LINE用</button>
+          <button class="action-btn danger" onclick="event.stopPropagation();delMatch(${m.id})">🗑 削除</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCard(id) {
+  const card = document.getElementById('card-' + id);
+  card.classList.toggle('expanded');
+}
+
+function delMatch(id) {
+  if (!confirm('この試合を削除しますか？')) return;
+  matches = matches.filter(m => m.id !== id);
+  persist(); renderRecords(); toast('🗑️ 削除しました');
+}
+
+// ===== 順位表・成績表 =====
+function initStandings() {
+  // 大会一覧をセレクターに設定
+  const tournaments = [...new Set(matches.map(m => m.tournament).filter(Boolean))];
+  const sel = document.getElementById('standingsTournamentSelect');
+  sel.innerHTML = '<option value="">大会を選んでください</option>' +
+    tournaments.map(t => `<option value="${t}">${t}</option>`).join('');
+  // 大会が1つしかない場合は自動選択
+  if (tournaments.length === 1) {
+    sel.value = tournaments[0];
+    renderStandings();
+    renderStandingsPhotos(tournaments[0]);
+    renderStandingsVideos(tournaments[0]);
+  } else {
+    document.getElementById('standingsSummary').innerHTML = '';
+    document.getElementById('standingsBlock').innerHTML = '';
+    document.getElementById('standingsMatchTable').innerHTML = '';
+  }
+}
+
+function renderStandings() {
+  const tournament = document.getElementById('standingsTournamentSelect').value;
+  if (!tournament) {
+    document.getElementById('standingsSummary').innerHTML = '';
+    document.getElementById('standingsBlock').innerHTML = '';
+    document.getElementById('standingsMatchTable').innerHTML = '';
+    return;
+  }
+  const ms = matches.filter(m => m.tournament === tournament);
+  if (ms.length === 0) return;
+  renderStandingsPhotos(tournament);
+  renderStandingsVideos(tournament);
+
+  // 矢作SC の集計
+  const wins = ms.filter(m => m.result === 'win').length;
+  const draws = ms.filter(m => m.result === 'draw').length;
+  const loses = ms.filter(m => m.result === 'lose').length;
+  const gf = ms.reduce((s,m) => s + m.myScore, 0);
+  const ga = ms.reduce((s,m) => s + m.oppScore, 0);
+  const pts = wins * 3 + draws;
+  const resultLabel = (r) => r === 'win' ? '🏆 優勝' : r === 'win3' ? '🥉 第3位' : '';
+
+  // 大会最終結果を推定（直近の試合の結果）
+  const lastMatch = ms[ms.length - 1];
+  let finalBadge = '';
+
+  // ===== サマリーカード =====
+  document.getElementById('standingsSummary').innerHTML = `
+    <div style="background:linear-gradient(135deg,var(--red),var(--red-dark));border-radius:16px;padding:18px;margin-bottom:12px;color:white;box-shadow:0 6px 20px rgba(192,57,43,0.3)">
+      <div style="font-size:0.72rem;opacity:0.8;margin-bottom:6px">矢作SC の成績</div>
+      <div style="font-family:'Oswald',sans-serif;font-size:1.5rem;font-weight:700;margin-bottom:10px">${tournament}</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center">
+        <div><div style="font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700">${wins}</div><div style="font-size:0.65rem;opacity:0.8">勝</div></div>
+        <div><div style="font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700">${draws}</div><div style="font-size:0.65rem;opacity:0.8">分</div></div>
+        <div><div style="font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700">${loses}</div><div style="font-size:0.65rem;opacity:0.8">敗</div></div>
+        <div><div style="font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700">${pts}</div><div style="font-size:0.65rem;opacity:0.8">勝点</div></div>
+      </div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.2);font-size:0.8rem">
+        <span>得点 <b style="font-size:1.1rem">${gf}</b> / 失点 <b style="font-size:1.1rem">${ga}</b> / 得失点差 <b style="font-size:1.1rem">${gf-ga>=0?'+':''}${gf-ga}</b></span>
+      </div>
+    </div>
+  `;
+
+  // ===== 試合ごとの成績表 =====
+  const bMap = { win:['bg-win','勝'], lose:['bg-lose','負'], draw:['bg-draw','分'] };
+  document.getElementById('standingsMatchTable').innerHTML = `
+    <div class="sec-title"><span>📋</span>試合成績表</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table style="width:100%;border-collapse:collapse;font-size:0.8rem">
+        <thead>
+          <tr style="background:var(--navy);color:white">
+            <th style="padding:10px 10px;text-align:left;font-size:0.72rem">対戦相手</th>
+            <th style="padding:10px 6px;text-align:center;font-size:0.72rem">スコア</th>
+            <th style="padding:10px 6px;text-align:center;font-size:0.72rem">結果</th>
+            <th style="padding:10px 6px;text-align:center;font-size:0.72rem">得点者</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${ms.map((m, i) => {
+            const [cls, lbl] = bMap[m.result];
+            const scorers = (m.scorers||[]).filter(s=>s.player);
+            const scorerText = scorers.length > 0
+              ? scorers.map(s => s.player.split('（')[0] + (s.goals>1?`×${s.goals}`:'')).join('、')
+              : '−';
+            return `<tr style="${i%2===1?'background:#f9fafc':''}">
+              <td style="padding:10px 10px;font-weight:700">vs ${m.opponent}</td>
+              <td style="padding:10px 6px;text-align:center;font-family:'Oswald',sans-serif;font-weight:700;font-size:1rem">${m.myScore}−${m.oppScore}</td>
+              <td style="padding:10px 6px;text-align:center"><span class="match-result-badge ${cls}" style="width:28px;height:28px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:900">${lbl}</span></td>
+              <td style="padding:10px 6px;text-align:center;font-size:0.72rem;color:var(--muted)">${scorerText}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+        <tfoot>
+          <tr style="background:var(--bg);font-weight:800">
+            <td style="padding:10px 10px">合計</td>
+            <td style="padding:10px 6px;text-align:center;font-family:'Oswald',sans-serif;font-weight:700">${gf}−${ga}</td>
+            <td style="padding:10px 6px;text-align:center;font-size:0.72rem;color:var(--muted)">${wins}勝${draws}分${loses}敗</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div style="text-align:right;margin-top:8px">
+      <button onclick="shareStandings('${tournament}')" style="background:var(--green);color:white;border:none;border-radius:10px;padding:10px 18px;font-size:0.82rem;font-weight:800;cursor:pointer;font-family:'M PLUS Rounded 1c',sans-serif">📤 LINE用テキストを作成</button>
+    </div>
+  `;
+
+  // ===== 大会全体の順位表（固定データ） =====
+  const standingsData = {
+    'U-9 鶴が台鯉のぼりカップ': {
+      blockA: {
+        label: 'Aブロック',
+        teams: [
+          { name: '矢作SC',           g:2, w:2, d:0, l:0, gf:10, ga:1,  pts:6, rank:1, isMe:true },
+          { name: 'FC小坂',           g:2, w:1, d:0, l:1, gf:5,  ga:5,  pts:3, rank:2 },
+          { name: '湘南レオーネ',     g:2, w:0, d:0, l:2, gf:2,  ga:11, pts:0, rank:3 },
+        ]
+      },
+      blockB: {
+        label: 'Bブロック',
+        teams: [
+          { name: '鶴が台スパイダーズSC', g:2, w:1, d:1, l:0, gf:2, ga:0, pts:4, rank:1 },
+          { name: 'FC相模野',             g:2, w:1, d:1, l:0, gf:1, ga:0, pts:4, rank:2 },
+          { name: '上矢部FC',             g:2, w:0, d:0, l:2, gf:0, ga:3, pts:0, rank:3 },
+        ]
+      },
+      final: { winner:'鶴が台スパイダーズSC', second:'FC相模野', third:'矢作SC' }
+    },
+    '第23回 海老名さつき杯': {
+      blockA: {
+        label: 'Cブロック（予選）',
+        teams: [
+          { name: 'KS.FC',      g:3, w:3, d:0, l:0, gf:23, ga:0,  pts:9, rank:1 },
+          { name: '中新田FC',   g:3, w:2, d:0, l:1, gf:9,  ga:4,  pts:6, rank:2 },
+          { name: '矢作SC',     g:3, w:1, d:0, l:2, gf:3,  ga:7,  pts:3, rank:3, isMe:true },
+          { name: 'FC山下',     g:3, w:0, d:0, l:3, gf:0,  ga:22, pts:0, rank:4 },
+        ]
+      },
+      final: { winner:'−', second:'−', third:'敢闘T参加（4年生対応のため2日目不参加）' }
+    }
+  };
+
+  const sd = standingsData[tournament];
+  if (!sd) {
+    document.getElementById('standingsBlock').innerHTML = '';
+    return;
+  }
+
+  const renderBlock = (block) => {
+    const rankIcon = (i) => i===0 ? '<span style="color:#e8a900;font-weight:900">1</span>' : i===1 ? '<span style="color:#95a5a6;font-weight:900">2</span>' : '<span style="color:#ca7a44;font-weight:900">3</span>';
+    return `
+      <div style="font-weight:800;font-size:0.8rem;color:var(--navy);margin-bottom:6px;display:flex;align-items:center;gap:6px">
+        <span style="background:var(--navy);color:white;border-radius:6px;padding:3px 10px;font-size:0.72rem">${block.label}</span>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:12px">
+        <table style="width:100%;border-collapse:collapse;font-size:0.78rem">
+          <thead>
+            <tr style="background:var(--navy);color:white">
+              <th style="padding:8px 10px;text-align:left;font-size:0.7rem">チーム</th>
+              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">試</th>
+              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">勝</th>
+              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">分</th>
+              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">負</th>
+              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">得</th>
+              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">失</th>
+              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">差</th>
+              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">点</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${block.teams.map((t, i) => `
+              <tr style="${t.isMe ? 'background:#fff0ee;font-weight:800' : i%2===1?'background:#f9fafc':''}">
+                <td style="padding:9px 10px">${rankIcon(i)} ${t.isMe?'⭐ ':''}${t.name}</td>
+                <td style="padding:9px 4px;text-align:center">${t.g}</td>
+                <td style="padding:9px 4px;text-align:center">${t.w}</td>
+                <td style="padding:9px 4px;text-align:center">${t.d}</td>
+                <td style="padding:9px 4px;text-align:center">${t.l}</td>
+                <td style="padding:9px 4px;text-align:center">${t.gf}</td>
+                <td style="padding:9px 4px;text-align:center">${t.ga}</td>
+                <td style="padding:9px 4px;text-align:center">${t.gf-t.ga>=0?'+':''}${t.gf-t.ga}</td>
+                <td style="padding:9px 4px;text-align:center;font-family:'Oswald',sans-serif;font-weight:700;color:var(--red)">${t.pts}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  };
+
+  document.getElementById('standingsBlock').innerHTML = `
+    <div class="sec-title"><span>📊</span>予選ブロック順位表</div>
+    ${sd.blockA ? renderBlock(sd.blockA) : ''}
+    ${sd.blockB ? renderBlock(sd.blockB) : ''}
+    ${sd.final ? `
+      <div class="sec-title"><span>🥇</span>最終順位</div>
+      <div class="card" style="padding:14px">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--gold-light);border-radius:10px">
+            <span style="font-size:1.8rem">🥇</span>
+            <div>
+              <div style="font-size:0.68rem;color:#7d5a00;font-weight:700">優勝</div>
+              <div style="font-weight:800">${sd.final.winner}</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:10px;background:#f4f4f4;border-radius:10px">
+            <span style="font-size:1.6rem">🥈</span>
+            <div>
+              <div style="font-size:0.68rem;color:#666;font-weight:700">準優勝</div>
+              <div style="font-weight:800">${sd.final.second}</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:10px;background:#fff3ec;border-radius:10px${sd.final.third==='矢作SC'?';border:2px solid var(--red)':''}">
+            <span style="font-size:1.6rem">🥉</span>
+            <div>
+              <div style="font-size:0.68rem;color:#7d4a00;font-weight:700">第3位</div>
+              <div style="font-weight:800">${sd.final.third}${sd.final.third==='矢作SC'?' ⭐':''}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ` : ''}
+  `;
+}
+
+// ===== 大会別写真 =====
+function renderStandingsPhotos(tournament) {
+  const tourPhotos = photos.filter(p => p.tournament === tournament);
+  const section = document.getElementById('standingsPhotoSection');
+  const grid = tourPhotos.map((p, i) => `
+    <div onclick="openPhotoView(${p.id})" style="border-radius:12px;overflow:hidden;background:white;box-shadow:var(--shadow);cursor:pointer;animation:fadeUp 0.25s ease ${i*0.05}s both">
+      <img src="${p.data}" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block">
+      ${p.caption ? `<div style="padding:6px 8px;font-size:0.72rem;color:var(--muted);font-weight:700">${p.caption}</div>` : ''}
+    </div>
+  `).join('');
+
+  section.innerHTML = `
+    <div class="sec-title" style="margin-top:4px"><span>📸</span>大会フォトアルバム</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+      ${grid || '<div style="grid-column:span 2;text-align:center;padding:30px;color:#bbb;font-size:0.85rem">📷<br>写真がまだありません</div>'}
+    </div>
+    <button onclick="openPhotoModal('${tournament}')" style="width:100%;padding:12px;border:2px dashed var(--border);border-radius:12px;background:white;color:var(--muted);font-weight:800;font-size:0.85rem;cursor:pointer;font-family:'M PLUS Rounded 1c',sans-serif;margin-bottom:16px">
+      📷 写真を追加する
+    </button>
+  `;
+}
+
+function openPhotoModal(tournament) {
+  currentPhotoTournament = tournament;
+  pendingPhotoData = null;
+  document.getElementById('photoPreviewWrap').style.display = 'none';
+  document.getElementById('photoUploadArea').style.display = 'block';
+  document.getElementById('photoCaptionIn').value = '';
+  document.getElementById('photoModalTournamentLabel').textContent = `📁 ${tournament}`;
+  document.getElementById('photoModal').classList.add('show');
+}
+
+function closePhotoModal() {
+  document.getElementById('photoModal').classList.remove('show');
+  pendingPhotoData = null;
+}
+
+document.getElementById('photoFileIn').addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    // Canvasでリサイズ・圧縮（iPhoneの大容量写真対策）
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 800; // 長辺の最大px
+      let w = img.width, h = img.height;
+      if (w > h) { if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; } }
+      else        { if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; } }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      pendingPhotoData = canvas.toDataURL('image/jpeg', 0.75); // 75%品質で圧縮
+      document.getElementById('photoPreviewImg').src = pendingPhotoData;
+      document.getElementById('photoPreviewWrap').style.display = 'block';
+      document.getElementById('photoUploadArea').style.display = 'none';
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+});
+
+function savePhoto() {
+  if (!pendingPhotoData) { toast('📷 写真を選んでください'); return; }
+  const caption = document.getElementById('photoCaptionIn').value.trim();
+  photos.unshift({
+    id: Date.now(),
+    tournament: currentPhotoTournament,
+    data: pendingPhotoData,
+    caption,
+    date: new Date().toLocaleDateString('ja-JP')
+  });
+  try {
+    persist();
+    closePhotoModal();
+    renderStandingsPhotos(currentPhotoTournament);
+    toast('📸 写真を保存しました');
+  } catch (e) {
+    // StorageがいっぱいになったらもっとQ下げて再試行
+    photos.shift();
+    try {
+      const canvas = document.createElement('canvas');
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 480;
+        let w = img.width, h = img.height;
+        if (w > h) { if (w > MAX) { h = Math.round(h*MAX/w); w = MAX; } }
+        else        { if (h > MAX) { w = Math.round(w*MAX/h); h = MAX; } }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const small = canvas.toDataURL('image/jpeg', 0.55);
+        photos.unshift({ id: Date.now(), tournament: currentPhotoTournament, data: small, caption, date: new Date().toLocaleDateString('ja-JP') });
+        persist();
+        closePhotoModal();
+        renderStandingsPhotos(currentPhotoTournament);
+        toast('📸 写真を保存しました（圧縮済み）');
+      };
+      img.src = pendingPhotoData;
+    } catch (e2) {
+      toast('⚠️ 保存できませんでした。写真の枚数を減らしてください');
+    }
+  }
+}
+
+function openPhotoView(id) {
+  const p = photos.find(x => x.id === id);
+  if (!p) return;
+  viewingPhotoId = id;
+  document.getElementById('photoViewImg').src = p.data;
+  document.getElementById('photoViewCaption').textContent = p.caption || '';
+  document.getElementById('photoViewDate').textContent = p.date || '';
+  document.getElementById('photoViewModal').classList.add('show');
+}
+
+function closePhotoView() {
+  document.getElementById('photoViewModal').classList.remove('show');
+  viewingPhotoId = null;
+}
+
+function deletePhotoById() {
+  if (!viewingPhotoId) return;
+  if (!confirm('この写真を削除しますか？')) return;
+  const p = photos.find(x => x.id === viewingPhotoId);
+  const t = p ? p.tournament : '';
+  photos = photos.filter(x => x.id !== viewingPhotoId);
+  persist();
+  closePhotoView();
+  if (t) renderStandingsPhotos(t);
+  toast('🗑 削除しました');
+}
+
+// ===== 大会別動画 =====
+function getYouTubeId(url) {
+  // 各種YouTube URL形式に対応
+  const patterns = [
+    /youtu\.be\/([^?&]+)/,
+    /youtube\.com\/watch\?v=([^&]+)/,
+    /youtube\.com\/embed\/([^?&]+)/,
+    /youtube\.com\/shorts\/([^?&]+)/,
+  ];
+  for (const p of patterns) {
+    const m = url.match(p);
+    if (m) return m[1];
+  }
+  return null;
+}
+
+function renderStandingsVideos(tournament) {
+  const tourVideos = videos.filter(v => v.tournament === tournament);
+  const section = document.getElementById('standingsVideoSection');
+
+  const grid = tourVideos.map((v, i) => {
+    const thumbUrl = `https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg`;
+    return `
+      <div onclick="openVideoView(${v.id})" style="border-radius:12px;overflow:hidden;background:white;box-shadow:var(--shadow);cursor:pointer;animation:fadeUp 0.25s ease ${i*0.05}s both">
+        <div style="position:relative">
+          <img src="${thumbUrl}" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block" onerror="this.style.background='#111';this.style.minHeight='90px'">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+            <div style="width:40px;height:40px;background:rgba(255,0,0,0.85);border-radius:50%;display:flex;align-items:center;justify-content:center">
+              <span style="color:white;font-size:1rem;margin-left:3px">▶</span>
+            </div>
+          </div>
+        </div>
+        ${v.title ? `<div style="padding:7px 10px;font-size:0.75rem;font-weight:700;color:var(--text)">${v.title}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  section.innerHTML = `
+    <div class="sec-title" style="margin-top:4px"><span>🎬</span>大会動画</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+      ${grid || '<div style="grid-column:span 2;text-align:center;padding:30px;color:#bbb;font-size:0.85rem">🎬<br>動画がまだありません</div>'}
+    </div>
+    <button onclick="openVideoModal('${tournament}')" style="width:100%;padding:12px;border:2px dashed var(--border);border-radius:12px;background:white;color:var(--muted);font-weight:800;font-size:0.85rem;cursor:pointer;font-family:'M PLUS Rounded 1c',sans-serif;margin-bottom:16px">
+      🎬 動画を追加する（YouTube）
+    </button>
+  `;
+}
+
+function openVideoModal(tournament) {
+  currentVideoTournament = tournament;
+  document.getElementById('videoUrlIn').value = '';
+  document.getElementById('videoTitleIn').value = '';
+  document.getElementById('videoPreviewWrap').style.display = 'none';
+  document.getElementById('videoPreviewFrame').src = '';
+  document.getElementById('videoModalTournamentLabel').textContent = `📁 ${tournament}`;
+  document.getElementById('videoModal').classList.add('show');
+}
+
+function closeVideoModal() {
+  document.getElementById('videoModal').classList.remove('show');
+  document.getElementById('videoPreviewFrame').src = '';
+}
+
+function previewVideo() {
+  const url = document.getElementById('videoUrlIn').value.trim();
+  const id = getYouTubeId(url);
+  if (!id) { toast('⚠️ YouTubeのURLを正しく入力してください'); return; }
+  document.getElementById('videoPreviewFrame').src = `https://www.youtube.com/embed/${id}`;
+  document.getElementById('videoPreviewWrap').style.display = 'block';
+  toast('✅ プレビューを表示しました');
+}
+
+function saveVideo() {
+  const url = document.getElementById('videoUrlIn').value.trim();
+  const title = document.getElementById('videoTitleIn').value.trim();
+  const id = getYouTubeId(url);
+  if (!id) { toast('⚠️ YouTubeのURLを正しく入力してください'); return; }
+  videos.unshift({
+    id: Date.now(),
+    tournament: currentVideoTournament,
+    videoId: id,
+    url,
+    title: title || 'YouTube動画',
+    date: new Date().toLocaleDateString('ja-JP')
+  });
+  persist();
+  closeVideoModal();
+  renderStandingsVideos(currentVideoTournament);
+  toast('🎬 動画を追加しました');
+}
+
+function openVideoView(id) {
+  const v = videos.find(x => x.id === id);
+  if (!v) return;
+  viewingVideoId = id;
+  document.getElementById('videoViewTitle').textContent = v.title || 'YouTube動画';
+  document.getElementById('videoViewFrame').src = `https://www.youtube.com/embed/${v.videoId}?autoplay=1`;
+  document.getElementById('videoViewModal').classList.add('show');
+}
+
+function closeVideoView() {
+  document.getElementById('videoViewModal').classList.remove('show');
+  document.getElementById('videoViewFrame').src = '';
+  viewingVideoId = null;
+}
+
+function deleteVideoById() {
+  if (!viewingVideoId) return;
+  if (!confirm('この動画を削除しますか？')) return;
+  const v = videos.find(x => x.id === viewingVideoId);
+  const t = v ? v.tournament : '';
+  videos = videos.filter(x => x.id !== viewingVideoId);
+  persist();
+  closeVideoView();
+  if (t) renderStandingsVideos(t);
+  toast('🗑 削除しました');
+}
+
+
+function shareStandings(tournament) {
+  const ms = matches.filter(m => m.tournament === tournament);
+  const wins = ms.filter(m=>m.result==='win').length;
+  const draws = ms.filter(m=>m.result==='draw').length;
+  const loses = ms.filter(m=>m.result==='lose').length;
+  const gf = ms.reduce((s,m)=>s+m.myScore,0);
+  const ga = ms.reduce((s,m)=>s+m.oppScore,0);
+  const bMap = { win:'✅ 勝利', lose:'❌ 負け', draw:'🤝 引き分け' };
+
+  let text = `⚽ 矢作SC U-9 成績報告\n`;
+  text += `🏆 ${tournament}\n\n`;
+  text += `【試合結果】\n`;
+  ms.forEach((m, i) => {
+    text += `${i+1}. vs ${m.opponent}　${m.myScore}−${m.oppScore}　${bMap[m.result]}\n`;
+    const scorers = (m.scorers||[]).filter(s=>s.player);
+    if (scorers.length > 0) {
+      text += `   ⚽ ${scorers.map(s=>s.player.split('（')[0]+(s.goals>1?`×${s.goals}`:'')).join('、')}\n`;
+    }
+  });
+  text += `\n【成績】${wins}勝${draws}分${loses}敗 / 得点${gf} 失点${ga}\n`;
+  text += `\n応援ありがとうございました！`;
+
+  document.getElementById('shareText').textContent = text;
+  document.getElementById('shareModal').classList.add('show');
+}
+
+
+function renderPlayerRanking() {
+  const container = document.getElementById('playerList');
+  if (players.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="emo">👥</div><p>設定タブから選手を登録してください</p></div>';
+    return;
+  }
+  // ふりがな全体（苗字から）でソート
+  const sorted = [...players].sort((a, b) => {
+    const yomiA = (a.match(/（(.+?)）/)?.[1] || a).trim();
+    const yomiB = (b.match(/（(.+?)）/)?.[1] || b).trim();
+    return yomiA.localeCompare(yomiB, 'ja');
+  });
+  container.innerHTML = `
+    <div class="card" style="padding:0;overflow:hidden">
+      ${sorted.map((p, i) => {
+        const name = p.split('（')[0].trim();
+        const yomi = p.match(/（(.+?)）/)?.[1] || '';
+        return `<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);${i===sorted.length-1?'border-bottom:none':''}">
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red-dark));color:white;display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-weight:700;font-size:0.85rem;flex-shrink:0">${i+1}</div>
+          <div>
+            <div style="font-weight:800;font-size:0.9rem">${name}</div>
+            ${yomi ? `<div style="font-size:0.7rem;color:var(--muted)">${yomi}</div>` : ''}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
+
+// ===== 設定 =====
+function renderSettings() {
+  const wrap = document.getElementById('playerChips');
+  if (players.length === 0) {
+    wrap.innerHTML = '<p style="font-size:0.8rem;color:#bbb">選手がまだ登録されていません</p>';
+    return;
+  }
+  wrap.innerHTML = players.map(p =>
+    `<div class="player-chip">${p}<button onclick="removePlayer('${p}')">✕</button></div>`
+  ).join('');
+}
+
+function addPlayer() {
+  const input = document.getElementById('newPlayerInput');
+  const name = input.value.trim();
+  if (!name) return;
+  if (players.includes(name)) { toast('すでに登録済みです'); return; }
+  players.push(name); persist();
+  input.value = '';
+  renderSettings();
+  toast(`✅ ${name} を追加しました`);
+}
+
+function removePlayer(name) {
+  players = players.filter(p => p !== name);
+  persist(); renderSettings();
+}
+
+function clearAll() {
+  if (!confirm('全試合データを削除しますか？\nこの操作は元に戻せません。')) return;
+  matches = []; persist();
+  toast('🗑️ 全データを削除しました');
+  renderHome();
+}
+
+// ===== エクスポート/インポート =====
+function exportData() {
+  const data = { matches, players, exportedAt: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `yahagi-u9-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('📥 エクスポートしました');
+}
+
+function importData(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!confirm(`${(data.matches||[]).length}件の試合データをインポートしますか？\n（既存データに追加されます）`)) return;
+      if (data.matches) matches = [...data.matches, ...matches];
+      if (data.players) players = [...new Set([...players, ...data.players])];
+      persist();
+      toast('✅ インポート完了');
+      renderHome();
+    } catch (err) { toast('❌ ファイルが読めませんでした'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+// ===== 共有（LINE用テキスト） =====
+function shareMatch(id) {
+  const m = matches.find(x => x.id === id);
+  if (!m) return;
+  const d = m.date ? new Date(m.date+'T00:00:00').toLocaleDateString('ja-JP',{month:'numeric',day:'numeric',weekday:'short'}) : '';
+  const resultEmoji = m.result === 'win' ? '🎉 勝利' : m.result === 'lose' ? '💪 負け' : '🤝 引き分け';
+  const haText = m.homeAway === 'home' ? '🏠 ホーム' : '✈️ アウェイ';
+  const scorers = (m.scorers || []).filter(s => s.player);
+
+  let text = `⚽ 矢作SC U-9 試合結果\n\n`;
+  text += `📅 ${d}\n`;
+  if (m.tournament) text += `🏆 ${m.tournament}\n`;
+  text += `${haText}\n\n`;
+  text += `矢作SC ${m.myScore} - ${m.oppScore} ${m.opponent}\n`;
+  text += `${resultEmoji}\n`;
+  if (scorers.length > 0) {
+    text += `\n⚽ 得点者\n`;
+    scorers.forEach(s => {
+      text += `・${s.player}${s.goals > 1 ? ` (${s.goals}点)` : ''}\n`;
+    });
+  }
+  if (m.memo) text += `\n📝 ${m.memo}\n`;
+  text += `\n応援ありがとうございました！`;
+
+  document.getElementById('shareText').textContent = text;
+  document.getElementById('shareModal').classList.add('show');
+}
+
+function closeShare() {
+  document.getElementById('shareModal').classList.remove('show');
+}
+
+function copyShare() {
+  const text = document.getElementById('shareText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    toast('📋 コピーしました！LINEに貼り付けてください');
+    setTimeout(closeShare, 1000);
+  }).catch(() => {
+    // フォールバック
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    toast('📋 コピーしました');
+    setTimeout(closeShare, 1000);
+  });
+}
+
+// ===== 初期化 =====
+renderHome();
+</script>
+</body>
+</html>
