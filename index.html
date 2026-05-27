@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>矢作SC U-9 記録</title>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@700&family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&family=Oswald:wght@600;700&display=swap');
 
@@ -384,6 +385,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--r
       <div class="sub">
         <span class="year-badge">2026</span>
         <span>3年生大会記録</span>
+        <span id="connectionBadge" style="font-size:0.65rem;font-weight:800">🔴 接続中...</span>
       </div>
     </div>
   </div>
@@ -654,7 +656,24 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--r
 
 <div class="toast" id="toast"></div>
 
+<!-- Firebase SDK（必ずscriptより前に読み込む） -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
 <script>
+// ===== Firebase初期化 =====
+const firebaseConfig = {
+  apiKey: "AIzaSyCTY4d6YCSYfNPmxW9dtGkGkQYZ0caADlo",
+  authDomain: "yahagi-u9.firebaseapp.com",
+  databaseURL: "https://yahagi-u9-default-rtdb.asia-southeast1.firebaseio.com",
+  projectId: "yahagi-u9",
+  storageBucket: "yahagi-u9.firebasestorage.app",
+  messagingSenderId: "844580053852",
+  appId: "1:844580053852:web:c060fa006d88a74fa85799"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 // ===== データ =====
 // ===== 初期データ =====
 const INIT_PLAYERS = [
@@ -752,35 +771,14 @@ const INIT_MATCHES = [
   }
 ];
 
-// ===== データ初期化戦略 =====
-// 選手名簿：常に最新に更新
-try { localStorage.setItem('yhg9_players', JSON.stringify(INIT_PLAYERS)); } catch(e) {}
-
-// 試合データ：初回のみセット（手動入力・写真を保持するため上書きしない）
-try {
-  if (!localStorage.getItem('yhg9_matches')) {
-    localStorage.setItem('yhg9_matches', JSON.stringify(INIT_MATCHES));
-  } else {
-    // 既存データにINIT_MATCHESのIDが無ければ追加（新大会データのみ追記）
-    const existing = JSON.parse(localStorage.getItem('yhg9_matches')) || [];
-    const existingIds = existing.map(m => m.id);
-    const toAdd = INIT_MATCHES.filter(m => !existingIds.includes(m.id));
-    if (toAdd.length > 0) {
-      const merged = [...existing, ...toAdd].sort((a,b) => new Date(b.date) - new Date(a.date));
-      localStorage.setItem('yhg9_matches', JSON.stringify(merged));
-    }
-  }
-} catch(e) {}
-
-// 写真・動画：一切触らない（localStorage に既存データを保持）
-
-let matches = (() => { try { return JSON.parse(localStorage.getItem('yhg9_matches')) || INIT_MATCHES; } catch(e) { return INIT_MATCHES; } })();
-let players = (() => { try { return JSON.parse(localStorage.getItem('yhg9_players')) || INIT_PLAYERS; } catch(e) { return INIT_PLAYERS; } })();
+// ===== データ初期化 =====
+// 写真はlocalStorage（サイズが大きいため）
+let photos = (() => { try { return JSON.parse(localStorage.getItem('yhg9_photos')) || []; } catch(e) { return []; } })();
+let videos = [];
+let matches = INIT_MATCHES; // Firebase受信まで初期値
+let players = INIT_PLAYERS; // Firebase受信まで初期値
 let curFilter = 'all';
 let scorerRows = [];
-
-let photos = (() => { try { return JSON.parse(localStorage.getItem('yhg9_photos')) || []; } catch(e) { return []; } })();
-let videos = (() => { try { return JSON.parse(localStorage.getItem('yhg9_videos')) || []; } catch(e) { return []; } })();
 let pendingPhotoData = null;
 let currentPhotoTournament = '';
 let currentVideoTournament = '';
@@ -788,10 +786,62 @@ let viewingPhotoId = null;
 let viewingVideoId = null;
 
 function persist() {
-  try { localStorage.setItem('yhg9_matches', JSON.stringify(matches)); } catch(e) {}
-  try { localStorage.setItem('yhg9_players', JSON.stringify(players)); } catch(e) {}
-  try { localStorage.setItem('yhg9_photos',  JSON.stringify(photos));  } catch(e) { throw e; } // 写真は呼び元でハンドル
-  try { localStorage.setItem('yhg9_videos',  JSON.stringify(videos));  } catch(e) {}
+  // matches・players・videosはFirebaseに保存
+  try { db.ref('matches').set(matches); } catch(e) {}
+  try { db.ref('players').set(players); } catch(e) {}
+  try { db.ref('videos').set(videos); } catch(e) {}
+  // photosはサイズが大きいのでlocalStorageに保存
+  try { localStorage.setItem('yhg9_photos', JSON.stringify(photos)); } catch(e) { throw e; }
+}
+
+// ===== Firebaseからリアルタイムでデータを受信 =====
+function initFirebase() {
+  // 接続状態表示
+  db.ref('.info/connected').on('value', snap => {
+    const connected = snap.val();
+    const badge = document.getElementById('connectionBadge');
+    if (badge) {
+      badge.textContent = connected ? '🟢 同期中' : '🔴 オフライン';
+      badge.style.color = connected ? '#27ae60' : '#e74c3c';
+    }
+  });
+
+  // 試合データをリアルタイム受信
+  db.ref('matches').on('value', snap => {
+    const data = snap.val();
+    if (data) {
+      matches = Array.isArray(data) ? data : Object.values(data);
+      matches.sort((a,b) => new Date(b.date) - new Date(a.date));
+    } else {
+      // Firebaseにデータがなければ初期データをアップロード
+      db.ref('matches').set(INIT_MATCHES);
+      matches = INIT_MATCHES;
+    }
+    // 現在の画面を再描画
+    const activeScreen = document.querySelector('.screen.active');
+    if (activeScreen) {
+      const id = activeScreen.id.replace('screen-', '');
+      if (id === 'home') renderHome();
+      if (id === 'records') renderRecords();
+    }
+  });
+
+  // 選手データをリアルタイム受信
+  db.ref('players').on('value', snap => {
+    const data = snap.val();
+    if (data) {
+      players = Array.isArray(data) ? data : Object.values(data);
+    } else {
+      db.ref('players').set(INIT_PLAYERS);
+      players = INIT_PLAYERS;
+    }
+  });
+
+  // 動画データをリアルタイム受信
+  db.ref('videos').on('value', snap => {
+    const data = snap.val();
+    videos = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
+  });
 }
 
 function toast(msg) {
@@ -1687,6 +1737,7 @@ function copyShare() {
 }
 
 // ===== 初期化 =====
+initFirebase();
 renderHome();
 </script>
 </body>
