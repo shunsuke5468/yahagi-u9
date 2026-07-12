@@ -13,373 +13,461 @@
 <meta name="apple-mobile-web-app-title" content="矢作U-9">
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@700&family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&family=Oswald:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&family=Baloo+2:wght@600;700;800&display=swap');
 
 :root {
-  --red: #c0392b;
-  --red-dark: #922b21;
-  --red-light: #fdecea;
-  --navy: #1a2744;
-  --navy-light: #2c3e6b;
-  --gold: #e8a900;
-  --gold-light: #fef6d6;
-  --green: #27ae60;
-  --green-light: #d5f5e3;
-  --bg: #f4f6f9;
-  --white: #fff;
-  --text: #1a1a2e;
-  --muted: #7986a3;
-  --border: #e2e6ee;
-  --shadow: 0 4px 20px rgba(26,39,68,0.08);
-  --shadow-lg: 0 8px 30px rgba(26,39,68,0.15);
-  --radius: 16px;
+  --ink: #23263A;
+  --paper: #FFFDF6;
+  --bg: #EDEAE0;
+  --red: #E8392B;
+  --red-dark: #B92216;
+  --red-light: #FDE6E3;
+  --gold: #F5B301;
+  --gold-light: #FFF4D4;
+  --lime: #8FCB3A;
+  --lime-light: #E7F5D4;
+  --sky: #3EA9DE;
+  --sky-light: #DCEEF9;
+  --grape: #7B5EA7;
+  --muted: #8B8778;
+  --border: #DCD8CB;
+  --radius: 4px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: 'M PLUS Rounded 1c', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
-
-/* ===== ヘッダー ===== */
-header {
-  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 60%, #3a5180 100%);
-  color: white; position: sticky; top: 0; z-index: 200;
-  box-shadow: 0 3px 20px rgba(26,39,68,0.4);
+body {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  background: var(--bg);
+  background-image:
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.012) 0 2px, transparent 2px 6px);
+  color: var(--ink); min-height: 100vh; padding-bottom: 86px;
 }
-.header-top { padding: 14px 16px 10px; display: flex; align-items: center; gap: 12px; }
+
+/* ===== ヘッダー：スタジアム入場ゲート ===== */
+header {
+  background: var(--ink);
+  color: var(--paper); position: sticky; top: 0; z-index: 200;
+}
+header::after {
+  content: ''; display: block; height: 8px;
+  background:
+    radial-gradient(circle at 6px -2px, var(--bg) 5px, transparent 5.5px) 0 0/12px 8px repeat-x;
+}
+.header-top { padding: 14px 16px 13px; display: flex; align-items: center; gap: 12px; }
 .club-emblem {
-  width: 42px; height: 42px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--red), var(--red-dark));
+  width: 46px; height: 46px; border-radius: 50%;
+  background: var(--red); border: 3px solid var(--paper);
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.4rem; flex-shrink: 0;
-  box-shadow: 0 2px 10px rgba(192,57,43,0.6);
+  font-size: 1.35rem; flex-shrink: 0;
 }
 .header-title { flex: 1; }
-.header-title h1 { font-family: 'Kaisei Decol', serif; font-size: 1.05rem; line-height: 1.2; font-weight: 700; }
-.header-title .sub {
-  font-size: 0.65rem; opacity: 0.7; margin-top: 2px;
-  display: flex; align-items: center; gap: 6px;
+.header-title h1 {
+  font-family: 'Bungee', sans-serif; font-size: 0.98rem; font-weight: 400;
+  line-height: 1.3; letter-spacing: 0.04em;
 }
-.year-badge { background: var(--gold); color: var(--navy); padding: 2px 8px; border-radius: 10px; font-weight: 800; font-size: 0.65rem; }
+.header-title .sub { font-size: 0.66rem; opacity: 0.75; margin-top: 4px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; letter-spacing: 0.06em; }
+.year-badge { background: var(--gold); color: var(--ink); padding: 2px 8px; border-radius: 2px; font-weight: 900; font-size: 0.64rem; letter-spacing: 0.08em; }
 
-/* ===== ボトムタブ ===== */
+/* ===== ボトムナビ ===== */
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0;
-  background: white;
+  background: var(--paper);
   display: flex; justify-content: space-around;
-  box-shadow: 0 -3px 20px rgba(0,0,0,0.08);
-  z-index: 200; padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
-  border-top: 1px solid var(--border);
+  z-index: 200; padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+  border-top: 2px solid var(--ink);
 }
 .nav-btn {
-  flex: 1; padding: 8px 4px;
+  flex: 1; padding: 5px 2px;
   background: none; border: none; cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  color: var(--muted); transition: color 0.2s;
-  font-family: 'M PLUS Rounded 1c', sans-serif;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  color: var(--muted); font-family: 'M PLUS Rounded 1c', sans-serif;
+  transition: color 0.15s;
 }
-.nav-btn .ico { font-size: 1.4rem; line-height: 1; }
-.nav-btn .lbl { font-size: 0.65rem; font-weight: 800; }
-.nav-btn.active { color: var(--red); }
-.nav-btn.active .ico { transform: scale(1.1); transition: transform 0.2s; }
+.nav-btn .ico { font-size: 1.2rem; line-height: 1; filter: grayscale(1) opacity(0.5); transition: filter 0.15s; }
+.nav-btn .lbl { font-size: 0.64rem; font-weight: 800; letter-spacing: 0.04em; }
+.nav-btn.active { color: var(--ink); }
+.nav-btn.active .ico { filter: none; }
+.nav-btn.active::after { content:''; position:absolute; bottom:-8px; width: 24px; height: 3px; background: var(--red); }
+.nav-btn { position: relative; }
 
 /* ===== 画面 ===== */
-.screen { display: none; padding: 14px; }
-.screen.active { display: block; animation: slideIn 0.25s ease; }
+.screen { display: none; padding: 18px 14px 92px; }
+.screen.active { display: block; animation: slideIn 0.22s ease; }
 @keyframes slideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
 
 .sec-title {
-  font-family: 'Oswald', sans-serif; font-size: 1.05rem;
-  color: var(--navy); margin-bottom: 12px;
-  display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px;
+  font-family: 'Bungee', sans-serif; font-size: 0.82rem; font-weight: 400;
+  color: var(--ink); margin-bottom: 13px; letter-spacing: 0.08em;
+  display: flex; align-items: center; gap: 9px;
 }
-.sec-title::after { content:''; flex:1; height:2px; background: linear-gradient(90deg, var(--red), transparent); border-radius:2px; }
+.sec-title::after {
+  content:''; flex:1; height: 0;
+  border-top: 2px dashed var(--border);
+}
 
-.card { background: white; border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
+.card {
+  background: var(--paper); border-radius: var(--radius); padding: 16px; margin-bottom: 14px;
+  border: 1.5px solid var(--ink);
+}
 
-/* ===== ホーム画面（ダッシュボード） ===== */
+/* ===== 半券（チケット）共通 ===== */
+.ticket {
+  position: relative;
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+/* 左右の丸い切り欠き */
+.ticket::before, .ticket::after {
+  content: ''; position: absolute;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--bg);
+  border: 1.5px solid var(--ink);
+  top: 50%; transform: translateY(-50%);
+  z-index: 2;
+}
+.ticket::before { left: -9px; border-right-color: transparent; }
+.ticket::after  { right: -9px; border-left-color: transparent; }
+
+/* ===== ホーム：シーズンパス ===== */
 .greeting {
-  background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
-  color: white; border-radius: var(--radius);
-  padding: 18px 18px 16px; margin-bottom: 14px;
+  background: var(--ink);
+  color: var(--paper); border-radius: var(--radius);
+  padding: 18px 20px 17px; margin-bottom: 16px;
   position: relative; overflow: hidden;
-  box-shadow: 0 6px 24px rgba(192,57,43,0.3);
 }
 .greeting::before {
-  content: ''; position: absolute; right: -10px; bottom: -20px;
-  font-size: 6rem; opacity: 0.15;
+  content: ''; position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 8px, transparent 8px 16px);
+  pointer-events: none;
 }
-.greeting h2 { font-family: 'Kaisei Decol', serif; font-size: 1.15rem; margin-bottom: 4px; position: relative; z-index: 1; }
-.greeting p { font-size: 0.78rem; opacity: 0.9; position: relative; z-index: 1; }
+.greeting::after {
+  content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 10px;
+  background: repeating-linear-gradient(180deg, var(--red) 0 12px, var(--gold) 12px 24px, var(--lime) 24px 36px);
+}
+.greeting h2 {
+  font-family: 'Bungee', sans-serif; font-size: 1rem; font-weight: 400;
+  margin-bottom: 8px; letter-spacing: 0.03em; position: relative; z-index: 1;
+}
+.greeting p, .greeting div { position: relative; z-index: 1; }
 
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+/* ===== 統計 ===== */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-bottom: 16px; }
 .stat-card {
-  background: white; border-radius: 14px; padding: 14px;
-  box-shadow: var(--shadow); position: relative; overflow: hidden;
+  background: var(--paper); border-radius: var(--radius); padding: 13px 14px;
+  border: 1.5px solid var(--ink);
+  position: relative; overflow: hidden;
 }
-.stat-card::before { content:''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent, var(--red)); }
-.stat-card .ico { font-size: 1.4rem; margin-bottom: 4px; }
-.stat-card .num { font-family: 'Oswald', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--navy); line-height: 1; }
-.stat-card .lbl { font-size: 0.7rem; color: var(--muted); margin-top: 2px; font-weight: 700; }
+.stat-card::before {
+  content:''; position: absolute; top: 0; left: 0; width: 5px; height: 100%;
+  background: var(--accent, var(--red));
+}
+.stat-card .ico { font-size: 1.15rem; margin-bottom: 5px; }
+.stat-card .num { font-family: 'Baloo 2', sans-serif; font-size: 1.85rem; font-weight: 800; color: var(--ink); line-height: 1; }
+.stat-card .lbl { font-size: 0.68rem; color: var(--muted); margin-top: 4px; font-weight: 800; letter-spacing: 0.06em; }
 .stat-card.acc-red { --accent: var(--red); }
-.stat-card.acc-green { --accent: var(--green); }
+.stat-card.acc-green { --accent: var(--lime); }
 .stat-card.acc-gold { --accent: var(--gold); }
-.stat-card.acc-navy { --accent: var(--navy); }
+.stat-card.acc-navy { --accent: var(--sky); }
 
+/* ===== クイック操作 ===== */
 .quick-action {
-  display: flex; align-items: center; gap: 12px;
-  background: white; border-radius: 14px; padding: 14px;
-  box-shadow: var(--shadow); cursor: pointer;
-  margin-bottom: 8px; border: none; width: 100%;
+  display: flex; align-items: center; gap: 13px;
+  background: var(--paper); border-radius: var(--radius); padding: 14px;
+  border: 1.5px solid var(--ink);
+  cursor: pointer; margin-bottom: 10px; width: 100%;
   font-family: 'M PLUS Rounded 1c', sans-serif;
-  text-align: left; transition: transform 0.15s;
+  text-align: left; transition: background 0.15s;
 }
-.quick-action:active { transform: scale(0.98); }
+.quick-action:active { background: var(--gold-light); }
 .quick-action .qa-ico {
-  width: 42px; height: 42px; border-radius: 12px;
-  background: var(--red-light); color: var(--red);
+  width: 42px; height: 42px; border-radius: 3px;
+  background: var(--red-light);
+  border: 1.5px solid var(--ink);
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.3rem; flex-shrink: 0;
+  font-size: 1.15rem; flex-shrink: 0;
 }
-.quick-action.alt .qa-ico { background: var(--gold-light); color: #b7770d; }
-.quick-action.alt2 .qa-ico { background: var(--green-light); color: var(--green); }
+.quick-action.alt .qa-ico { background: var(--gold-light); }
+.quick-action.alt2 .qa-ico { background: var(--lime-light); }
 .qa-text { flex: 1; }
-.qa-text .qa-title { font-weight: 800; font-size: 0.88rem; }
-.qa-text .qa-sub { font-size: 0.7rem; color: var(--muted); margin-top: 1px; }
-.qa-arrow { color: #ccc; font-size: 1.1rem; }
+.qa-text .qa-title { font-weight: 900; font-size: 0.89rem; }
+.qa-text .qa-sub { font-size: 0.69rem; color: var(--muted); margin-top: 2px; font-weight: 700; }
+.qa-arrow { color: var(--ink); font-size: 1.1rem; font-weight: 900; }
 
-.recent-match {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 0; border-bottom: 1px solid var(--border);
-}
+/* ===== 最近の試合 ===== */
+.recent-match { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-bottom: 1px dashed var(--border); }
 .recent-match:last-child { border-bottom: none; }
 .rm-result {
-  width: 32px; height: 32px; border-radius: 8px;
+  width: 32px; height: 32px; border-radius: 2px;
   display: flex; align-items: center; justify-content: center;
   font-weight: 900; font-size: 0.72rem; flex-shrink: 0;
+  border: 1.5px solid var(--ink);
 }
 .rm-info { flex: 1; min-width: 0; }
-.rm-vs { font-weight: 700; font-size: 0.85rem; }
-.rm-meta { font-size: 0.7rem; color: var(--muted); }
-.rm-score { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--navy); }
+.rm-vs { font-weight: 800; font-size: 0.86rem; }
+.rm-meta { font-size: 0.69rem; color: var(--muted); font-weight: 700; }
+.rm-score { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--ink); }
 
-/* ===== 入力フォーム ===== */
-label { display: block; font-size: 0.76rem; font-weight: 800; color: var(--muted); margin-top: 12px; margin-bottom: 4px; }
+/* ===== フォーム ===== */
+label { display: block; font-size: 0.72rem; font-weight: 900; color: var(--ink); margin-top: 14px; margin-bottom: 5px; letter-spacing: 0.06em; }
 label:first-of-type { margin-top: 0; }
-input[type=text], input[type=date], input[type=number], select, textarea {
-  width: 100%; padding: 11px 13px;
-  border: 2px solid var(--border); border-radius: 10px;
+input[type=text], input[type=date], input[type=number], input[type=password], select, textarea {
+  width: 100%; padding: 11px 12px;
+  border: 1.5px solid var(--ink); border-radius: 3px;
   font-size: 0.92rem; font-family: 'M PLUS Rounded 1c', sans-serif;
-  color: var(--text); background: var(--bg); transition: all 0.15s;
+  color: var(--ink); background: #FBF9F1;
+  transition: background 0.15s, box-shadow 0.15s;
 }
-input:focus, select:focus, textarea:focus { outline: none; border-color: var(--red); background: white; }
+input:focus, select:focus, textarea:focus {
+  outline: none; background: white;
+  box-shadow: inset 0 -3px 0 var(--gold);
+}
 
-.score-input-row {
-  display: grid; grid-template-columns: 1fr 28px 1fr;
-  gap: 8px; align-items: center; margin: 10px 0;
-}
-.score-input-row input {
-  text-align: center; font-size: 1.8rem; font-weight: 900;
-  font-family: 'Oswald', sans-serif; padding: 12px 6px;
-}
-.vs-x { text-align: center; font-weight: 800; color: #ccc; font-size: 1.2rem; }
-.team-lbl { text-align: center; font-size: 0.72rem; color: var(--muted); margin-top: 4px; font-weight: 700; }
+.score-input-row { display: grid; grid-template-columns: 1fr 26px 1fr; gap: 8px; align-items: center; margin: 10px 0; }
+.score-input-row input { text-align: center; font-size: 1.85rem; font-weight: 800; font-family: 'Baloo 2', sans-serif; padding: 12px 6px; }
+.vs-x { text-align: center; font-weight: 900; color: var(--muted); font-size: 1.1rem; }
+.team-lbl { text-align: center; font-size: 0.7rem; color: var(--muted); margin-top: 5px; font-weight: 800; letter-spacing: 0.05em; }
 
 .btn {
-  width: 100%; padding: 14px; border: none; border-radius: 12px;
-  font-size: 0.95rem; font-weight: 800;
+  width: 100%; padding: 14px; border-radius: 3px;
+  font-size: 0.92rem; font-weight: 900;
   font-family: 'M PLUS Rounded 1c', sans-serif; cursor: pointer;
-  margin-top: 14px; transition: all 0.15s;
+  margin-top: 15px; letter-spacing: 0.06em;
+  border: 1.5px solid var(--ink);
+  transition: transform 0.1s;
 }
-.btn-red { background: linear-gradient(135deg, var(--red), var(--red-dark)); color: white; }
-.btn-red:active { transform: scale(0.97); }
-.btn-outline { background: white; border: 2px solid var(--border); color: var(--navy); }
+.btn:active { transform: translateY(2px); }
+.btn-red { background: var(--red); color: white; }
+.btn-outline { background: var(--paper); color: var(--ink); }
 
 /* ===== 得点者入力 ===== */
-.scorer-section {
-  background: var(--bg); border-radius: 12px; padding: 12px;
-  margin-top: 12px;
-}
-.scorer-row {
-  display: flex; gap: 6px; align-items: center;
-  background: white; border-radius: 10px; padding: 8px;
-  margin-bottom: 6px;
-}
-.scorer-row select {
-  flex: 1; padding: 6px 8px; font-size: 0.85rem;
-  border: 1px solid var(--border); border-radius: 8px;
-  background: white;
-}
-.scorer-row input { width: 50px; padding: 6px; text-align: center; font-weight: 700; border: 1px solid var(--border); border-radius: 8px; background: white; }
-.scorer-row .del { background: none; border: none; color: #ccc; font-size: 1rem; cursor: pointer; padding: 4px 6px; }
+.scorer-section { background: var(--lime-light); border: 1.5px dashed var(--lime); border-radius: 3px; padding: 12px; margin-top: 12px; }
+.scorer-row { display: flex; gap: 7px; align-items: center; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 3px; padding: 8px; margin-bottom: 7px; }
+.scorer-row select { flex: 1; padding: 6px 8px; font-size: 0.84rem; border: 1px solid var(--border); border-radius: 2px; background: white; }
+.scorer-row input { width: 50px; padding: 6px; text-align: center; font-weight: 800; border: 1px solid var(--border); border-radius: 2px; background: white; }
+.scorer-row .del { background: none; border: none; color: var(--red); font-size: 1rem; cursor: pointer; padding: 4px 6px; font-weight: 900; }
 .add-scorer-btn {
   width: 100%; padding: 10px;
-  background: white; border: 2px dashed var(--border);
-  border-radius: 10px; cursor: pointer;
-  color: var(--muted); font-weight: 700; font-size: 0.85rem;
-  font-family: 'M PLUS Rounded 1c', sans-serif;
-  margin-top: 4px;
+  background: var(--paper); border: 1.5px dashed var(--lime);
+  border-radius: 3px; cursor: pointer;
+  color: #5d8f1e; font-weight: 900; font-size: 0.82rem;
+  font-family: 'M PLUS Rounded 1c', sans-serif; margin-top: 4px;
 }
-.add-scorer-btn:active { background: var(--bg); }
 
-/* ===== 検索バー ===== */
-.search-bar {
-  position: relative; margin-bottom: 12px;
-}
-.search-bar input {
-  padding-left: 38px; background: white;
-  box-shadow: var(--shadow);
-}
-.search-bar::before {
-  content: ''; position: absolute; left: 12px; top: 50%;
-  transform: translateY(-50%); font-size: 0.95rem; opacity: 0.5;
-}
-.filter-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; scrollbar-width: none; }
+/* ===== 検索 ===== */
+.search-bar { position: relative; margin-bottom: 13px; }
+.search-bar input { padding-left: 38px; background: var(--paper); }
+.search-bar::before { content: '🔍'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; z-index: 1; }
+.filter-pills { display: flex; gap: 7px; overflow-x: auto; padding: 2px 2px 9px; margin-bottom: 6px; scrollbar-width: none; }
 .filter-pills::-webkit-scrollbar { display: none; }
 .pill {
-  flex: 0 0 auto; padding: 6px 14px; border-radius: 20px;
-  border: 2px solid var(--border); background: white;
-  font-size: 0.76rem; font-weight: 700; cursor: pointer;
+  flex: 0 0 auto; padding: 7px 14px; border-radius: 2px;
+  border: 1.5px solid var(--ink); background: var(--paper);
+  font-size: 0.74rem; font-weight: 900; cursor: pointer;
   font-family: 'M PLUS Rounded 1c', sans-serif;
-  white-space: nowrap; color: var(--muted);
+  white-space: nowrap; color: var(--ink); letter-spacing: 0.04em;
 }
-.pill.active { background: var(--red); color: white; border-color: var(--red); }
+.pill.active { background: var(--ink); color: var(--paper); }
 
-/* ===== 試合カード ===== */
+/* ===== 試合カード＝半券 ===== */
 .match-card {
-  background: white; border-radius: 14px;
-  margin-bottom: 10px; box-shadow: var(--shadow);
-  overflow: hidden; cursor: pointer;
-  animation: fadeUp 0.25s ease both;
+  position: relative;
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  cursor: pointer;
+  animation: fadeUp 0.22s ease both;
 }
 @keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
 .match-head {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 14px;
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px 14px 14px;
+  position: relative;
 }
+/* 左端のカラーバー（大会の色） */
+.match-head::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+  background: var(--stub, var(--red));
+}
+.match-card.expanded .match-head::before { bottom: 0; }
+
 .match-result-badge {
-  width: 38px; height: 38px; border-radius: 10px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 0.85rem; flex-shrink: 0; line-height: 1;
+  width: 38px; height: 38px; border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 0.82rem; flex-shrink: 0;
+  border: 1.5px solid var(--ink); margin-left: 4px;
 }
-.bg-win { background: var(--green-light); color: var(--green); }
-.bg-lose { background: var(--red-light); color: var(--red); }
-.bg-draw { background: var(--gold-light); color: #b7770d; }
+.bg-win { background: var(--lime); color: var(--ink); }
+.bg-lose { background: var(--red-light); color: var(--red-dark); }
+.bg-draw { background: var(--gold-light); color: #8a6400; }
 .match-body { flex: 1; min-width: 0; }
-.match-tournament { font-weight: 800; font-size: 0.88rem; color: var(--navy); }
-.match-detail { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+.match-tournament { font-weight: 900; font-size: 0.86rem; color: var(--ink); letter-spacing: 0.01em; }
+.match-detail { font-size: 0.69rem; color: var(--muted); margin-top: 3px; font-weight: 700; }
 .match-score-big {
-  font-family: 'Oswald', sans-serif; font-weight: 700;
-  font-size: 1.5rem; color: var(--navy); margin-left: 4px;
+  font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.5rem;
+  color: var(--ink); margin-left: 4px; letter-spacing: -0.01em;
 }
+/* ミシン目 */
 .expand-section {
-  display: none; padding: 0 14px 12px;
-  border-top: 1px solid var(--border); padding-top: 10px;
+  display: none; padding: 13px 16px 14px;
+  position: relative;
+  border-top: 1.5px dashed var(--border);
 }
+.expand-section::before, .expand-section::after {
+  content: ''; position: absolute; top: -8px;
+  width: 15px; height: 15px; border-radius: 50%;
+  background: var(--bg);
+  border: 1.5px solid var(--ink);
+}
+.expand-section::before { left: -9px; border-right-color: transparent; border-top-color: transparent; }
+.expand-section::after  { right: -9px; border-left-color: transparent; border-top-color: transparent; }
 .match-card.expanded .expand-section { display: block; animation: fadeUp 0.2s ease; }
-.scorer-list { font-size: 0.8rem; line-height: 1.8; color: #444; }
+
+.scorer-list { font-size: 0.8rem; line-height: 1.9; }
 .scorer-tag {
   display: inline-block; background: var(--gold-light);
-  color: #7d5a00; border-radius: 12px; padding: 2px 9px;
-  font-size: 0.74rem; font-weight: 700; margin: 2px 3px 2px 0;
+  border: 1.5px solid var(--gold);
+  color: #7a5a00; border-radius: 2px; padding: 2px 9px;
+  font-size: 0.73rem; font-weight: 800; margin: 2px 4px 2px 0;
 }
-.match-memo { background: var(--bg); border-radius: 8px; padding: 8px 10px; font-size: 0.78rem; color: #555; margin-top: 6px; }
-.match-actions { display: flex; gap: 6px; margin-top: 10px; }
+.match-memo { background: #F7F5EC; border-left: 3px solid var(--border); border-radius: 0 2px 2px 0; padding: 8px 10px; font-size: 0.77rem; color: #58564c; margin-top: 9px; font-weight: 700; }
+.match-actions { display: flex; gap: 8px; margin-top: 12px; }
 .action-btn {
-  flex: 1; padding: 7px; border: 1px solid var(--border);
-  background: white; border-radius: 8px; cursor: pointer;
-  font-size: 0.75rem; font-weight: 700; color: var(--muted);
-  font-family: 'M PLUS Rounded 1c', sans-serif;
+  flex: 1; padding: 8px; border: 1.5px solid var(--ink);
+  background: var(--paper); border-radius: 2px; cursor: pointer;
+  font-size: 0.74rem; font-weight: 900; color: var(--ink);
+  font-family: 'M PLUS Rounded 1c', sans-serif; letter-spacing: 0.04em;
 }
 .action-btn:active { background: var(--bg); }
-.action-btn.danger { color: var(--red); border-color: var(--red-light); }
+.action-btn.danger { color: var(--red-dark); border-color: var(--red); background: var(--red-light); }
 
-/* ===== 選手成績 ===== */
+/* ===== 選手一覧 ===== */
+.player-row {
+  display: flex; align-items: center; gap: 13px;
+  background: var(--paper); border: 1.5px solid var(--ink);
+  border-radius: var(--radius); padding: 12px 14px; margin-bottom: 9px;
+  position: relative;
+}
+.player-row.is-cap   { border-color: var(--gold); border-width: 2px; background: #FFFCF2; }
+.player-row.is-vice  { border-color: var(--sky); }
+.player-no {
+  width: 34px; height: 34px; border-radius: 2px;
+  background: var(--ink); color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.player-row.is-cap .player-no  { background: var(--gold); color: var(--ink); }
+.player-row.is-vice .player-no { background: var(--sky); color: white; }
+.player-meta { flex: 1; min-width: 0; }
+.player-nm { font-weight: 900; font-size: 0.92rem; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.player-yomi { font-size: 0.69rem; color: var(--muted); font-weight: 700; margin-top: 2px; }
+.role-badge {
+  font-size: 0.62rem; font-weight: 900; letter-spacing: 0.06em;
+  padding: 2px 7px; border-radius: 2px; border: 1.5px solid var(--ink);
+}
+.role-badge.cap  { background: var(--gold); color: var(--ink); }
+.role-badge.vice { background: var(--sky); color: white; border-color: var(--ink); }
+
+/* ===== 選手成績（既存） ===== */
 .player-stat-card {
-  background: white; border-radius: 14px; padding: 14px;
-  margin-bottom: 8px; box-shadow: var(--shadow);
+  background: var(--paper); border-radius: var(--radius); padding: 13px;
+  margin-bottom: 9px; border: 1.5px solid var(--ink);
   display: flex; align-items: center; gap: 12px;
 }
 .player-rank {
-  width: 32px; height: 32px; border-radius: 50%;
+  width: 32px; height: 32px; border-radius: 2px;
   background: var(--bg); color: var(--muted);
+  border: 1.5px solid var(--ink);
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 0.95rem;
+  font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 0.9rem;
   flex-shrink: 0;
 }
-.player-rank.top1 { background: linear-gradient(135deg, #ffd700, #f0a500); color: white; }
-.player-rank.top2 { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); color: white; }
-.player-rank.top3 { background: linear-gradient(135deg, #cd7f32, #a05a25); color: white; }
+.player-rank.top1 { background: var(--gold); color: var(--ink); }
+.player-rank.top2 { background: #d7dbe0; color: var(--ink); }
+.player-rank.top3 { background: #e0a877; color: var(--ink); }
 .player-info { flex: 1; min-width: 0; }
-.player-name { font-weight: 800; font-size: 0.92rem; }
-.player-games { font-size: 0.7rem; color: var(--muted); }
-.player-goals {
-  font-family: 'Oswald', sans-serif; font-weight: 700;
-  font-size: 1.4rem; color: var(--red);
-}
-.player-goals small { font-size: 0.65rem; color: var(--muted); margin-left: 2px; font-weight: 700; }
+.player-name { font-weight: 900; font-size: 0.9rem; }
+.player-games { font-size: 0.69rem; color: var(--muted); font-weight: 700; }
+.player-goals { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.35rem; color: var(--red); }
+.player-goals small { font-size: 0.64rem; color: var(--muted); margin-left: 2px; font-weight: 800; }
 
-/* ===== 共有モーダル ===== */
+/* ===== モーダル ===== */
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  position: fixed; inset: 0; background: rgba(35,38,58,0.6);
   display: none; align-items: flex-end; z-index: 500;
   animation: fadeIn 0.2s ease;
 }
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 .modal-overlay.show { display: flex; }
 .modal {
-  background: white; border-radius: 20px 20px 0 0;
+  background: var(--paper); border-radius: 6px 6px 0 0;
+  border-top: 2px solid var(--ink);
   width: 100%; max-height: 85vh; overflow-y: auto;
   padding: 20px 18px calc(20px + env(safe-area-inset-bottom));
   animation: slideUp 0.25s ease;
 }
 @keyframes slideUp { from{transform:translateY(100%)} to{transform:none} }
-.modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: -8px auto 14px; }
-.modal-title { font-weight: 800; font-size: 1rem; margin-bottom: 12px; color: var(--navy); }
+.modal-handle { width: 42px; height: 4px; background: var(--border); border-radius: 2px; margin: -8px auto 15px; }
+.modal-title { font-family: 'Bungee', sans-serif; font-weight: 400; font-size: 0.88rem; margin-bottom: 13px; color: var(--ink); letter-spacing: 0.06em; }
 .share-text {
-  background: var(--bg); border-radius: 10px;
-  padding: 14px; font-size: 0.85rem; line-height: 1.7;
+  background: #FBF9F1; border-radius: 2px;
+  padding: 14px; font-size: 0.85rem; line-height: 1.75;
   white-space: pre-wrap; word-wrap: break-word;
-  color: var(--text); border: 2px solid var(--border);
+  color: var(--ink); border: 1.5px dashed var(--ink);
   font-family: 'M PLUS Rounded 1c', sans-serif;
 }
 .copy-btn {
   width: 100%; padding: 14px;
-  background: linear-gradient(135deg, #06c755, #00a040);
-  color: white; border: none; border-radius: 12px;
-  font-weight: 800; font-size: 0.95rem; cursor: pointer;
+  background: #06c755; color: white;
+  border: 1.5px solid var(--ink); border-radius: 3px;
+  font-weight: 900; font-size: 0.92rem; cursor: pointer;
   margin-top: 12px; font-family: 'M PLUS Rounded 1c', sans-serif;
+  letter-spacing: 0.06em; transition: transform 0.1s;
 }
-.copy-btn:active { transform: scale(0.97); }
+.copy-btn:active { transform: translateY(2px); }
 
-/* ===== 名簿管理 ===== */
-.player-chip-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+/* ===== 名簿・設定 ===== */
+.player-chip-list { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0; }
 .player-chip {
   display: inline-flex; align-items: center; gap: 6px;
   background: var(--red-light); color: var(--red-dark);
-  border-radius: 20px; padding: 6px 12px;
-  font-size: 0.82rem; font-weight: 700;
+  border: 1.5px solid var(--red);
+  border-radius: 2px; padding: 6px 11px;
+  font-size: 0.79rem; font-weight: 800;
 }
-.player-chip button { background: none; border: none; cursor: pointer; color: #999; font-size: 0.85rem; }
+.player-chip button { background: none; border: none; cursor: pointer; color: var(--red-dark); font-size: 0.9rem; font-weight: 900; }
 .add-row { display: flex; gap: 8px; }
 .add-row input { flex: 1; }
-.add-row button { background: var(--red); color: white; border: none; border-radius: 10px; padding: 0 16px; font-size: 1.2rem; cursor: pointer; font-weight: 800; }
+.add-row button {
+  background: var(--red); color: white; border: 1.5px solid var(--ink);
+  border-radius: 3px; padding: 0 16px; font-size: 1.1rem; cursor: pointer; font-weight: 900;
+  transition: transform 0.1s;
+}
+.add-row button:active { transform: translateY(2px); }
+.danger-zone { background: var(--red-light); border: 1.5px dashed var(--red); border-radius: 3px; padding: 14px; margin-top: 6px; }
+.danger-title { color: var(--red-dark); font-weight: 900; font-size: 0.86rem; margin-bottom: 7px; letter-spacing: 0.04em; }
 
 /* ===== 共通 ===== */
 .toast {
-  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
-  background: var(--navy); color: white;
-  padding: 11px 22px; border-radius: 30px;
-  font-size: 0.85rem; font-weight: 700;
+  position: fixed; bottom: 96px; left: 50%; transform: translateX(-50%);
+  background: var(--ink); color: var(--paper);
+  padding: 11px 22px; border-radius: 3px;
+  font-size: 0.84rem; font-weight: 800;
   z-index: 999; opacity: 0; transition: opacity 0.3s;
   pointer-events: none; white-space: nowrap;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  letter-spacing: 0.04em;
 }
 .toast.show { opacity: 1; }
+.empty-state { text-align: center; padding: 42px 20px; color: #b6b2a4; }
+.empty-state .emo { font-size: 2.6rem; margin-bottom: 10px; }
+.empty-state p { font-size: 0.86rem; font-weight: 700; }
 
-.empty-state { text-align: center; padding: 40px 20px; color: #bbb; }
-.empty-state .emo { font-size: 3rem; margin-bottom: 10px; }
-.empty-state p { font-size: 0.88rem; }
-
-.danger-zone { background: var(--red-light); border-radius: 12px; padding: 14px; margin-top: 6px; }
-.danger-title { color: var(--red-dark); font-weight: 800; font-size: 0.88rem; margin-bottom: 6px; }
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
 </style>
 </head>
 <body>
@@ -408,7 +496,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--r
   <div class="stats-grid" id="statsGrid"></div>
 
   <div class="sec-title">クイック操作</div>
-  <button class="quick-action" onclick="goTab('input')">
+  <button class="quick-action editor-only" onclick="goTab('input')">
     <div class="qa-ico"></div>
     <div class="qa-text">
       <div class="qa-title">試合結果を入力</div>
@@ -512,30 +600,62 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--r
 
 <!-- ===== 設定 ===== -->
 <div id="screen-settings" class="screen">
-  <div class="sec-title">選手名簿の管理</div>
+
+  <div class="sec-title">編集モード</div>
   <div class="card">
-    <p style="font-size:0.8rem;color:var(--muted);margin-bottom:10px">
-      得点者を選択肢から選べるように、選手を登録しておきましょう。
-    </p>
-    <div class="player-chip-list" id="playerChips"></div>
-    <div class="add-row">
-      <input type="text" id="newPlayerInput" placeholder="選手名を入力" onkeydown="if(event.key==='Enter')addPlayer()">
-      <button onclick="addPlayer()">＋</button>
+    <div id="editModeStatus" style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <div id="editModeBadge" style="padding:6px 14px;border-radius:20px;font-size:0.82rem;font-weight:800"></div>
+      <div id="editModeText" style="font-size:0.78rem;color:var(--muted)"></div>
+    </div>
+    <div id="editModeLocked">
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:10px">
+        試合結果の入力・編集・削除にはマネージャー用の合言葉が必要です。
+      </p>
+      <div class="add-row">
+        <input type="password" id="editPassInput" placeholder="合言葉を入力" onkeydown="if(event.key==='Enter')unlockEdit()">
+        <button onclick="unlockEdit()" style="padding:0 20px;font-size:0.85rem;white-space:nowrap">解除</button>
+      </div>
+    </div>
+    <div id="editModeUnlocked" style="display:none">
+      <button class="btn btn-outline" style="margin-top:0" onclick="lockEdit()">編集モードを終了する</button>
     </div>
   </div>
 
-  <div class="sec-title" style="margin-top:18px">データの管理</div>
-  <div class="card">
-    <button class="btn btn-outline" style="margin-top:0" onclick="exportData()"> データをエクスポート（JSON）</button>
-    <button class="btn btn-outline" style="margin-top:8px" onclick="document.getElementById('importFile').click()"> データをインポート</button>
-    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+  <div class="editor-only">
+    <div class="sec-title" style="margin-top:18px">選手名簿の管理</div>
+    <div class="card">
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:10px">
+        得点者を選択肢から選べるように、選手を登録しておきましょう。
+      </p>
+      <div class="player-chip-list" id="playerChips"></div>
+      <div class="add-row">
+        <input type="text" id="newPlayerInput" placeholder="選手名を入力" onkeydown="if(event.key==='Enter')addPlayer()">
+        <button onclick="addPlayer()">＋</button>
+      </div>
+    </div>
+
+    <div class="sec-title" style="margin-top:18px">データの管理</div>
+    <div class="card">
+      <button class="btn btn-outline" style="margin-top:0" onclick="exportData()">データをエクスポート（JSON）</button>
+      <button class="btn btn-outline" style="margin-top:8px" onclick="document.getElementById('importFile').click()">データをインポート</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    </div>
+
+    <div class="card">
+      <div class="danger-zone">
+        <div class="danger-title">データを削除</div>
+        <p style="font-size:0.78rem;color:#999;margin-bottom:10px">入力した試合データを全て削除します。</p>
+        <button class="btn btn-red" style="margin-top:0" onclick="clearAll()">全データを削除</button>
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <div class="danger-zone">
-      <div class="danger-title"> データを削除</div>
-      <p style="font-size:0.78rem;color:#999;margin-bottom:10px">入力した試合データを全て削除します。</p>
-      <button class="btn btn-red" style="margin-top:0" onclick="clearAll()"> 全データを削除</button>
+  <div class="viewer-only">
+    <div class="card" style="margin-top:14px">
+      <p style="font-size:0.82rem;color:var(--muted);line-height:1.9">
+        現在は閲覧モードです。試合結果・順位表・写真の閲覧ができます。<br>
+        写真の追加・削除はどなたでも行えますが、写真はご自身の端末にのみ保存され、他の方には共有されません。
+      </p>
     </div>
   </div>
 </div>
@@ -934,8 +1054,67 @@ function toast(msg) {
 }
 
 // ===== タブ =====
+// ===== 編集モード（合言葉方式） =====
+const EDIT_PASSWORD = 'yahagi2026';
+let isEditor = sessionStorage.getItem('yhg9_editor') === '1';
+
+function applyEditMode() {
+  document.querySelectorAll('.editor-only').forEach(el => {
+    el.style.display = isEditor ? '' : 'none';
+  });
+  document.querySelectorAll('.viewer-only').forEach(el => {
+    el.style.display = isEditor ? 'none' : '';
+  });
+  // 入力タブのナビボタン
+  const inputNav = document.querySelectorAll('.nav-btn')[1];
+  if (inputNav) inputNav.style.display = isEditor ? '' : 'none';
+
+  const badge = document.getElementById('editModeBadge');
+  const text  = document.getElementById('editModeText');
+  const locked   = document.getElementById('editModeLocked');
+  const unlocked = document.getElementById('editModeUnlocked');
+  if (badge) {
+    badge.textContent = isEditor ? '編集モード' : '閲覧モード';
+    badge.style.background = isEditor ? 'var(--green-light)' : 'var(--bg)';
+    badge.style.color      = isEditor ? 'var(--green)' : 'var(--muted)';
+  }
+  if (text) {
+    text.textContent = isEditor ? '入力・編集ができます' : '閲覧のみ可能です';
+  }
+  if (locked)   locked.style.display   = isEditor ? 'none' : '';
+  if (unlocked) unlocked.style.display = isEditor ? '' : 'none';
+}
+
+function unlockEdit() {
+  const input = document.getElementById('editPassInput');
+  const val = input.value.trim();
+  if (val !== EDIT_PASSWORD) {
+    toast('合言葉が違います');
+    input.value = '';
+    return;
+  }
+  isEditor = true;
+  sessionStorage.setItem('yhg9_editor', '1');
+  input.value = '';
+  applyEditMode();
+  toast('編集モードになりました');
+}
+
+function lockEdit() {
+  isEditor = false;
+  sessionStorage.removeItem('yhg9_editor');
+  applyEditMode();
+  goTab('home');
+  toast('閲覧モードに戻りました');
+}
+
 const tabOrder = ['home','input','records','standings','players','settings'];
 function goTab(name) {
+  // 閲覧モードでは入力タブに入れない
+  if (name === 'input' && !isEditor) {
+    toast('入力には編集モードの解除が必要です');
+    return;
+  }
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(t => t.classList.remove('active'));
   document.getElementById('screen-' + name).classList.add('active');
@@ -1152,15 +1331,21 @@ function renderRecords() {
   }
 
   const bMap = { win:['bg-win','勝'], lose:['bg-lose','負'], draw:['bg-draw','分'] };
+  // 大会ごとに半券の色を割り当てる
+  const stubColors = ['#E8392B','#3EA9DE','#8FCB3A','#F5B301','#7B5EA7','#E07A5F'];
+  const tourNames = [...new Set(matches.map(m => m.tournament || '練習試合'))];
+  const stubOf = t => stubColors[tourNames.indexOf(t) % stubColors.length];
+
   list.innerHTML = filtered.map((m, i) => {
     const [cls, lbl] = bMap[m.result];
     const d = m.date ? new Date(m.date+'T00:00:00').toLocaleDateString('ja-JP',{year:'2-digit',month:'numeric',day:'numeric',weekday:'short'}) : '';
     const scorers = (m.scorers || []).filter(s => s.player);
-    return `<div class="match-card" id="card-${m.id}" style="animation-delay:${i*0.04}s">
+    const tname = m.tournament || '練習試合';
+    return `<div class="match-card" id="card-${m.id}" style="animation-delay:${i*0.04}s;--stub:${stubOf(tname)}">
       <div class="match-head" onclick="toggleCard(${m.id})">
         <div class="match-result-badge ${cls}">${lbl}</div>
         <div class="match-body">
-          <div class="match-tournament">${m.tournament || '練習試合'}</div>
+          <div class="match-tournament">${tname}</div>
           <div class="match-detail">${d} · vs ${m.opponent}</div>
         </div>
         <div class="match-score-big">${m.myScore}-${m.oppScore}</div>
@@ -1174,8 +1359,8 @@ function renderRecords() {
         ` : '<div style="font-size:0.78rem;color:#bbb">得点者の記録なし</div>'}
         ${m.memo ? `<div class="match-memo"> ${m.memo}</div>` : ''}
         <div class="match-actions">
-          <button class="action-btn" onclick="event.stopPropagation();shareMatch(${m.id})"> LINE用</button>
-          <button class="action-btn danger" onclick="event.stopPropagation();delMatch(${m.id})"> 削除</button>
+          <button class="action-btn" onclick="event.stopPropagation();shareMatch(${m.id})">LINE用</button>
+          ${isEditor ? `<button class="action-btn danger" onclick="event.stopPropagation();delMatch(${m.id})">削除</button>` : ''}
         </div>
       </div>
     </div>`;
@@ -1251,14 +1436,14 @@ function renderStandings() {
   document.getElementById('standingsSummary').innerHTML = `
     <div style="background:linear-gradient(135deg,var(--red),var(--red-dark));border-radius:16px;padding:18px;margin-bottom:12px;color:white;box-shadow:0 6px 20px rgba(192,57,43,0.3)">
       <div style="font-size:0.72rem;opacity:0.8;margin-bottom:4px">矢作SC の成績</div>
-      <div style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:8px">${tournament}</div>
+      <div style="font-family:'Baloo 2',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:8px">${tournament}</div>
       ${info.date   ? `<div style="font-size:0.78rem;opacity:0.9;margin-bottom:2px"> ${info.date}</div>` : ''}
       ${info.venue  ? `<div style="font-size:0.78rem;opacity:0.9;margin-bottom:10px"> ${info.venue}</div>` : ''}
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center">
-        <div><div style="font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700">${wins}</div><div style="font-size:0.65rem;opacity:0.8">勝</div></div>
-        <div><div style="font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700">${draws}</div><div style="font-size:0.65rem;opacity:0.8">分</div></div>
-        <div><div style="font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700">${loses}</div><div style="font-size:0.65rem;opacity:0.8">敗</div></div>
-        <div><div style="font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700">${pts}</div><div style="font-size:0.65rem;opacity:0.8">勝点</div></div>
+        <div><div style="font-family:'Baloo 2',sans-serif;font-size:1.6rem;font-weight:700">${wins}</div><div style="font-size:0.65rem;opacity:0.8">勝</div></div>
+        <div><div style="font-family:'Baloo 2',sans-serif;font-size:1.6rem;font-weight:700">${draws}</div><div style="font-size:0.65rem;opacity:0.8">分</div></div>
+        <div><div style="font-family:'Baloo 2',sans-serif;font-size:1.6rem;font-weight:700">${loses}</div><div style="font-size:0.65rem;opacity:0.8">敗</div></div>
+        <div><div style="font-family:'Baloo 2',sans-serif;font-size:1.6rem;font-weight:700">${pts}</div><div style="font-size:0.65rem;opacity:0.8">勝点</div></div>
       </div>
       <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.2);font-size:0.8rem">
         <span>得点 <b style="font-size:1.1rem">${gf}</b> / 失点 <b style="font-size:1.1rem">${ga}</b> / 得失点差 <b style="font-size:1.1rem">${gf-ga>=0?'+':''}${gf-ga}</b></span>
@@ -1289,7 +1474,7 @@ function renderStandings() {
               : '−';
             return `<tr style="${i%2===1?'background:#f9fafc':''}">
               <td style="padding:10px 10px;font-weight:700">vs ${m.opponent}</td>
-              <td style="padding:10px 6px;text-align:center;font-family:'Oswald',sans-serif;font-weight:700;font-size:1rem">${m.myScore}−${m.oppScore}</td>
+              <td style="padding:10px 6px;text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1rem">${m.myScore}−${m.oppScore}</td>
               <td style="padding:10px 6px;text-align:center"><span class="match-result-badge ${cls}" style="width:28px;height:28px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:900">${lbl}</span></td>
               <td style="padding:10px 6px;text-align:center;font-size:0.72rem;color:var(--muted)">${scorerText}</td>
             </tr>`;
@@ -1298,7 +1483,7 @@ function renderStandings() {
         <tfoot>
           <tr style="background:var(--bg);font-weight:800">
             <td style="padding:10px 10px">合計</td>
-            <td style="padding:10px 6px;text-align:center;font-family:'Oswald',sans-serif;font-weight:700">${gf}−${ga}</td>
+            <td style="padding:10px 6px;text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700">${gf}−${ga}</td>
             <td style="padding:10px 6px;text-align:center;font-size:0.72rem;color:var(--muted)">${wins}勝${draws}分${loses}敗</td>
             <td></td>
           </tr>
@@ -1409,7 +1594,7 @@ function renderStandings() {
                 <td style="padding:9px 4px;text-align:center">${t.gf}</td>
                 <td style="padding:9px 4px;text-align:center">${t.ga}</td>
                 <td style="padding:9px 4px;text-align:center">${t.gf-t.ga>=0?'+':''}${t.gf-t.ga}</td>
-                <td style="padding:9px 4px;text-align:center;font-family:'Oswald',sans-serif;font-weight:700;color:var(--red)">${t.pts}</td>
+                <td style="padding:9px 4px;text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;color:var(--red)">${t.pts}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -1731,44 +1916,58 @@ function shareStandings(tournament) {
 }
 
 
+const CAPTAIN = '田中 瑛就';
+const VICE_CAPTAIN = '香川 紡希';
+
 function renderPlayerRanking() {
   const container = document.getElementById('playerList');
   if (players.length === 0) {
     container.innerHTML = '<div class="empty-state"><div class="emo"></div><p>設定タブから選手を登録してください</p></div>';
     return;
   }
-  // ふりがな全体（苗字から）でソート
+  // キャプテン→副キャプテン→ふりがな順
   const sorted = [...players].sort((a, b) => {
+    const nameA = a.split('（')[0].trim();
+    const nameB = b.split('（')[0].trim();
+    const rank = n => n === CAPTAIN ? 0 : n === VICE_CAPTAIN ? 1 : 2;
+    const rA = rank(nameA), rB = rank(nameB);
+    if (rA !== rB) return rA - rB;
     const yomiA = (a.match(/（(.+?)）/)?.[1] || a).trim();
     const yomiB = (b.match(/（(.+?)）/)?.[1] || b).trim();
     return yomiA.localeCompare(yomiB, 'ja');
   });
-  container.innerHTML = `
-    <div class="card" style="padding:0;overflow:hidden">
-      ${sorted.map((p, i) => {
-        const name = p.split('（')[0].trim();
-        const yomi = p.match(/（(.+?)）/)?.[1] || '';
-        return `<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);${i===sorted.length-1?'border-bottom:none':''}">
-          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red-dark));color:white;display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-weight:700;font-size:0.85rem;flex-shrink:0">${i+1}</div>
-          <div>
-            <div style="font-weight:800;font-size:0.9rem">${name}</div>
-            ${yomi ? `<div style="font-size:0.7rem;color:var(--muted)">${yomi}</div>` : ''}
-          </div>
-        </div>`;
-      }).join('')}
-    </div>
-  `;
+
+  container.innerHTML = sorted.map((p, i) => {
+    const name = p.split('（')[0].trim();
+    const yomi = p.match(/（(.+?)）/)?.[1] || '';
+    const isCap  = name === CAPTAIN;
+    const isVice = name === VICE_CAPTAIN;
+    const badge = isCap
+      ? '<span class="role-badge cap">キャプテン</span>'
+      : isVice
+      ? '<span class="role-badge vice">副キャプテン</span>'
+      : '';
+    return `<div class="player-row${isCap ? ' is-cap' : isVice ? ' is-vice' : ''}">
+      <div class="player-no">${i + 1}</div>
+      <div class="player-meta">
+        <div class="player-nm">${name}${badge}</div>
+        ${yomi ? `<div class="player-yomi">${yomi}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ===== 設定 =====
 function renderSettings() {
+  applyEditMode();
   const wrap = document.getElementById('playerChips');
+  if (!wrap) return;
   if (players.length === 0) {
     wrap.innerHTML = '<p style="font-size:0.8rem;color:#bbb">選手がまだ登録されていません</p>';
     return;
   }
   wrap.innerHTML = players.map(p =>
-    `<div class="player-chip">${p}<button onclick="removePlayer('${p}')"></button></div>`
+    `<div class="player-chip">${p}<button onclick="removePlayer('${p}')">×</button></div>`
   ).join('');
 }
 
@@ -1875,6 +2074,7 @@ function copyShare() {
 
 // ===== 初期化 =====
 initFirebase();
+applyEditMode();
 renderHome();
 </script>
 </body>
