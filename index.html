@@ -32,6 +32,14 @@
   --muted: #8B8778;
   --border: #DCD8CB;
   --radius: 4px;
+  /* 旧デザインとの互換用エイリアス */
+  --navy: #23263A;
+  --navy-light: #3A3E58;
+  --white: #FFFDF6;
+  --text: #23263A;
+  --green: #5D8F1E;
+  --green-light: #E7F5D4;
+  --shadow: none;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body {
@@ -473,6 +481,67 @@ input:focus, select:focus, textarea:focus {
 .empty-state { text-align: center; padding: 42px 20px; color: #b6b2a4; }
 .empty-state .emo { font-size: 2.6rem; margin-bottom: 10px; }
 .empty-state p { font-size: 0.86rem; font-weight: 700; }
+
+
+/* ===== 順位表サマリー（シーズンパス） ===== */
+.summary-ticket {
+  background: var(--ink); color: var(--paper);
+  border-radius: var(--radius); padding: 18px 20px 16px;
+  margin-bottom: 14px; position: relative; overflow: hidden;
+}
+.summary-ticket::after {
+  content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 8px;
+  background: repeating-linear-gradient(180deg, var(--red) 0 10px, var(--gold) 10px 20px, var(--lime) 20px 30px);
+}
+.st-label { font-size: 0.66rem; opacity: 0.6; letter-spacing: 0.1em; font-weight: 800; }
+.st-title { font-family: 'Bungee', sans-serif; font-size: 1rem; font-weight: 400; margin: 5px 0 8px; letter-spacing: 0.02em; }
+.st-meta { font-size: 0.74rem; opacity: 0.75; font-weight: 700; margin-bottom: 2px; }
+.st-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; text-align: center; margin-top: 13px; }
+.st-num { font-family: 'Baloo 2', sans-serif; font-size: 1.6rem; font-weight: 800; line-height: 1; }
+.st-cap { font-size: 0.63rem; opacity: 0.65; font-weight: 800; margin-top: 3px; letter-spacing: 0.08em; }
+.st-foot {
+  margin-top: 13px; padding-top: 11px; font-size: 0.76rem; font-weight: 700;
+  border-top: 1px dashed rgba(255,255,255,0.25);
+}
+.st-foot b { font-family: 'Baloo 2', sans-serif; font-size: 1rem; font-weight: 800; }
+
+/* ===== 順位表テーブル ===== */
+.standings-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.standings-table thead tr { background: var(--ink); }
+.standings-table th {
+  color: var(--paper); font-weight: 900; font-size: 0.68rem;
+  padding: 9px 4px; text-align: center; letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.standings-table th:first-child { text-align: left; padding-left: 11px; }
+.standings-table td {
+  padding: 10px 4px; text-align: center; font-weight: 700;
+  border-bottom: 1px dashed var(--border); white-space: nowrap;
+}
+.standings-table td:first-child { text-align: left; padding-left: 11px; font-weight: 800; }
+.standings-table tr:last-child td { border-bottom: none; }
+.standings-table tr.is-me td { background: var(--red-light); font-weight: 900; }
+.standings-table .rk { font-family: 'Baloo 2', sans-serif; font-weight: 800; margin-right: 5px; }
+.standings-table .rk.r1 { color: var(--gold); }
+.standings-table .rk.r2 { color: #9AA0A6; }
+.standings-table .rk.r3 { color: #C98A4B; }
+.standings-table .pts { font-family: 'Baloo 2', sans-serif; font-weight: 800; color: var(--red); font-size: 0.95rem; }
+.block-label {
+  display: inline-block; background: var(--ink); color: var(--paper);
+  border-radius: 2px; padding: 4px 11px; font-size: 0.7rem; font-weight: 900;
+  letter-spacing: 0.06em; margin-bottom: 8px;
+}
+.podium-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 13px; border-radius: 3px; margin-bottom: 9px;
+  border: 1.5px solid var(--ink);
+}
+.podium-row .rank-label { font-size: 0.66rem; font-weight: 900; letter-spacing: 0.08em; }
+.podium-row .rank-team { font-weight: 900; font-size: 0.92rem; margin-top: 2px; }
+.podium-row.p1 { background: var(--gold-light); border-color: var(--gold); }
+.podium-row.p2 { background: #F0F0EC; }
+.podium-row.p3 { background: #FBEEE2; border-color: #C98A4B; }
+.podium-row.is-me { border-width: 2.5px; border-color: var(--red); }
 
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
@@ -1510,19 +1579,19 @@ function renderStandings() {
   const info = fixedInfo[tournament] || {};
 
   document.getElementById('standingsSummary').innerHTML = `
-    <div style="background:linear-gradient(135deg,var(--red),var(--red-dark));border-radius:16px;padding:18px;margin-bottom:12px;color:white;box-shadow:0 6px 20px rgba(192,57,43,0.3)">
-      <div style="font-size:0.72rem;opacity:0.8;margin-bottom:4px">矢作SC の成績</div>
-      <div style="font-family:'Baloo 2',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:8px">${tournament}</div>
-      ${info.date   ? `<div style="font-size:0.78rem;opacity:0.9;margin-bottom:2px"> ${info.date}</div>` : ''}
-      ${info.venue  ? `<div style="font-size:0.78rem;opacity:0.9;margin-bottom:10px"> ${info.venue}</div>` : ''}
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center">
-        <div><div style="font-family:'Baloo 2',sans-serif;font-size:1.6rem;font-weight:700">${wins}</div><div style="font-size:0.65rem;opacity:0.8">勝</div></div>
-        <div><div style="font-family:'Baloo 2',sans-serif;font-size:1.6rem;font-weight:700">${draws}</div><div style="font-size:0.65rem;opacity:0.8">分</div></div>
-        <div><div style="font-family:'Baloo 2',sans-serif;font-size:1.6rem;font-weight:700">${loses}</div><div style="font-size:0.65rem;opacity:0.8">敗</div></div>
-        <div><div style="font-family:'Baloo 2',sans-serif;font-size:1.6rem;font-weight:700">${pts}</div><div style="font-size:0.65rem;opacity:0.8">勝点</div></div>
+    <div class="summary-ticket">
+      <div class="st-label">矢作SC の成績</div>
+      <div class="st-title">${tournament}</div>
+      ${info.date   ? `<div class="st-meta">${info.date}</div>` : ''}
+      ${info.venue  ? `<div class="st-meta">${info.venue}</div>` : ''}
+      <div class="st-grid">
+        <div><div class="st-num">${wins}</div><div class="st-cap">勝</div></div>
+        <div><div class="st-num">${draws}</div><div class="st-cap">分</div></div>
+        <div><div class="st-num">${loses}</div><div class="st-cap">敗</div></div>
+        <div><div class="st-num">${pts}</div><div class="st-cap">勝点</div></div>
       </div>
-      <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.2);font-size:0.8rem">
-        <span>得点 <b style="font-size:1.1rem">${gf}</b> / 失点 <b style="font-size:1.1rem">${ga}</b> / 得失点差 <b style="font-size:1.1rem">${gf-ga>=0?'+':''}${gf-ga}</b></span>
+      <div class="st-foot">
+        得点 <b>${gf}</b> ／ 失点 <b>${ga}</b> ／ 得失点差 <b>${gf-ga>=0?'+':''}${gf-ga}</b>
       </div>
     </div>
   `;
@@ -1532,13 +1601,10 @@ function renderStandings() {
   document.getElementById('standingsMatchTable').innerHTML = `
     <div class="sec-title">試合成績表</div>
     <div class="card" style="padding:0;overflow:hidden">
-      <table style="width:100%;border-collapse:collapse;font-size:0.8rem">
+      <table class="standings-table">
         <thead>
-          <tr style="background:var(--navy);color:white">
-            <th style="padding:10px 10px;text-align:left;font-size:0.72rem">対戦相手</th>
-            <th style="padding:10px 6px;text-align:center;font-size:0.72rem">スコア</th>
-            <th style="padding:10px 6px;text-align:center;font-size:0.72rem">結果</th>
-            <th style="padding:10px 6px;text-align:center;font-size:0.72rem">得点者</th>
+          <tr>
+            <th>対戦相手</th><th>スコア</th><th>結果</th><th>得点者</th>
           </tr>
         </thead>
         <tbody>
@@ -1550,29 +1616,28 @@ function renderStandings() {
               ? scorers.map(s => s.player.split('（')[0] + (s.goals>1?`×${s.goals}`:'')).join('、')
               : '−';
             const pkLine = (m.pk && m.pk.my != null && m.pk.opp != null)
-              ? `<div style="font-size:0.62rem;color:var(--muted);font-weight:800;margin-top:2px">PK ${m.pk.my}−${m.pk.opp}</div>`
+              ? `<div style="font-size:0.6rem;color:var(--muted);font-weight:800;margin-top:2px">PK ${m.pk.my}−${m.pk.opp}</div>`
               : '';
-            return `<tr style="${i%2===1?'background:#FAF8F0':''}">
-              <td style="padding:10px 10px;font-weight:700">vs ${m.opponent}</td>
-              <td style="padding:10px 6px;text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1rem">${m.myScore}−${m.oppScore}${pkLine}</td>
-              <td style="padding:10px 6px;text-align:center"><span class="match-result-badge ${cls}" style="width:auto;min-width:30px;height:26px;padding:0 6px;border-radius:2px;display:inline-flex;align-items:center;justify-content:center;font-size:${m.pk?'0.62rem':'0.72rem'};font-weight:900">${lbl}</span></td>
-              <td style="padding:10px 6px;text-align:center;font-size:0.72rem;color:var(--muted)">${scorerText}</td>
+            return `<tr>
+              <td>vs ${m.opponent}</td>
+              <td style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:0.95rem">${m.myScore}−${m.oppScore}${pkLine}</td>
+              <td><span class="match-result-badge ${cls}" style="width:auto;min-width:28px;height:24px;padding:0 6px;border-radius:2px;display:inline-flex;align-items:center;justify-content:center;font-size:${m.pk?'0.6rem':'0.7rem'};font-weight:900;margin:0">${lbl}</span></td>
+              <td style="font-size:0.68rem;color:var(--muted);white-space:normal">${scorerText}</td>
             </tr>`;
           }).join('')}
         </tbody>
         <tfoot>
-          <tr style="background:var(--bg);font-weight:800">
-            <td style="padding:10px 10px">合計</td>
-            <td style="padding:10px 6px;text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700">${gf}−${ga}</td>
-            <td style="padding:10px 6px;text-align:center;font-size:0.72rem;color:var(--muted)">${wins}勝${draws}分${loses}敗</td>
-            <td></td>
+          <tr style="background:#F5F2E8">
+            <td style="font-weight:900">合計</td>
+            <td style="font-family:'Baloo 2',sans-serif;font-weight:800">${gf}−${ga}</td>
+            <td colspan="2" style="font-size:0.68rem;color:var(--muted);font-weight:800">${wins}勝${draws}分${loses}敗</td>
           </tr>
         </tfoot>
       </table>
     </div>
 
-    <div style="text-align:right;margin-top:8px">
-      <button onclick="shareStandings('${tournament}')" style="background:var(--green);color:white;border:none;border-radius:10px;padding:10px 18px;font-size:0.82rem;font-weight:800;cursor:pointer;font-family:'M PLUS Rounded 1c',sans-serif"> LINE用テキストを作成</button>
+    <div style="text-align:right;margin-top:10px;margin-bottom:6px">
+      <button onclick="shareStandings('${tournament}')" style="background:#06c755;color:white;border:1.5px solid var(--ink);border-radius:3px;padding:10px 18px;font-size:0.8rem;font-weight:900;cursor:pointer;font-family:'M PLUS Rounded 1c',sans-serif;letter-spacing:0.04em">LINE用テキストを作成</button>
     </div>
   `;
 
@@ -1643,44 +1708,46 @@ function renderStandings() {
   }
 
   const renderBlock = (block) => {
-    const rankIcon = (i) => i===0 ? '<span style="color:#e8a900;font-weight:900">1</span>' : i===1 ? '<span style="color:#95a5a6;font-weight:900">2</span>' : '<span style="color:#ca7a44;font-weight:900">3</span>';
     return `
-      <div style="font-weight:800;font-size:0.8rem;color:var(--navy);margin-bottom:6px;display:flex;align-items:center;gap:6px">
-        <span style="background:var(--navy);color:white;border-radius:6px;padding:3px 10px;font-size:0.72rem">${block.label}</span>
-      </div>
-      <div class="card" style="padding:0;overflow:hidden;margin-bottom:12px">
-        <table style="width:100%;border-collapse:collapse;font-size:0.78rem">
+      <div class="block-label">${block.label}</div>
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:14px">
+        <table class="standings-table">
           <thead>
-            <tr style="background:var(--navy);color:white">
-              <th style="padding:8px 10px;text-align:left;font-size:0.7rem">チーム</th>
-              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">試</th>
-              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">勝</th>
-              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">分</th>
-              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">負</th>
-              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">得</th>
-              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">失</th>
-              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">差</th>
-              <th style="padding:8px 4px;text-align:center;font-size:0.7rem">点</th>
+            <tr>
+              <th>チーム</th><th>試</th><th>勝</th><th>分</th><th>負</th>
+              <th>得</th><th>失</th><th>差</th><th>点</th>
             </tr>
           </thead>
           <tbody>
-            ${block.teams.map((t, i) => `
-              <tr style="${t.isMe ? 'background:#fff0ee;font-weight:800' : i%2===1?'background:#f9fafc':''}">
-                <td style="padding:9px 10px">${rankIcon(i)} ${t.isMe?' ':''}${t.name}</td>
-                <td style="padding:9px 4px;text-align:center">${t.g}</td>
-                <td style="padding:9px 4px;text-align:center">${t.w}</td>
-                <td style="padding:9px 4px;text-align:center">${t.d}</td>
-                <td style="padding:9px 4px;text-align:center">${t.l}</td>
-                <td style="padding:9px 4px;text-align:center">${t.gf}</td>
-                <td style="padding:9px 4px;text-align:center">${t.ga}</td>
-                <td style="padding:9px 4px;text-align:center">${t.gf-t.ga>=0?'+':''}${t.gf-t.ga}</td>
-                <td style="padding:9px 4px;text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;color:var(--red)">${t.pts}</td>
-              </tr>
-            `).join('')}
+            ${block.teams.map((t, i) => {
+              const rkCls = i===0 ? 'r1' : i===1 ? 'r2' : i===2 ? 'r3' : '';
+              const diff = t.gf - t.ga;
+              return `<tr class="${t.isMe ? 'is-me' : ''}">
+                <td><span class="rk ${rkCls}">${i+1}</span>${t.name}</td>
+                <td>${t.g}</td>
+                <td>${t.w}</td>
+                <td>${t.d}</td>
+                <td>${t.l}</td>
+                <td>${t.gf}</td>
+                <td>${t.ga}</td>
+                <td>${diff >= 0 ? '+' : ''}${diff}</td>
+                <td class="pts">${t.pts}</td>
+              </tr>`;
+            }).join('')}
           </tbody>
         </table>
       </div>
     `;
+  };
+
+  const podium = (cls, label, team) => {
+    const isMe = team && team.indexOf('矢作') !== -1;
+    return `<div class="podium-row ${cls}${isMe ? ' is-me' : ''}">
+      <div>
+        <div class="rank-label">${label}</div>
+        <div class="rank-team">${team}</div>
+      </div>
+    </div>`;
   };
 
   document.getElementById('standingsBlock').innerHTML = `
@@ -1690,29 +1757,9 @@ function renderStandings() {
     ${sd.final ? `
       <div class="sec-title">最終順位</div>
       <div class="card" style="padding:14px">
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--gold-light);border-radius:10px">
-            <span style="font-size:1.8rem"></span>
-            <div>
-              <div style="font-size:0.68rem;color:#7d5a00;font-weight:700">優勝</div>
-              <div style="font-weight:800">${sd.final.winner}</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;padding:10px;background:#f4f4f4;border-radius:10px">
-            <span style="font-size:1.6rem"></span>
-            <div>
-              <div style="font-size:0.68rem;color:#666;font-weight:700">準優勝</div>
-              <div style="font-weight:800">${sd.final.second}</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;padding:10px;background:#fff3ec;border-radius:10px${sd.final.third==='矢作SC'?';border:2px solid var(--red)':''}">
-            <span style="font-size:1.6rem"></span>
-            <div>
-              <div style="font-size:0.68rem;color:#7d4a00;font-weight:700">第3位</div>
-              <div style="font-weight:800">${sd.final.third}${sd.final.third==='矢作SC'?' ':''}</div>
-            </div>
-          </div>
-        </div>
+        ${podium('p1', '優勝',   sd.final.winner)}
+        ${podium('p2', '準優勝', sd.final.second)}
+        ${podium('p3', '第3位',  sd.final.third)}
       </div>
     ` : ''}
   `;
