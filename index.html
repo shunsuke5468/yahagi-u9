@@ -305,10 +305,19 @@ input:focus, select:focus, textarea:focus {
 .match-body { flex: 1; min-width: 0; }
 .match-tournament { font-weight: 900; font-size: 0.86rem; color: var(--ink); letter-spacing: 0.01em; }
 .match-detail { font-size: 0.69rem; color: var(--muted); margin-top: 3px; font-weight: 700; }
+.match-score-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
 .match-score-big {
   font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.5rem;
-  color: var(--ink); margin-left: 4px; letter-spacing: -0.01em;
+  color: var(--ink); margin-left: 4px; letter-spacing: -0.01em; line-height: 1;
 }
+.pk-tag {
+  font-size: 0.6rem; font-weight: 900; letter-spacing: 0.05em;
+  padding: 2px 6px; border-radius: 2px; border: 1.5px solid var(--ink);
+  white-space: nowrap;
+}
+.pk-tag.pk-win  { background: var(--lime); color: var(--ink); }
+.pk-tag.pk-lose { background: var(--red-light); color: var(--red-dark); }
+.match-result-badge.is-pk { font-size: 0.66rem; }
 /* ミシン目 */
 .expand-section {
   display: none; padding: 13px 16px 14px;
@@ -558,6 +567,26 @@ input:focus, select:focus, textarea:focus {
       <option value="home"> ホーム</option>
       <option value="away"> アウェイ</option>
     </select>
+
+    <label>PK戦（引き分けの場合）</label>
+    <select id="iPkResult" onchange="togglePkScore()">
+      <option value="">PK戦なし</option>
+      <option value="win">PK勝ち</option>
+      <option value="lose">PK負け</option>
+    </select>
+    <div id="pkScoreWrap" style="display:none;margin-top:8px">
+      <div class="score-input-row">
+        <div>
+          <input type="number" id="iPkMy" min="0" placeholder="0">
+          <div class="team-lbl">矢作SC</div>
+        </div>
+        <div class="vs-x">-</div>
+        <div>
+          <input type="number" id="iPkOpp" min="0" placeholder="0">
+          <div class="team-lbl">相手</div>
+        </div>
+      </div>
+    </div>
 
     <label> 得点者（任意）</label>
     <div class="scorer-section">
@@ -920,7 +949,8 @@ const INIT_MATCHES = [
     scorers: [
       { player: '田中 瑛就（たなか えいしゅう）', goals: 1 }
     ],
-    memo: 'PK戦（サドンデス）勝ち', result: 'draw'
+    memo: 'PK戦（サドンデス）で勝利', result: 'win',
+    pk: { result: 'win', my: null, opp: null }
   },
   {
     id: 1000010, date: '2026-07-12',
@@ -933,7 +963,8 @@ const INIT_MATCHES = [
       { player: '高野 珀翔（たかの はくと）',     goals: 1 },
       { player: '澤地 玲臣（さわじ れお）',       goals: 1 }
     ],
-    memo: 'PK戦 3-1 で勝利！2位パート優勝', result: 'draw'
+    memo: '2位パート優勝', result: 'win',
+    pk: { result: 'win', my: 3, opp: 1 }
   }
 ];
 
@@ -991,10 +1022,21 @@ function initFirebase() {
           const existing = Array.isArray(data) ? data.filter(Boolean) : Object.values(data);
           if (firstMatchLoad) {
             firstMatchLoad = false;
+            const initMap = new Map(INIT_MATCHES.map(m => [m.id, m]));
+            // 既存データのうち、INIT_MATCHESに同じIDがあれば内容を最新に差し替える
+            let changed = false;
+            const updated = existing.map(m => {
+              const init = initMap.get(m.id);
+              if (init && JSON.stringify(init) !== JSON.stringify(m)) {
+                changed = true;
+                return init;
+              }
+              return m;
+            });
             const existingIds = existing.map(m => m.id);
             const toAdd = INIT_MATCHES.filter(m => !existingIds.includes(m.id));
-            if (toAdd.length > 0) {
-              const merged = [...existing, ...toAdd].sort((a,b) => new Date(b.date) - new Date(a.date));
+            if (toAdd.length > 0 || changed) {
+              const merged = [...updated, ...toAdd].sort((a,b) => new Date(b.date) - new Date(a.date));
               db.ref('matches').set(merged);
               matches = merged;
             } else {
@@ -1256,6 +1298,11 @@ function renderScorers() {
   `).join('');
 }
 
+function togglePkScore() {
+  const v = document.getElementById('iPkResult').value;
+  document.getElementById('pkScoreWrap').style.display = v ? 'block' : 'none';
+}
+
 function saveMatch() {
   const date = document.getElementById('iDate').value;
   const tournament = document.getElementById('iTournament').value.trim();
@@ -1265,19 +1312,37 @@ function saveMatch() {
   const matchType = document.getElementById('iMatchType').value;
   const homeAway = document.getElementById('iHomeAway').value;
   const memo = document.getElementById('iMemo').value.trim();
+  const pkResult = document.getElementById('iPkResult').value;
+  const pkMy  = document.getElementById('iPkMy').value;
+  const pkOpp = document.getElementById('iPkOpp').value;
 
-  if (!date) { toast(' 日付を入力してください'); return; }
-  if (!opponent) { toast(' 相手チームを入力してください'); return; }
-  if (myScore === '' || oppScore === '') { toast(' スコアを入力してください'); return; }
+  if (!date) { toast('日付を入力してください'); return; }
+  if (!opponent) { toast('相手チームを入力してください'); return; }
+  if (myScore === '' || oppScore === '') { toast('スコアを入力してください'); return; }
 
   const ms = parseInt(myScore), os = parseInt(oppScore);
-  const result = ms > os ? 'win' : ms < os ? 'lose' : 'draw';
+
+  // 通常の勝敗判定
+  let result = ms > os ? 'win' : ms < os ? 'lose' : 'draw';
+
+  // PK戦がある場合は勝敗を上書き（PK勝ち＝勝利としてカウント）
+  let pk = null;
+  if (pkResult) {
+    if (ms !== os) { toast('PK戦は引き分けの試合のみ入力できます'); return; }
+    pk = {
+      result: pkResult,
+      my:  pkMy  === '' ? null : parseInt(pkMy),
+      opp: pkOpp === '' ? null : parseInt(pkOpp)
+    };
+    result = pkResult; // win / lose
+  }
+
   const validScorers = scorerRows.filter(s => s.player && s.goals > 0);
 
   matches.unshift({
     id: Date.now(), date, tournament, opponent,
     myScore: ms, oppScore: os, matchType, homeAway,
-    scorers: validScorers, memo, result
+    scorers: validScorers, memo, result, pk
   });
 
   // 得点者を選手名簿に自動追加
@@ -1291,10 +1356,14 @@ function saveMatch() {
   document.getElementById('iMyScore').value = '';
   document.getElementById('iOppScore').value = '';
   document.getElementById('iMemo').value = '';
+  document.getElementById('iPkResult').value = '';
+  document.getElementById('iPkMy').value = '';
+  document.getElementById('iPkOpp').value = '';
+  togglePkScore();
   scorerRows = [];
   addScorerRow();
 
-  const msg = result==='win' ? ' 勝利！保存しました' : result==='draw' ? ' 引き分け。保存しました' : ' 次は勝とう！保存しました';
+  const msg = result==='win' ? '勝利。保存しました' : result==='draw' ? '引き分け。保存しました' : '保存しました';
   toast(msg);
   setTimeout(() => goTab('home'), 800);
 }
@@ -1337,18 +1406,25 @@ function renderRecords() {
   const stubOf = t => stubColors[tourNames.indexOf(t) % stubColors.length];
 
   list.innerHTML = filtered.map((m, i) => {
-    const [cls, lbl] = bMap[m.result];
+    let [cls, lbl] = bMap[m.result];
+    if (m.pk) { lbl = m.pk.result === 'win' ? 'PK勝' : 'PK負'; }
     const d = m.date ? new Date(m.date+'T00:00:00').toLocaleDateString('ja-JP',{year:'2-digit',month:'numeric',day:'numeric',weekday:'short'}) : '';
     const scorers = (m.scorers || []).filter(s => s.player);
     const tname = m.tournament || '練習試合';
+    const pkTag = m.pk
+      ? `<span class="pk-tag ${m.pk.result === 'win' ? 'pk-win' : 'pk-lose'}">PK${m.pk.my != null && m.pk.opp != null ? ` ${m.pk.my}-${m.pk.opp}` : ''}</span>`
+      : '';
     return `<div class="match-card" id="card-${m.id}" style="animation-delay:${i*0.04}s;--stub:${stubOf(tname)}">
       <div class="match-head" onclick="toggleCard(${m.id})">
-        <div class="match-result-badge ${cls}">${lbl}</div>
+        <div class="match-result-badge ${cls}${m.pk ? ' is-pk' : ''}">${lbl}</div>
         <div class="match-body">
           <div class="match-tournament">${tname}</div>
           <div class="match-detail">${d} · vs ${m.opponent}</div>
         </div>
-        <div class="match-score-big">${m.myScore}-${m.oppScore}</div>
+        <div class="match-score-wrap">
+          <div class="match-score-big">${m.myScore}-${m.oppScore}</div>
+          ${pkTag}
+        </div>
       </div>
       <div class="expand-section">
         ${scorers.length > 0 ? `
@@ -1467,15 +1543,19 @@ function renderStandings() {
         </thead>
         <tbody>
           ${ms.map((m, i) => {
-            const [cls, lbl] = bMap[m.result];
+            let [cls, lbl] = bMap[m.result];
+            if (m.pk) lbl = m.pk.result === 'win' ? 'PK勝' : 'PK負';
             const scorers = (m.scorers||[]).filter(s=>s.player);
             const scorerText = scorers.length > 0
               ? scorers.map(s => s.player.split('（')[0] + (s.goals>1?`×${s.goals}`:'')).join('、')
               : '−';
-            return `<tr style="${i%2===1?'background:#f9fafc':''}">
+            const pkLine = (m.pk && m.pk.my != null && m.pk.opp != null)
+              ? `<div style="font-size:0.62rem;color:var(--muted);font-weight:800;margin-top:2px">PK ${m.pk.my}−${m.pk.opp}</div>`
+              : '';
+            return `<tr style="${i%2===1?'background:#FAF8F0':''}">
               <td style="padding:10px 10px;font-weight:700">vs ${m.opponent}</td>
-              <td style="padding:10px 6px;text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1rem">${m.myScore}−${m.oppScore}</td>
-              <td style="padding:10px 6px;text-align:center"><span class="match-result-badge ${cls}" style="width:28px;height:28px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:900">${lbl}</span></td>
+              <td style="padding:10px 6px;text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1rem">${m.myScore}−${m.oppScore}${pkLine}</td>
+              <td style="padding:10px 6px;text-align:center"><span class="match-result-badge ${cls}" style="width:auto;min-width:30px;height:26px;padding:0 6px;border-radius:2px;display:inline-flex;align-items:center;justify-content:center;font-size:${m.pk?'0.62rem':'0.72rem'};font-weight:900">${lbl}</span></td>
               <td style="padding:10px 6px;text-align:center;font-size:0.72rem;color:var(--muted)">${scorerText}</td>
             </tr>`;
           }).join('')}
@@ -2030,23 +2110,28 @@ function shareMatch(id) {
   const m = matches.find(x => x.id === id);
   if (!m) return;
   const d = m.date ? new Date(m.date+'T00:00:00').toLocaleDateString('ja-JP',{month:'numeric',day:'numeric',weekday:'short'}) : '';
-  const resultEmoji = m.result === 'win' ? ' 勝利' : m.result === 'lose' ? ' 負け' : ' 引き分け';
-  const haText = m.homeAway === 'home' ? ' ホーム' : ' アウェイ';
+  const resultText = m.pk
+    ? (m.pk.result === 'win' ? 'PK戦で勝利' : 'PK戦で敗退')
+    : m.result === 'win' ? '勝利' : m.result === 'lose' ? '敗戦' : '引き分け';
+  const haText = m.homeAway === 'home' ? 'ホーム' : 'アウェイ';
   const scorers = (m.scorers || []).filter(s => s.player);
 
-  let text = ` 矢作SC U-9 試合結果\n\n`;
-  text += ` ${d}\n`;
-  if (m.tournament) text += ` ${m.tournament}\n`;
+  let text = `矢作SC U-9 試合結果\n\n`;
+  text += `${d}\n`;
+  if (m.tournament) text += `${m.tournament}\n`;
   text += `${haText}\n\n`;
   text += `矢作SC ${m.myScore} - ${m.oppScore} ${m.opponent}\n`;
-  text += `${resultEmoji}\n`;
+  if (m.pk && m.pk.my != null && m.pk.opp != null) {
+    text += `PK戦 ${m.pk.my} - ${m.pk.opp}\n`;
+  }
+  text += `${resultText}\n`;
   if (scorers.length > 0) {
-    text += `\n 得点者\n`;
+    text += `\n得点者\n`;
     scorers.forEach(s => {
       text += `・${s.player}${s.goals > 1 ? ` (${s.goals}点)` : ''}\n`;
     });
   }
-  if (m.memo) text += `\n ${m.memo}\n`;
+  if (m.memo) text += `\n${m.memo}\n`;
   text += `\n応援ありがとうございました！`;
 
   document.getElementById('shareText').textContent = text;
