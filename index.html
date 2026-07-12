@@ -669,17 +669,22 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--r
 
 <script>
 // ===== Firebase初期化 =====
-const firebaseConfig = {
-  apiKey: "AIzaSyCTY4d6YCSYfNPmxW9dtGkGkQYZ0caADlo",
-  authDomain: "yahagi-u9.firebaseapp.com",
-  databaseURL: "https://yahagi-u9-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "yahagi-u9",
-  storageBucket: "yahagi-u9.firebasestorage.app",
-  messagingSenderId: "844580053852",
-  appId: "1:844580053852:web:c060fa006d88a74fa85799"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+let db = null;
+try {
+  const firebaseConfig = {
+    apiKey: "AIzaSyCTY4d6YCSYfNPmxW9dtGkGkQYZ0caADlo",
+    authDomain: "yahagi-u9.firebaseapp.com",
+    databaseURL: "https://yahagi-u9-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "yahagi-u9",
+    storageBucket: "yahagi-u9.firebasestorage.app",
+    messagingSenderId: "844580053852",
+    appId: "1:844580053852:web:c060fa006d88a74fa85799"
+  };
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+} catch(e) {
+  console.warn('Firebase初期化に失敗しました', e);
+}
 
 // ===== データ =====
 // ===== 初期データ =====
@@ -775,6 +780,40 @@ const INIT_MATCHES = [
       { player: '柏木 陸人（かしわぎ りと）', goals: 1 }
     ],
     memo: '', result: 'win'
+  },
+  // ===== 第19回 早川杯 =====
+  {
+    id: 1000008, date: '2026-07-12',
+    tournament: '第19回 早川杯',
+    opponent: '三の丸SC',
+    myScore: 0, oppScore: 1,
+    matchType: 'public', homeAway: 'away',
+    scorers: [],
+    memo: '', result: 'lose'
+  },
+  {
+    id: 1000009, date: '2026-07-12',
+    tournament: '第19回 早川杯',
+    opponent: '港SC',
+    myScore: 0, oppScore: 0,
+    matchType: 'public', homeAway: 'away',
+    scorers: [
+      { player: '田中 瑛就（たなか えいしゅう）', goals: 1 }
+    ],
+    memo: 'PK戦（サドンデス）勝ち', result: 'draw'
+  },
+  {
+    id: 1000010, date: '2026-07-12',
+    tournament: '第19回 早川杯',
+    opponent: '東富水SC（2位パート決勝）',
+    myScore: 0, oppScore: 0,
+    matchType: 'public', homeAway: 'away',
+    scorers: [
+      { player: '田中 瑛就（たなか えいしゅう）', goals: 1 },
+      { player: '高野 珀翔（たかの はくと）',     goals: 1 },
+      { player: '澤地 玲臣（さわじ れお）',       goals: 1 }
+    ],
+    memo: 'PK戦 3-1 で勝利！2位パート優勝🎉', result: 'draw'
   }
 ];
 
@@ -794,61 +833,81 @@ let viewingVideoId = null;
 
 function persist() {
   // matches・players・videosはFirebaseに保存
-  try { db.ref('matches').set(matches); } catch(e) {}
-  try { db.ref('players').set(players); } catch(e) {}
-  try { db.ref('videos').set(videos); } catch(e) {}
+  if (db) {
+    try { db.ref('matches').set(matches); } catch(e) { console.warn(e); }
+    try { db.ref('players').set(players); } catch(e) { console.warn(e); }
+    try { db.ref('videos').set(videos); } catch(e) { console.warn(e); }
+  }
   // photosはサイズが大きいのでlocalStorageに保存
   try { localStorage.setItem('yhg9_photos', JSON.stringify(photos)); } catch(e) { throw e; }
 }
 
 // ===== Firebaseからリアルタイムでデータを受信 =====
 function initFirebase() {
-  // 接続状態表示
-  db.ref('.info/connected').on('value', snap => {
-    const connected = snap.val();
+  if (typeof db === 'undefined' || !db) {
+    console.warn('Firebase未接続。ローカルモードで動作します');
     const badge = document.getElementById('connectionBadge');
-    if (badge) {
-      badge.textContent = connected ? '🟢 同期中' : '🔴 オフライン';
-      badge.style.color = connected ? '#27ae60' : '#e74c3c';
-    }
-  });
+    if (badge) { badge.textContent = '⚪ ローカル'; badge.style.color = '#999'; }
+    return;
+  }
 
-  // 試合データをリアルタイム受信
-  db.ref('matches').on('value', snap => {
-    const data = snap.val();
-    if (data) {
-      matches = Array.isArray(data) ? data : Object.values(data);
-      matches.sort((a,b) => new Date(b.date) - new Date(a.date));
-    } else {
-      // Firebaseにデータがなければ初期データをアップロード
-      db.ref('matches').set(INIT_MATCHES);
-      matches = INIT_MATCHES;
-    }
-    // 現在の画面を再描画
-    const activeScreen = document.querySelector('.screen.active');
-    if (activeScreen) {
-      const id = activeScreen.id.replace('screen-', '');
-      if (id === 'home') renderHome();
-      if (id === 'records') renderRecords();
-    }
-  });
+  try {
+    // 接続状態表示
+    db.ref('.info/connected').on('value', snap => {
+      const connected = snap.val();
+      const badge = document.getElementById('connectionBadge');
+      if (badge) {
+        badge.textContent = connected ? '🟢 同期中' : '🔴 オフライン';
+        badge.style.color = connected ? '#27ae60' : '#e74c3c';
+      }
+    });
 
-  // 選手データをリアルタイム受信
-  db.ref('players').on('value', snap => {
-    const data = snap.val();
-    if (data) {
-      players = Array.isArray(data) ? data : Object.values(data);
-    } else {
-      db.ref('players').set(INIT_PLAYERS);
-      players = INIT_PLAYERS;
-    }
-  });
+    // 試合データをリアルタイム受信
+    db.ref('matches').on('value', snap => {
+      try {
+        const data = snap.val();
+        if (data) {
+          matches = Array.isArray(data) ? data.filter(Boolean) : Object.values(data);
+          matches.sort((a,b) => new Date(b.date) - new Date(a.date));
+        } else {
+          db.ref('matches').set(INIT_MATCHES);
+          matches = INIT_MATCHES;
+        }
+        const activeScreen = document.querySelector('.screen.active');
+        if (activeScreen) {
+          const id = activeScreen.id.replace('screen-', '');
+          if (id === 'home') renderHome();
+          if (id === 'records') renderRecords();
+        }
+      } catch(e) { console.warn('matches受信エラー', e); }
+    }, err => console.warn('matches購読エラー', err));
 
-  // 動画データをリアルタイム受信
-  db.ref('videos').on('value', snap => {
-    const data = snap.val();
-    videos = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
-  });
+    // 選手データをリアルタイム受信
+    db.ref('players').on('value', snap => {
+      try {
+        const data = snap.val();
+        if (data) {
+          players = Array.isArray(data) ? data.filter(Boolean) : Object.values(data);
+        } else {
+          db.ref('players').set(INIT_PLAYERS);
+          players = INIT_PLAYERS;
+        }
+      } catch(e) { console.warn('players受信エラー', e); }
+    }, err => console.warn('players購読エラー', err));
+
+    // 動画データをリアルタイム受信
+    db.ref('videos').on('value', snap => {
+      try {
+        const data = snap.val();
+        videos = data ? (Array.isArray(data) ? data.filter(Boolean) : Object.values(data)) : [];
+      } catch(e) { videos = []; }
+    }, err => console.warn('videos購読エラー', err));
+
+  } catch(e) {
+    console.warn('Firebase初期化エラー', e);
+    const badge = document.getElementById('connectionBadge');
+    if (badge) { badge.textContent = '⚪ ローカル'; badge.style.color = '#999'; }
+  }
 }
 
 function toast(msg) {
@@ -1166,10 +1225,20 @@ function renderStandings() {
   let finalBadge = '';
 
   // ===== サマリーカード =====
+  // 固定データから日付・場所を取得（renderStandingsより後で参照できるよう先に定義）
+  const fixedInfo = {
+    'U-9 鶴が台鯉のぼりカップ': { date:'2026年5月5日（火・祝）', venue:'茅ヶ崎市立円蔵小学校' },
+    '第23回 海老名さつき杯':     { date:'2026年5月16日（土）',    venue:'海老名市立中新田小学校' },
+    '第19回 早川杯':             { date:'2026年7月12日（日）',    venue:'早川小学校' },
+  };
+  const info = fixedInfo[tournament] || {};
+
   document.getElementById('standingsSummary').innerHTML = `
     <div style="background:linear-gradient(135deg,var(--red),var(--red-dark));border-radius:16px;padding:18px;margin-bottom:12px;color:white;box-shadow:0 6px 20px rgba(192,57,43,0.3)">
-      <div style="font-size:0.72rem;opacity:0.8;margin-bottom:6px">矢作SC の成績</div>
-      <div style="font-family:'Oswald',sans-serif;font-size:1.5rem;font-weight:700;margin-bottom:10px">${tournament}</div>
+      <div style="font-size:0.72rem;opacity:0.8;margin-bottom:4px">矢作SC の成績</div>
+      <div style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:8px">${tournament}</div>
+      ${info.date   ? `<div style="font-size:0.78rem;opacity:0.9;margin-bottom:2px">📅 ${info.date}</div>` : ''}
+      ${info.venue  ? `<div style="font-size:0.78rem;opacity:0.9;margin-bottom:10px">📍 ${info.venue}</div>` : ''}
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center">
         <div><div style="font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700">${wins}</div><div style="font-size:0.65rem;opacity:0.8">勝</div></div>
         <div><div style="font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700">${draws}</div><div style="font-size:0.65rem;opacity:0.8">分</div></div>
@@ -1230,6 +1299,8 @@ function renderStandings() {
   // ===== 大会全体の順位表（固定データ） =====
   const standingsData = {
     'U-9 鶴が台鯉のぼりカップ': {
+      date: '2026年5月5日（火・祝）',
+      venue: '茅ヶ崎市立円蔵小学校',
       blockA: {
         label: 'Aブロック',
         teams: [
@@ -1249,6 +1320,8 @@ function renderStandings() {
       final: { winner:'鶴が台スパイダーズSC', second:'FC相模野', third:'矢作SC' }
     },
     '第23回 海老名さつき杯': {
+      date: '2026年5月16日（土）',
+      venue: '海老名市立中新田小学校',
       blockA: {
         label: 'Cブロック（予選）',
         teams: [
@@ -1259,6 +1332,27 @@ function renderStandings() {
         ]
       },
       final: { winner:'−', second:'−', third:'敢闘T参加（4年生対応のため2日目不参加）' }
+    },
+    '第19回 早川杯': {
+      date: '2026年7月12日（日）',
+      venue: '早川小学校',
+      blockA: {
+        label: 'A組（予選）',
+        teams: [
+          { name: '三の丸SC', g:2, w:2, d:0, l:0, gf:2, ga:0, pts:6, rank:1 },
+          { name: '矢作SC',   g:2, w:0, d:1, l:1, gf:0, ga:1, pts:1, rank:2, isMe:true },
+          { name: '港SC',     g:2, w:0, d:1, l:1, gf:0, ga:1, pts:1, rank:3 },
+        ]
+      },
+      blockB: {
+        label: 'B組（予選）',
+        teams: [
+          { name: '早川SC',   g:2, w:2, d:0, l:0, gf:8, ga:1, pts:6, rank:1 },
+          { name: '東富水SC', g:2, w:1, d:0, l:1, gf:3, ga:4, pts:3, rank:2 },
+          { name: '岩原SC',   g:2, w:0, d:0, l:2, gf:1, ga:7, pts:0, rank:3 },
+        ]
+      },
+      final: { winner:'三の丸SC', second:'早川SC', third:'矢作SC（2位パート優勝）' }
     }
   };
 
