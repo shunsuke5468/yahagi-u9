@@ -862,22 +862,41 @@ function initFirebase() {
       }
     });
 
-    // 試合データをリアルタイム受信
+    // 試合データをリアルタイム受信（初回のみ新規データを自動マージ）
+    let firstMatchLoad = true;
     db.ref('matches').on('value', snap => {
       try {
         const data = snap.val();
         if (data) {
-          matches = Array.isArray(data) ? data.filter(Boolean) : Object.values(data);
-          matches.sort((a,b) => new Date(b.date) - new Date(a.date));
+          const existing = Array.isArray(data) ? data.filter(Boolean) : Object.values(data);
+
+          if (firstMatchLoad) {
+            firstMatchLoad = false;
+            // INIT_MATCHESの中でFirebaseに無いIDのものだけ追加
+            const existingIds = existing.map(m => m.id);
+            const toAdd = INIT_MATCHES.filter(m => !existingIds.includes(m.id));
+            if (toAdd.length > 0) {
+              const merged = [...existing, ...toAdd].sort((a,b) => new Date(b.date) - new Date(a.date));
+              db.ref('matches').set(merged);  // Firebaseに書き戻し
+              matches = merged;
+              console.log(`${toAdd.length}件の新規試合を追加しました`);
+            } else {
+              matches = existing.sort((a,b) => new Date(b.date) - new Date(a.date));
+            }
+          } else {
+            matches = existing.sort((a,b) => new Date(b.date) - new Date(a.date));
+          }
         } else {
           db.ref('matches').set(INIT_MATCHES);
           matches = INIT_MATCHES;
+          firstMatchLoad = false;
         }
         const activeScreen = document.querySelector('.screen.active');
         if (activeScreen) {
           const id = activeScreen.id.replace('screen-', '');
           if (id === 'home') renderHome();
           if (id === 'records') renderRecords();
+          if (id === 'standings') initStandings();
         }
       } catch(e) { console.warn('matches受信エラー', e); }
     }, err => console.warn('matches購読エラー', err));
