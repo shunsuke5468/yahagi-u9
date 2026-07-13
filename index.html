@@ -483,6 +483,42 @@ input:focus, select:focus, textarea:focus {
 .empty-state p { font-size: 0.86rem; font-weight: 700; }
 
 
+/* ===== 大会成績（入賞回数） ===== */
+.medal-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 9px; margin-bottom: 13px; }
+.medal-box {
+  border: 1.5px solid var(--ink); border-radius: 3px;
+  padding: 11px 6px; text-align: center;
+}
+.medal-box.m1 { background: var(--gold-light); border-color: var(--gold); }
+.medal-box.m2 { background: #F0F0EC; }
+.medal-box.m3 { background: #FBEEE2; border-color: #C98A4B; }
+.medal-num { font-family: 'Baloo 2', sans-serif; font-size: 1.7rem; font-weight: 800; line-height: 1; color: var(--ink); }
+.medal-lbl { font-size: 0.66rem; font-weight: 900; margin-top: 4px; letter-spacing: 0.06em; color: var(--ink); }
+
+.award-note {
+  font-size: 0.68rem; color: var(--muted); font-weight: 800;
+  letter-spacing: 0.06em; padding-bottom: 9px;
+  border-bottom: 1px dashed var(--border); margin-bottom: 4px;
+}
+.award-list { }
+.award-row {
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 0; border-bottom: 1px dashed var(--border);
+}
+.award-row:last-child { border-bottom: none; padding-bottom: 0; }
+.award-place {
+  flex-shrink: 0; min-width: 58px; text-align: center;
+  font-size: 0.68rem; font-weight: 900; letter-spacing: 0.04em;
+  padding: 5px 7px; border-radius: 2px; border: 1.5px solid var(--ink);
+}
+.award-place.p1 { background: var(--gold); color: var(--ink); }
+.award-place.p2 { background: #DDDDD8; color: var(--ink); }
+.award-place.p3 { background: #E3AE80; color: var(--ink); }
+.award-place.pn { background: var(--paper); color: var(--muted); border-style: dashed; border-color: var(--border); font-size: 0.6rem; }
+.award-meta { flex: 1; min-width: 0; }
+.award-name { font-weight: 800; font-size: 0.84rem; }
+.award-date { font-size: 0.67rem; color: var(--muted); font-weight: 700; margin-top: 2px; }
+
 /* ===== 順位表サマリー（シーズンパス） ===== */
 .summary-ticket {
   background: var(--ink); color: var(--paper);
@@ -572,6 +608,9 @@ input:focus, select:focus, textarea:focus {
   </div>
 
   <div class="stats-grid" id="statsGrid"></div>
+
+  <div class="sec-title">大会成績</div>
+  <div id="awardsSection"></div>
 
   <div class="sec-title">クイック操作</div>
   <button class="quick-action editor-only" onclick="goTab('input')">
@@ -1037,6 +1076,70 @@ const INIT_MATCHES = [
   }
 ];
 
+const STANDINGS_DATA = {
+    'U-9 鶴が台鯉のぼりカップ': {
+      date: '2026年5月5日（火・祝）',
+      venue: '茅ヶ崎市立円蔵小学校',
+      blockA: {
+        label: 'Aブロック',
+        teams: [
+          { name: '矢作SC',           g:2, w:2, d:0, l:0, gf:10, ga:1,  pts:6, rank:1, isMe:true },
+          { name: 'FC小坂',           g:2, w:1, d:0, l:1, gf:5,  ga:5,  pts:3, rank:2 },
+          { name: '湘南レオーネ',     g:2, w:0, d:0, l:2, gf:2,  ga:11, pts:0, rank:3 },
+        ]
+      },
+      blockB: {
+        label: 'Bブロック',
+        teams: [
+          { name: '鶴が台スパイダーズSC', g:2, w:1, d:1, l:0, gf:2, ga:0, pts:4, rank:1 },
+          { name: 'FC相模野',             g:2, w:1, d:1, l:0, gf:1, ga:0, pts:4, rank:2 },
+          { name: '上矢部FC',             g:2, w:0, d:0, l:2, gf:0, ga:3, pts:0, rank:3 },
+        ]
+      },
+      myPlace: 3,
+      final: { winner:'鶴が台スパイダーズSC', second:'FC相模野', third:'矢作SC' }
+    },
+    '第23回 海老名さつき杯': {
+      date: '2026年5月16日（土）',
+      venue: '海老名市立中新田小学校',
+      blockA: {
+        label: 'Cブロック（予選）',
+        teams: [
+          { name: 'KS.FC',      g:3, w:3, d:0, l:0, gf:23, ga:0,  pts:9, rank:1 },
+          { name: '中新田FC',   g:3, w:2, d:0, l:1, gf:9,  ga:4,  pts:6, rank:2 },
+          { name: '矢作SC',     g:3, w:1, d:0, l:2, gf:3,  ga:7,  pts:3, rank:3, isMe:true },
+          { name: 'FC山下',     g:3, w:0, d:0, l:3, gf:0,  ga:22, pts:0, rank:4 },
+        ]
+      },
+      myPlace: null,
+      myPlaceNote: '予選3位（2日目は不参加）',
+      final: null
+    },
+    '第19回 早川杯': {
+      date: '2026年7月12日（日）',
+      venue: '早川小学校',
+      blockA: {
+        label: 'A組（予選）',
+        teams: [
+          { name: '三の丸SC', g:2, w:2, d:0, l:0, gf:2, ga:0, pts:6, rank:1 },
+          { name: '矢作SC',   g:2, w:0, d:1, l:1, gf:0, ga:1, pts:1, rank:2, isMe:true },
+          { name: '港SC',     g:2, w:0, d:1, l:1, gf:0, ga:1, pts:1, rank:3 },
+        ]
+      },
+      blockB: {
+        label: 'B組（予選）',
+        teams: [
+          { name: '早川SC',   g:2, w:2, d:0, l:0, gf:8, ga:1, pts:6, rank:1 },
+          { name: '東富水SC', g:2, w:1, d:0, l:1, gf:3, ga:4, pts:3, rank:2 },
+          { name: '岩原SC',   g:2, w:0, d:0, l:2, gf:1, ga:7, pts:0, rank:3 },
+        ]
+      },
+      myPlace: 3,
+      myPlaceNote: '2位パート優勝',
+      final: { winner:'三の丸SC', second:'早川SC', third:'矢作SC（2位パート優勝）' }
+    }
+  };
+
 // ===== データ初期化 =====
 // 写真はlocalStorage（サイズが大きいため）
 let photos = (() => { try { return JSON.parse(localStorage.getItem('yhg9_photos')) || []; } catch(e) { return []; } })();
@@ -1296,6 +1399,8 @@ function renderHome() {
     </div>
   `;
 
+  renderAwards();
+
   // 最近の試合（日付降順で最新3件）
   const recent = [...matches].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
   if (recent.length === 0) {
@@ -1315,6 +1420,62 @@ function renderHome() {
       </div>`;
     }).join('');
   }
+}
+
+// ===== 大会成績（入賞回数） =====
+function renderAwards() {
+  const el = document.getElementById('awardsSection');
+  if (!el) return;
+
+  // 大会一覧（日付順・新しい順）
+  const entries = Object.entries(STANDINGS_DATA).map(([name, d]) => {
+    // その大会の最初の試合日を取得
+    const ms = matches.filter(m => m.tournament === name);
+    const date = ms.length ? ms.map(m => m.date).sort()[0] : '';
+    return { name, date, place: d.myPlace ?? null, note: d.myPlaceNote || '' };
+  }).sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+
+  // 入賞回数の集計
+  const count = { 1: 0, 2: 0, 3: 0 };
+  entries.forEach(e => { if (e.place && count[e.place] != null) count[e.place]++; });
+  const totalTournaments = entries.length;
+
+  const medalRow = (n, label, cls) => `
+    <div class="medal-box ${cls}">
+      <div class="medal-num">${count[n]}</div>
+      <div class="medal-lbl">${label}</div>
+    </div>`;
+
+  const placeText = e => {
+    if (e.place === 1) return '優勝';
+    if (e.place === 2) return '準優勝';
+    if (e.place === 3) return '第3位';
+    return e.note || '−';
+  };
+  const placeCls = e => e.place === 1 ? 'p1' : e.place === 2 ? 'p2' : e.place === 3 ? 'p3' : 'pn';
+
+  el.innerHTML = `
+    <div class="card" style="padding:15px 16px">
+      <div class="medal-grid">
+        ${medalRow(1, '優勝', 'm1')}
+        ${medalRow(2, '準優勝', 'm2')}
+        ${medalRow(3, '第3位', 'm3')}
+      </div>
+      <div class="award-note">出場 ${totalTournaments} 大会</div>
+      <div class="award-list">
+        ${entries.map(e => {
+          const d = e.date ? new Date(e.date+'T00:00:00').toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'}) : '';
+          return `<div class="award-row">
+            <div class="award-place ${placeCls(e)}">${placeText(e)}</div>
+            <div class="award-meta">
+              <div class="award-name">${e.name}</div>
+              ${d ? `<div class="award-date">${d}</div>` : ''}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  `;
 }
 
 // ===== 入力 =====
@@ -1642,66 +1803,8 @@ function renderStandings() {
   `;
 
   // ===== 大会全体の順位表（固定データ） =====
-  const standingsData = {
-    'U-9 鶴が台鯉のぼりカップ': {
-      date: '2026年5月5日（火・祝）',
-      venue: '茅ヶ崎市立円蔵小学校',
-      blockA: {
-        label: 'Aブロック',
-        teams: [
-          { name: '矢作SC',           g:2, w:2, d:0, l:0, gf:10, ga:1,  pts:6, rank:1, isMe:true },
-          { name: 'FC小坂',           g:2, w:1, d:0, l:1, gf:5,  ga:5,  pts:3, rank:2 },
-          { name: '湘南レオーネ',     g:2, w:0, d:0, l:2, gf:2,  ga:11, pts:0, rank:3 },
-        ]
-      },
-      blockB: {
-        label: 'Bブロック',
-        teams: [
-          { name: '鶴が台スパイダーズSC', g:2, w:1, d:1, l:0, gf:2, ga:0, pts:4, rank:1 },
-          { name: 'FC相模野',             g:2, w:1, d:1, l:0, gf:1, ga:0, pts:4, rank:2 },
-          { name: '上矢部FC',             g:2, w:0, d:0, l:2, gf:0, ga:3, pts:0, rank:3 },
-        ]
-      },
-      final: { winner:'鶴が台スパイダーズSC', second:'FC相模野', third:'矢作SC' }
-    },
-    '第23回 海老名さつき杯': {
-      date: '2026年5月16日（土）',
-      venue: '海老名市立中新田小学校',
-      blockA: {
-        label: 'Cブロック（予選）',
-        teams: [
-          { name: 'KS.FC',      g:3, w:3, d:0, l:0, gf:23, ga:0,  pts:9, rank:1 },
-          { name: '中新田FC',   g:3, w:2, d:0, l:1, gf:9,  ga:4,  pts:6, rank:2 },
-          { name: '矢作SC',     g:3, w:1, d:0, l:2, gf:3,  ga:7,  pts:3, rank:3, isMe:true },
-          { name: 'FC山下',     g:3, w:0, d:0, l:3, gf:0,  ga:22, pts:0, rank:4 },
-        ]
-      },
-      final: { winner:'−', second:'−', third:'敢闘T参加（4年生対応のため2日目不参加）' }
-    },
-    '第19回 早川杯': {
-      date: '2026年7月12日（日）',
-      venue: '早川小学校',
-      blockA: {
-        label: 'A組（予選）',
-        teams: [
-          { name: '三の丸SC', g:2, w:2, d:0, l:0, gf:2, ga:0, pts:6, rank:1 },
-          { name: '矢作SC',   g:2, w:0, d:1, l:1, gf:0, ga:1, pts:1, rank:2, isMe:true },
-          { name: '港SC',     g:2, w:0, d:1, l:1, gf:0, ga:1, pts:1, rank:3 },
-        ]
-      },
-      blockB: {
-        label: 'B組（予選）',
-        teams: [
-          { name: '早川SC',   g:2, w:2, d:0, l:0, gf:8, ga:1, pts:6, rank:1 },
-          { name: '東富水SC', g:2, w:1, d:0, l:1, gf:3, ga:4, pts:3, rank:2 },
-          { name: '岩原SC',   g:2, w:0, d:0, l:2, gf:1, ga:7, pts:0, rank:3 },
-        ]
-      },
-      final: { winner:'三の丸SC', second:'早川SC', third:'矢作SC（2位パート優勝）' }
-    }
-  };
 
-  const sd = standingsData[tournament];
+  const sd = STANDINGS_DATA[tournament];
   if (!sd) {
     document.getElementById('standingsBlock').innerHTML = '';
     return;
@@ -1760,6 +1863,16 @@ function renderStandings() {
         ${podium('p1', '優勝',   sd.final.winner)}
         ${podium('p2', '準優勝', sd.final.second)}
         ${podium('p3', '第3位',  sd.final.third)}
+      </div>
+    ` : sd.myPlaceNote ? `
+      <div class="sec-title">矢作SCの結果</div>
+      <div class="card" style="padding:14px">
+        <div class="podium-row is-me" style="background:var(--red-light);border-color:var(--red)">
+          <div>
+            <div class="rank-label">大会結果</div>
+            <div class="rank-team">${sd.myPlaceNote}</div>
+          </div>
+        </div>
       </div>
     ` : ''}
   `;
