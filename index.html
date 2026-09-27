@@ -366,6 +366,7 @@ input:focus, select:focus, textarea:focus { outline: none; background: white; bo
 .podium-row.p1 { background: var(--gold-light); border-color: var(--gold); }
 .podium-row.p2 { background: #F0F0EC; }
 .podium-row.p3 { background: #FBEEE2; border-color: #C98A4B; }
+.podium-row.p4 { background: var(--paper); }
 .podium-row.is-me { border-width: 2.5px; border-color: var(--red); }
 </style>
 </head>
@@ -1049,7 +1050,13 @@ const STANDINGS_DATA = {
     },
     myPlace: null,
     myPlaceNote: '3位パート優勝（12チーム中9位）',
-    final: null
+    final: {
+      winner: 'I.Oキッカーズ', second: '開成SC', third: '三の丸FC', fourth: '東富水SSS',
+      parts: [
+        { label: '2位パート 1位', team: '芦子国府津' },
+        { label: '3位パート 1位', team: '矢作SC' }
+      ]
+    }
   }
 };
 
@@ -1804,7 +1811,32 @@ function renderStandings() {
     ${sd.blockB ? renderBlock(sd.blockB) : ''}
     ${sd.blockC ? renderBlock(sd.blockC) : ''}
     ${sd.blockD ? renderBlock(sd.blockD) : ''}
+    ${renderFinal(sd)}
   `;
+}
+
+// 最終順位（1〜4位・パート別1位・矢作SCの結果）
+function renderFinal(sd) {
+  const f = sd.final;
+  const row = (cls, label, team) => {
+    if (!team) return '';
+    const isMe = team.indexOf('矢作') !== -1;
+    return `<div class="podium-row ${cls}${isMe ? ' is-me' : ''}">
+      <div><div class="rank-label">${label}</div><div class="rank-team">${team}</div></div>
+    </div>`;
+  };
+  let html = '';
+  if (f) {
+    html += row('p1', '優勝', f.winner) + row('p2', '準優勝', f.second) +
+            row('p3', '第3位', f.third) + row('p4', '第4位', f.fourth);
+    (f.parts || []).forEach(p => { html += row('p4', p.label, p.team); });
+  }
+  // 最終順位に矢作SCが含まれない大会は、矢作SCの結果を別に表示
+  const listed = f && [f.winner, f.second, f.third, f.fourth, ...(f.parts || []).map(p => p.team)]
+    .some(t => t && t.indexOf('矢作') !== -1);
+  if (!listed && sd.myPlaceNote) html += row('p4', '矢作SCの結果', sd.myPlaceNote).replace('podium-row p4', 'podium-row p4 is-me');
+  if (!html) return '';
+  return `<div class="sec-title">最終順位</div><div class="card" style="padding:14px">${html}</div>`;
 }
 
 // ===== 写真・動画 =====
