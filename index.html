@@ -260,6 +260,8 @@ input:focus, select:focus, textarea:focus { outline: none; background: white; bo
 .pk-tag { font-size: 0.6rem; font-weight: 900; padding: 2px 6px; border-radius: 2px; border: 1.5px solid var(--ink); }
 .pk-tag.pk-win { background: var(--lime); color: var(--ink); }
 .pk-tag.pk-lose { background: var(--red-light); color: var(--red-dark); }
+.scorer-tag.pk-scorer { background: var(--sky-light, #DCEEF9); border-color: var(--sky, #3EA9DE); color: #1d5f80; }
+.pk-mini { display: inline-block; font-size: 0.56rem; font-weight: 900; padding: 0 4px; margin-right: 4px; border: 1px solid var(--sky, #3EA9DE); color: #1d5f80; border-radius: 2px; }
 
 .expand-section { display: none; padding: 13px 16px 14px; position: relative; border-top: 1.5px dashed var(--border); }
 .match-card.expanded .expand-section { display: block; animation: fadeUp 0.2s ease; }
@@ -475,6 +477,11 @@ input:focus, select:focus, textarea:focus { outline: none; background: white; bo
           <input type="number" id="iPkOpp" min="0" placeholder="0">
           <div class="team-lbl">相手</div>
         </div>
+      </div>
+      <label>PK得点者（任意）</label>
+      <div class="scorer-section">
+        <div id="pkScorerList"></div>
+        <button class="add-scorer-btn" onclick="addPkScorerRow()">＋ PK得点者を追加</button>
       </div>
     </div>
 
@@ -879,11 +886,11 @@ const INIT_MATCHES = [
     opponent: '港SC',
     myScore: 0, oppScore: 0,
     matchType: 'public', homeAway: 'away',
-    scorers: [
-      { player: '田中 瑛就（たなか えいしゅう）', goals: 1 }
-    ],
+    scorers: [],
+    pkScorers: ['田中 瑛就（たなか えいしゅう）'],
     memo: 'PK戦（サドンデス）で勝利', result: 'win',
-    pk: { result: 'win', my: null, opp: null }
+    pk: { result: 'win', my: null, opp: null },
+    rev: 2
   },
   {
     id: 1000010, date: '2026-07-12',
@@ -891,13 +898,55 @@ const INIT_MATCHES = [
     opponent: '東富水SC（2位パート決勝）',
     myScore: 0, oppScore: 0,
     matchType: 'public', homeAway: 'away',
-    scorers: [
-      { player: '田中 瑛就（たなか えいしゅう）', goals: 1 },
-      { player: '高野 珀翔（たかの はくと）',     goals: 1 },
-      { player: '澤地 玲臣（さわじ れお）',       goals: 1 }
-    ],
+    scorers: [],
+    pkScorers: ['田中 瑛就（たなか えいしゅう）', '高野 珀翔（たかの はくと）', '澤地 玲臣（さわじ れお）'],
     memo: '2位パート優勝', result: 'win',
-    pk: { result: 'win', my: 3, opp: 1 }
+    pk: { result: 'win', my: 3, opp: 1 },
+    rev: 2
+  },
+  // ===== 第21回 久野カップ =====
+  {
+    id: 1000011, date: '2026-09-27',
+    tournament: '第21回 久野カップ',
+    opponent: '国府津FC',
+    myScore: 0, oppScore: 0,
+    matchType: 'public', homeAway: 'away',
+    scorers: [], memo: '', result: 'draw'
+  },
+  {
+    id: 1000012, date: '2026-09-27',
+    tournament: '第21回 久野カップ',
+    opponent: 'I.Oキッカーズ',
+    myScore: 0, oppScore: 3,
+    matchType: 'public', homeAway: 'away',
+    scorers: [], memo: '', result: 'lose'
+  },
+  {
+    id: 1000013, date: '2026-09-27',
+    tournament: '第21回 久野カップ',
+    opponent: '大磯SSS（3位パート準決勝）',
+    myScore: 1, oppScore: 1,
+    matchType: 'public', homeAway: 'away',
+    scorers: [
+      { player: '高野 珀翔（たかの はくと）', goals: 1 }
+    ],
+    pkScorers: ['田中 瑛就（たなか えいしゅう）', '平城 岳（ひらき がく）'],
+    memo: 'PK戦で勝利', result: 'win',
+    pk: { result: 'win', my: 2, opp: 1 },
+    rev: 3
+  },
+  {
+    id: 1000014, date: '2026-09-27',
+    tournament: '第21回 久野カップ',
+    opponent: '岩原PP（3位パート決勝）',
+    myScore: 4, oppScore: 0,
+    matchType: 'public', homeAway: 'away',
+    scorers: [
+      { player: '高野 珀翔（たかの はくと）',     goals: 2 },
+      { player: '田中 瑛就（たなか えいしゅう）', goals: 1 },
+      { player: '平城 岳（ひらき がく）',         goals: 1 }
+    ],
+    memo: '3位パート優勝', result: 'win'
   }
 ];
 
@@ -962,6 +1011,45 @@ const STANDINGS_DATA = {
     myPlace: 3,
     myPlaceNote: '2位パート優勝',
     final: { winner:'三の丸SC', second:'早川SC', third:'矢作SC（2位パート優勝）' }
+  },
+  '第21回 久野カップ': {
+    date: '2026年9月27日（日）',
+    venue: '上府中運動公園グランド',
+    blockA: {
+      label: 'Aブロック',
+      teams: [
+        { name: '三の丸FC', g:2, w:2, d:0, l:0, gf:3, ga:0, pts:6, rank:1 },
+        { name: '桜井報徳', g:2, w:0, d:1, l:1, gf:1, ga:2, pts:1, rank:2 },
+        { name: '大磯SSS',  g:2, w:0, d:1, l:1, gf:1, ga:3, pts:1, rank:3 },
+      ]
+    },
+    blockB: {
+      label: 'Bブロック',
+      teams: [
+        { name: '開成SC',  g:2, w:2, d:0, l:0, gf:4, ga:0, pts:6, rank:1 },
+        { name: 'FC久野',  g:2, w:1, d:0, l:1, gf:2, ga:2, pts:3, rank:2 },
+        { name: '岩原PP',  g:2, w:0, d:0, l:2, gf:0, ga:4, pts:0, rank:3 },
+      ]
+    },
+    blockC: {
+      label: 'Cブロック',
+      teams: [
+        { name: 'I.Oキッカーズ', g:2, w:2, d:0, l:0, gf:7, ga:2, pts:6, rank:1 },
+        { name: '芦子国府津',    g:2, w:0, d:1, l:1, gf:2, ga:4, pts:1, rank:2 },
+        { name: '矢作SC',        g:2, w:0, d:1, l:1, gf:0, ga:3, pts:1, rank:3, isMe:true },
+      ]
+    },
+    blockD: {
+      label: 'Dブロック',
+      teams: [
+        { name: '東富水SSS', g:2, w:2, d:0, l:0, gf:14, ga:0,  pts:6, rank:1 },
+        { name: '向田SC',    g:2, w:1, d:0, l:1, gf:3,  ga:6,  pts:3, rank:2 },
+        { name: '山王FC',    g:2, w:0, d:0, l:2, gf:0,  ga:11, pts:0, rank:3 },
+      ]
+    },
+    myPlace: null,
+    myPlaceNote: '3位パート優勝（12チーム中9位）',
+    final: null
   }
 };
 
@@ -971,6 +1059,7 @@ let matches = [];
 let players = [];
 let curFilter = 'all';
 let scorerRows = [];
+let pkScorerRows = [];
 let pendingPhotoData = null;
 let currentPhotoTournament = '';
 let currentVideoTournament = '';
@@ -1109,7 +1198,27 @@ function initFirebaseYearListener() {
         });
         // 現在ノードのデータを登録（最新データを優先）
         currentMatches.forEach(m => { if(m && m.id) map.set(m.id, m); });
+        // 初期データ側で修正した試合（revが新しいもの）は保存済みデータを上書き
+        INIT_MATCHES.forEach(im => {
+          if (!im.rev) return;
+          const cur = map.get(im.id);
+          if (!cur || (cur.rev || 0) < im.rev) map.set(im.id, im);
+        });
 
+        // アプリで手入力済みの同じ試合（同日・同大会・同スコア・相手名が近い）があれば初期データ側を除外
+        const norm = s => (s || '').replace(/[（(].*?[）)]/g, '').replace(/[\s.．・]/g, '').replace(/FC|SC|SSS|PP/gi, '').toLowerCase();
+        const initIds = new Set(INIT_MATCHES.map(m => m.id));
+        const currentIds = new Set(currentMatches.map(m => m && m.id));
+        INIT_MATCHES.forEach(im => {
+          if (currentIds.has(im.id)) return;
+          const dup = Array.from(map.values()).some(x =>
+            !initIds.has(x.id) && x.date === im.date && x.tournament === im.tournament &&
+            x.myScore === im.myScore && x.oppScore === im.oppScore &&
+            norm(x.opponent) && norm(im.opponent) &&
+            (norm(x.opponent).includes(norm(im.opponent)) || norm(im.opponent).includes(norm(x.opponent)))
+          );
+          if (dup) map.delete(im.id);
+        });
         matches = Array.from(map.values()).sort((a,b) => new Date(b.date) - new Date(a.date));
         
         // 統合結果を正しいノードに書き保存
@@ -1405,7 +1514,32 @@ function renderScorers() {
 function togglePkScore() {
   const v = document.getElementById('iPkResult').value;
   document.getElementById('pkScoreWrap').style.display = v ? 'block' : 'none';
+  if (v && pkScorerRows.length === 0) addPkScorerRow();
 }
+
+// ===== PK得点者（1人1点なので人数のみ） =====
+function addPkScorerRow() { pkScorerRows.push(''); renderPkScorers(); }
+function removePkScorerRow(idx) { pkScorerRows.splice(idx, 1); renderPkScorers(); }
+function updatePkScorer(idx, val) { pkScorerRows[idx] = val; }
+function renderPkScorers() {
+  const list = document.getElementById('pkScorerList');
+  if (!list) return;
+  const opts = ['<option value="">選手を選択</option>'].concat(
+    players.map(p => `<option value="${p}">${p}</option>`)
+  ).join('');
+  list.innerHTML = pkScorerRows.map((p, i) => `
+    <div class="scorer-row">
+      <select onchange="updatePkScorer(${i},this.value)">
+        ${p ? opts.replace(`value="${p}"`, `value="${p}" selected`) : opts}
+      </select>
+      <button class="del" onclick="removePkScorerRow(${i})">×</button>
+    </div>
+  `).join('');
+}
+
+// 表示用：選手名（ふりがな除く）
+function shortName(p) { return (p || '').split('（')[0].trim(); }
+function pkScorerList(m) { return (m.pkScorers || []).filter(Boolean); }
 
 function saveMatch() {
   const date = document.getElementById('iDate').value;
@@ -1435,11 +1569,12 @@ function saveMatch() {
   }
 
   const validScorers = scorerRows.filter(s => s.player && s.goals > 0);
+  const validPkScorers = pk ? pkScorerRows.filter(Boolean) : [];
 
   matches.unshift({
     id: Date.now(), date, tournament, opponent,
     myScore: ms, oppScore: os, matchType, homeAway,
-    scorers: validScorers, memo, result, pk
+    scorers: validScorers, pkScorers: validPkScorers, memo, result, pk
   });
 
   validScorers.forEach(s => { if (s.player && !players.includes(s.player)) players.push(s.player); });
@@ -1454,6 +1589,8 @@ function saveMatch() {
   document.getElementById('iPkResult').value = '';
   document.getElementById('iPkMy').value = '';
   document.getElementById('iPkOpp').value = '';
+  pkScorerRows = [];
+  renderPkScorers();
   togglePkScore();
   scorerRows = [];
   addScorerRow();
@@ -1483,7 +1620,8 @@ function renderRecords() {
       (m.tournament||'').toLowerCase().includes(q) ||
       (m.opponent||'').toLowerCase().includes(q) ||
       (m.memo||'').toLowerCase().includes(q) ||
-      (m.scorers||[]).some(s => (s.player||'').toLowerCase().includes(q))
+      (m.scorers||[]).some(s => (s.player||'').toLowerCase().includes(q)) ||
+      pkScorerList(m).some(p => p.toLowerCase().includes(q))
     );
   }
 
@@ -1526,6 +1664,12 @@ function renderRecords() {
             ${scorers.map(s => `<span class="scorer-tag">${s.player} ${s.goals > 1 ? '×'+s.goals : ''}</span>`).join('')}
           </div>
         ` : '<div style="font-size:0.78rem;color:#bbb">得点者の記録なし</div>'}
+        ${pkScorerList(m).length > 0 ? `
+          <div style="font-size:0.78rem;color:var(--muted);font-weight:700;margin:8px 0 4px">PK得点</div>
+          <div class="scorer-list">
+            ${pkScorerList(m).map(p => `<span class="scorer-tag pk-scorer">${p}</span>`).join('')}
+          </div>
+        ` : ''}
         ${m.memo ? `<div class="match-memo">${m.memo}</div>` : ''}
         <div class="match-actions">
           <button class="action-btn" onclick="event.stopPropagation();shareMatch(${m.id})">LINE用</button>
@@ -1612,16 +1756,19 @@ function renderStandings() {
             if (m.pk) lbl = m.pk.result === 'win' ? 'PK勝' : 'PK負';
             const scorers = (m.scorers||[]).filter(s=>s.player);
             const scorerText = scorers.length > 0 ? scorers.map(s => s.player.split('（')[0] + (s.goals>1?`×${s.goals}`:'')).join('、') : '−';
+            const pkList = pkScorerList(m);
+            const pkText = pkList.length > 0 ? `<div style="margin-top:3px;font-size:0.62rem"><span class="pk-mini">PK</span>${pkList.map(shortName).join('、')}</div>` : '';
             return `<tr>
               <td>vs ${m.opponent}</td>
               <td style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:0.95rem">${m.myScore}−${m.oppScore}</td>
               <td><span class="match-result-badge ${cls}" style="width:auto;height:24px;padding:0 6px;margin:0">${lbl}</span></td>
-              <td style="font-size:0.68rem;color:var(--muted);white-space:normal">${scorerText}</td>
+              <td style="font-size:0.68rem;color:var(--muted);white-space:normal">${scorerText}${pkText}</td>
             </tr>`;
           }).join('')}
         </tbody>
       </table>
     </div>
+    <button class="copy-btn" style="margin:12px 0 18px" onclick="shareTournament()">この大会のLINE用テキストを作成</button>
   `;
 
   const sd = (currentYear === '2026 U-9') ? STANDINGS_DATA[tournament] : null;
@@ -1655,6 +1802,8 @@ function renderStandings() {
     <div class="sec-title">予選ブロック順位表</div>
     ${sd.blockA ? renderBlock(sd.blockA) : ''}
     ${sd.blockB ? renderBlock(sd.blockB) : ''}
+    ${sd.blockC ? renderBlock(sd.blockC) : ''}
+    ${sd.blockD ? renderBlock(sd.blockD) : ''}
   `;
 }
 
@@ -1863,15 +2012,87 @@ function shareMatch(id) {
   const m = matches.find(x => x.id === id); if (!m) return;
   const d = m.date ? new Date(m.date+'T00:00:00').toLocaleDateString('ja-JP',{month:'numeric',day:'numeric',weekday:'short'}) : '';
   let text = `矢作SC (${currentYear}) 試合結果\n\n${d}\n${m.tournament || ''}\n`;
-  text += `矢作SC ${m.myScore} - ${m.oppScore} ${m.opponent}\n${m.result==='win'?'勝利':m.result==='lose'?'敗戦':'引き分け'}\n`;
+  text += `矢作SC ${m.myScore} - ${m.oppScore} ${m.opponent}\n`;
+  if (m.pk && m.pk.my != null && m.pk.opp != null) text += `PK戦 ${m.pk.my} - ${m.pk.opp}\n`;
+  text += m.pk ? (m.pk.result === 'win' ? 'PK戦で勝利\n' : 'PK戦で敗退\n')
+               : `${m.result==='win'?'勝利':m.result==='lose'?'敗戦':'引き分け'}\n`;
+  const sc = (m.scorers || []).filter(s => s.player);
+  if (sc.length) text += `\n得点者：${sc.map(s => shortName(s.player) + (s.goals > 1 ? '×' + s.goals : '')).join('、')}\n`;
+  const pks = pkScorerList(m);
+  if (pks.length) text += `PK得点：${pks.map(shortName).join('、')}\n`;
   document.getElementById('shareText').textContent = text;
   document.getElementById('shareModal').classList.add('show');
 }
+// ===== 大会ごとのLINE用テキスト =====
+function buildTournamentText(tournament) {
+  const ms = matches.filter(m => m.tournament === tournament).slice()
+    .sort((a, b) => (a.date || '').localeCompare(b.date || '') || (a.id || 0) - (b.id || 0));
+  if (!ms.length) return '';
+  const sd = (currentYear === '2026 U-9') ? STANDINGS_DATA[tournament] : null;
+
+  const fmtDate = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('ja-JP', { year:'numeric', month:'long', day:'numeric', weekday:'short' }) : '';
+  const dateText = (sd && sd.date) ? sd.date : [...new Set(ms.map(m => m.date).filter(Boolean))].map(fmtDate).join('・');
+
+  let t = `矢作SC（${currentYear}）大会結果\n\n`;
+  t += `${tournament}\n`;
+  if (dateText) t += `日程：${dateText}\n`;
+  if (sd && sd.venue) t += `会場：${sd.venue}\n`;
+
+  t += `\n【試合結果】\n`;
+  ms.forEach((m, i) => {
+    let pkScore = '';
+    if (m.pk) pkScore = (m.pk.my != null && m.pk.opp != null) ? `（PK ${m.pk.my}-${m.pk.opp}）` : '（PK）';
+    const res = m.pk ? (m.pk.result === 'win' ? '○ PK勝ち' : '● PK負け')
+              : m.result === 'win' ? '○ 勝ち' : m.result === 'lose' ? '● 負け' : '△ 引き分け';
+    t += `${i + 1}. vs ${m.opponent}　${m.myScore}-${m.oppScore}${pkScore}　${res}\n`;
+    const sc = (m.scorers || []).filter(s => s.player);
+    if (sc.length) t += `　得点：${sc.map(s => shortName(s.player) + (s.goals > 1 ? '×' + s.goals : '')).join('、')}\n`;
+    const pks = pkScorerList(m);
+    if (pks.length) t += `　PK：${pks.map(shortName).join('、')}\n`;
+  });
+
+  const w = ms.filter(m => m.result === 'win').length;
+  const d = ms.filter(m => m.result === 'draw').length;
+  const l = ms.filter(m => m.result === 'lose').length;
+  const gf = ms.reduce((s, m) => s + m.myScore, 0);
+  const ga = ms.reduce((s, m) => s + m.oppScore, 0);
+  t += `\n【成績】${w}勝${d}分${l}敗　得点${gf}　失点${ga}\n`;
+
+  if (sd) {
+    const placeLbl = sd.myPlace === 1 ? '優勝' : sd.myPlace === 2 ? '準優勝' : sd.myPlace === 3 ? '第3位' : '';
+    const note = sd.myPlaceNote || '';
+    const placeText = placeLbl && note ? `${placeLbl}（${note}）` : (placeLbl || note);
+    if (placeText) t += `【結果】${placeText}\n`;
+  }
+
+  t += `\n応援ありがとうございました。`;
+  return t;
+}
+
+function shareTournament() {
+  const tournament = document.getElementById('standingsTournamentSelect').value;
+  if (!tournament) { toast('大会を選んでください'); return; }
+  const text = buildTournamentText(tournament);
+  if (!text) return;
+  document.getElementById('shareText').textContent = text;
+  document.getElementById('shareModal').classList.add('show');
+}
+
 function closeShare() { document.getElementById('shareModal').classList.remove('show'); }
 function copyShare() {
-  navigator.clipboard.writeText(document.getElementById('shareText').textContent).then(() => {
-    toast('コピーしました！'); closeShare();
-  });
+  const text = document.getElementById('shareText').textContent;
+  const fallback = () => {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); toast('コピーしました！'); closeShare(); }
+    catch (e) { toast('コピーできませんでした。長押しで選択してください'); }
+    document.body.removeChild(ta);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => { toast('コピーしました！'); closeShare(); }).catch(fallback);
+  } else {
+    fallback();
+  }
 }
 
 // ===== 初期化実行 =====
