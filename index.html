@@ -442,6 +442,206 @@ input:focus, select:focus, textarea:focus { outline: none; background: white; bo
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; }
 }
+
+/* ===================================================
+   少年サッカー テーマ（芝・白線・クラブカラー 赤×黄×白）
+   =================================================== */
+:root {
+  --ink: #1C2440;
+  --paper: #FFFFFF;
+  --bg: #E6F4DE;
+  --turf: #2F9A45;
+  --turf-dark: #1E7434;
+  --turf-light: #3DAD55;
+  --chalk: #FFFFFF;
+  --red: #E8392B;
+  --red-dark: #B92216;
+  --gold: #FFC61A;
+  --gold-light: #FFF5CC;
+  --muted: #667363;
+  --border: #CFE3C6;
+  --radius: 16px;
+  --pop: 3px 3px 0 var(--ink);
+}
+body {
+  background-color: var(--bg);
+  background-image: repeating-linear-gradient(180deg, #E6F4DE 0 56px, #DCEFD2 56px 112px);
+}
+
+/* ヘッダー：芝のしま模様＋白線 */
+header {
+  background-color: var(--turf-dark);
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 28px, transparent 28px 56px);
+  border-bottom: 3px solid var(--chalk);
+  box-shadow: 0 3px 0 var(--turf-dark);
+}
+header::after {
+  height: 6px;
+  background: repeating-linear-gradient(90deg, var(--red) 0 22px, var(--gold) 22px 44px, var(--chalk) 44px 66px);
+}
+.header-title h1 { font-size: 1.08rem; letter-spacing: .06em; text-shadow: 2px 2px 0 rgba(0,0,0,.25); }
+.club-emblem { background: var(--red); border: 3px solid var(--chalk); box-shadow: 0 0 0 3px var(--gold); width: 46px; height: 46px; }
+.year-select-header { border-radius: 999px; border: 2px solid var(--chalk); background: var(--gold); padding: 3px 12px; }
+#connectionBadge { background: rgba(0,0,0,.2); padding: 2px 8px; border-radius: 999px; }
+
+/* 見出し：ボール＋白線 */
+.sec-title {
+  font-size: .86rem; color: var(--turf-dark);
+}
+.sec-title::before {
+  content: '⚽'; font-size: .95rem; line-height: 1;
+}
+.sec-title::after { border-top: 3px dotted #A9D59A; }
+
+/* カード：ステッカー風（太線＋ずらし影） */
+.card, .stat-card, .quick-action, .match-card, .player-row, .medal-box, .podium-row, .fx-panel {
+  border: 2.5px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--pop);
+}
+.card { padding: 16px 16px; }
+
+/* あいさつ：ピッチ */
+.greeting {
+  background-color: var(--turf);
+  background-image:
+    linear-gradient(90deg, transparent calc(100% - 30px), rgba(255,255,255,.35) calc(100% - 30px), rgba(255,255,255,.35) calc(100% - 27px), transparent calc(100% - 27px)),
+    radial-gradient(circle at calc(100% - 28px) 50%, transparent 52px, rgba(255,255,255,.35) 53px, rgba(255,255,255,.35) 56px, transparent 57px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.07) 0 34px, transparent 34px 68px);
+  border: 3px solid var(--chalk);
+  outline: 2.5px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 5px 5px 0 var(--ink);
+  padding: 20px 20px 18px;
+}
+.greeting::before {
+  background: none;
+  border: 3px solid rgba(255,255,255,.8); border-radius: 10px; inset: 10px;
+}
+.greeting::after { width: 0; }
+.greeting h2 { font-size: 1.05rem; text-shadow: 2px 2px 0 rgba(0,0,0,.28); }
+.greeting p, .greeting div { text-shadow: 1px 1px 0 rgba(0,0,0,.25); }
+.greeting b { color: var(--gold); }
+.fx-wdl { border: 2px solid var(--chalk); border-radius: 999px; height: 12px; }
+
+/* 数字カード：スコアボード */
+.stat-card { padding: 14px 14px 12px; }
+.stat-card::before { width: 100%; height: 7px; top: 0; left: 0; }
+.stat-card .num { font-size: 2.1rem; margin-top: 4px; }
+.stat-card.acc-red .num { color: var(--red); }
+.stat-card .lbl { color: var(--ink); }
+.stat-card.on { box-shadow: 5px 5px 0 var(--ink); }
+.fx-panel::before { height: 7px; border-radius: 13px 13px 0 0; }
+
+/* ボタン */
+.btn { border-radius: 999px; border: 2.5px solid var(--ink); box-shadow: var(--pop); }
+.btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+.btn-red { background: var(--red); }
+.btn-outline { background: var(--paper); }
+.copy-btn { border-radius: 999px; border: 2.5px solid var(--ink); box-shadow: var(--pop); }
+.quick-action .qa-ico { border-radius: 50%; border: 2.5px solid var(--ink); background: var(--gold-light); }
+.quick-action:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+.qa-arrow { width: 30px; height: 30px; border-radius: 50%; background: var(--red); color: #fff; display: grid; place-items: center; border: 2px solid var(--ink); font-size: 1rem; }
+
+/* 最近の試合・結果バッジ（まる） */
+.rm-result, .match-result-badge { border-radius: 50%; border: 2.5px solid var(--ink); }
+.bg-win { background: var(--red); color: #fff; }
+.bg-lose { background: #E7ECF3; color: #3B4868; }
+.bg-draw { background: var(--gold); color: var(--ink); }
+.rm-score, .match-score-big { color: var(--ink); }
+
+/* 試合カード */
+.match-card { overflow: hidden; }
+.match-head::before { width: 8px; }
+.match-card.expanded { box-shadow: 5px 5px 0 var(--ink); }
+.scorer-tag { border-radius: 999px; background: var(--gold-light); border: 2px solid var(--gold); color: #6B5200; }
+.scorer-tag.pk-scorer { border-radius: 999px; }
+.pk-tag { border-radius: 999px; border-width: 2px; }
+.action-btn { border-radius: 999px; border-width: 2px; }
+.match-memo { border-radius: 10px; border-left: 4px solid var(--turf); background: #F1F8EC; }
+
+/* 検索・フィルター */
+.search-bar input { border-radius: 999px; border: 2.5px solid var(--ink); box-shadow: var(--pop); }
+.search-bar::before { content: '⚽'; }
+.pill { border-radius: 999px; border: 2.5px solid var(--ink); background: var(--paper); }
+.pill.active { background: var(--turf); color: #fff; box-shadow: 2px 2px 0 var(--ink); }
+
+/* フォーム */
+input[type=text], input[type=date], input[type=number], input[type=password], select, textarea {
+  border-radius: 12px; border: 2px solid var(--ink); background: #F7FBF4;
+}
+input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 3px var(--gold); background: #fff; }
+.score-input-row input { background: var(--turf-dark); color: #fff; border: 3px solid var(--chalk); outline: 2px solid var(--ink); font-size: 2.2rem; }
+.score-input-row input::placeholder { color: rgba(255,255,255,.4); }
+.vs-x { color: var(--turf-dark); font-size: 1.4rem; }
+.scorer-section { border-radius: 12px; border: 2px dashed var(--turf); background: #EEF8E8; }
+.scorer-row { border-radius: 10px; border-width: 2px; }
+.add-scorer-btn { border-radius: 999px; border: 2px dashed var(--turf); color: var(--turf-dark); }
+.add-row button { border-radius: 12px; border-width: 2.5px; box-shadow: 2px 2px 0 var(--ink); }
+
+/* 大会成績：メダル */
+.medal-box { border-radius: 50% 50% 16px 16px / 36% 36% 16px 16px; padding-top: 14px; }
+.medal-box.m1 { background: #FFE680; }
+.medal-box.m2 { background: #E9EDF1; }
+.medal-box.m3 { background: #F6D2B0; }
+.medal-box.m1 .medal-lbl::before { content: '🥇 '; }
+.medal-box.m2 .medal-lbl::before { content: '🥈 '; }
+.medal-box.m3 .medal-lbl::before { content: '🥉 '; }
+.award-place { border-radius: 999px; border-width: 2px; }
+.award-place.p1 { background: var(--gold); }
+
+/* 順位表 */
+.summary-ticket {
+  background-color: var(--turf-dark);
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 30px, transparent 30px 60px);
+  border: 3px solid var(--chalk); outline: 2.5px solid var(--ink);
+  border-radius: var(--radius); box-shadow: 5px 5px 0 var(--ink);
+}
+.summary-ticket::after { width: 0; }
+.st-num { font-size: 1.9rem; color: var(--gold); text-shadow: 2px 2px 0 rgba(0,0,0,.3); }
+.st-grid > div { background: rgba(0,0,0,.22); border-radius: 12px; padding: 8px 0 6px; }
+.standings-table thead tr { background: var(--turf-dark); }
+.standings-table tr.is-me td { background: #FFE9E6; }
+.block-label { border-radius: 999px; background: var(--turf-dark); padding: 4px 14px; }
+.podium-row.p1 { background: #FFE680; border-color: var(--ink); }
+.podium-row.p2 { background: #EEF1F4; }
+.podium-row.p3 { background: #F9DEC5; border-color: var(--ink); }
+.podium-row.is-me { outline: 3px solid var(--red); outline-offset: 2px; border-color: var(--ink); }
+
+/* 選手：ユニフォーム型の背番号 */
+.player-row { padding: 12px 14px; }
+.player-no {
+  width: 42px; height: 40px; border-radius: 0; background: var(--red); color: #fff; font-size: 1rem;
+  clip-path: polygon(22% 0, 38% 0, 50% 12%, 62% 0, 78% 0, 100% 20%, 88% 42%, 80% 36%, 80% 100%, 20% 100%, 20% 36%, 12% 42%, 0 20%);
+  padding-top: 8px;
+}
+.player-row.is-cap { border-color: var(--ink); background: #FFFBE6; }
+.player-row.is-cap .player-no { background: var(--gold); color: var(--ink); }
+.player-row.is-vice { border-color: var(--ink); background: #F0F8FE; }
+.player-row.is-vice .player-no { background: var(--sky); color: #fff; }
+.role-badge { border-radius: 999px; border-width: 2px; }
+
+/* 設定 */
+.player-chip { border-radius: 999px; border-width: 2px; }
+.danger-zone { border-radius: 12px; }
+
+/* 下のナビ */
+.bottom-nav {
+  border-top: 3px solid var(--ink); border-radius: 20px 20px 0 0;
+  box-shadow: 0 -3px 0 var(--turf);
+}
+.nav-btn { border-radius: 14px; margin: 0 2px; }
+.nav-btn.active { background: var(--red); color: #fff; }
+.nav-btn.active::after { display: none; }
+.nav-btn .ico { filter: grayscale(1) opacity(.55); }
+
+/* モーダル・トースト */
+.modal { border-radius: 22px 22px 0 0; border-top: 3px solid var(--ink); }
+.modal-title { color: var(--turf-dark); }
+.share-text { border-radius: 12px; border: 2px dashed var(--turf); }
+.toast { background: var(--turf-dark); border: 2.5px solid var(--chalk); border-radius: 999px; box-shadow: var(--pop); }
+.empty-state { color: #8FA88A; }
+.empty-state::before { content: '⚽'; display: block; font-size: 2rem; margin-bottom: 8px; opacity: .6; }
 </style>
 </head>
 <body>
