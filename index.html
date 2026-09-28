@@ -368,6 +368,80 @@ input:focus, select:focus, textarea:focus { outline: none; background: white; bo
 .podium-row.p3 { background: #FBEEE2; border-color: #C98A4B; }
 .podium-row.p4 { background: var(--paper); }
 .podium-row.is-me { border-width: 2.5px; border-color: var(--red); }
+
+/* ===== 動き（FX） ===== */
+@keyframes fxSlideL { from{opacity:0;transform:translateX(26px)} to{opacity:1;transform:none} }
+@keyframes fxSlideR { from{opacity:0;transform:translateX(-26px)} to{opacity:1;transform:none} }
+.screen.active.fx-from-right { animation: fxSlideL .32s cubic-bezier(.2,.8,.2,1); }
+.screen.active.fx-from-left  { animation: fxSlideR .32s cubic-bezier(.2,.8,.2,1); }
+@keyframes fxBar { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+.nav-btn.active::after { animation: fxBar .3s cubic-bezier(.2,.8,.2,1) both; transform-origin: center; }
+.nav-btn.active .ico { animation: fxHop .4s cubic-bezier(.3,1.6,.5,1); }
+@keyframes fxHop { 0%{transform:translateY(0)} 40%{transform:translateY(-5px)} 100%{transform:none} }
+@keyframes fxRoll { from{transform:translateX(-40px) rotate(-360deg);opacity:0} to{transform:none;opacity:1} }
+.club-emblem { animation: fxRoll .9s cubic-bezier(.2,.8,.2,1) both; cursor:pointer; }
+.club-emblem.spin { animation: fxSpin .7s cubic-bezier(.2,.8,.2,1); }
+@keyframes fxSpin { to{transform:rotate(360deg)} }
+
+/* 勝敗バー（あいさつカード） */
+.fx-wdl { display:flex; height:10px; margin-top:12px; border:1.5px solid var(--paper); border-radius:2px; overflow:hidden; position:relative; z-index:1; background:rgba(255,255,255,.08); }
+.fx-wdl i { display:block; height:100%; transform-origin:left; animation: fxBar .8s cubic-bezier(.2,.8,.2,1) both; }
+.fx-wdl .w { background: var(--lime); }
+.fx-wdl .d { background: var(--gold); animation-delay:.15s; }
+.fx-wdl .l { background: var(--red); animation-delay:.3s; }
+
+/* スタットカード：タップで内訳 */
+.stat-card { cursor:pointer; transition: transform .18s ease, box-shadow .18s ease; user-select:none; }
+.stat-card:active { transform: translate(1px,1px); }
+.stat-card.on { transform: translate(-2px,-2px); box-shadow: 4px 4px 0 var(--ink); }
+.stat-card .fx-hint { position:absolute; right:9px; top:9px; font-size:.58rem; font-weight:900; color:var(--muted); letter-spacing:.04em; }
+.stat-card .fx-hint b { display:inline-block; transition: transform .25s; }
+.stat-card.on .fx-hint { color: var(--ink); }
+.stat-card.on .fx-hint b { transform: rotate(180deg); }
+.stat-card .num { font-variant-numeric: tabular-nums; }
+#statDetail { display:grid; grid-template-rows:0fr; transition: grid-template-rows .35s cubic-bezier(.2,.8,.2,1), margin .35s; }
+#statDetail.open { grid-template-rows:1fr; margin-top:-4px; margin-bottom:16px; }
+#statDetail > div { overflow:hidden; min-height:0; }
+.fx-panel { background:var(--paper); border:1.5px solid var(--ink); border-radius:var(--radius); padding:14px 15px; position:relative; }
+.fx-panel::before { content:''; position:absolute; left:0; top:0; right:0; height:4px; background: var(--accent, var(--red)); }
+.fx-ph { font-weight:900; font-size:.84rem; margin:2px 0 10px; display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+.fx-ph small { font-size:.64rem; color:var(--muted); font-weight:800; }
+.fx-row { display:grid; grid-template-columns: 7.2em 1fr 3.2em; align-items:center; gap:8px; font-size:.74rem; font-weight:800; padding:4px 0; }
+.fx-row .nm { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.fx-row .v { text-align:right; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:.95rem; }
+.fx-track { height:12px; background:#F1EEE3; border-radius:2px; overflow:hidden; display:flex; }
+.fx-track i { display:block; height:100%; transform-origin:left; animation: fxBar .7s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--k,0) * 60ms); }
+.fx-legend { display:flex; gap:12px; font-size:.62rem; font-weight:800; color:var(--muted); margin-top:8px; }
+.fx-legend b { display:inline-block; width:9px; height:9px; margin-right:4px; vertical-align:-1px; border:1px solid var(--ink); }
+.fx-seq { display:flex; flex-wrap:wrap; gap:5px; }
+.fx-seq span { width:26px; height:26px; display:grid; place-items:center; font-size:.66rem; font-weight:900; border:1.5px solid var(--ink); border-radius:2px; animation: fxPop .35s cubic-bezier(.3,1.5,.5,1) both; animation-delay: calc(var(--k,0) * 45ms); }
+@keyframes fxPop { from{opacity:0;transform:scale(.3)} to{opacity:1;transform:none} }
+.fx-seq .t { width:auto; padding:0 6px; border-style:dashed; border-color:var(--border); color:var(--muted); font-size:.58rem; }
+
+/* 試合カード：なめらかに開く＋結果スタンプ */
+.expand-section { display:block !important; max-height:0; overflow:hidden; padding-top:0; padding-bottom:0; border-top-color:transparent; transition: max-height .38s cubic-bezier(.2,.8,.2,1), padding .38s cubic-bezier(.2,.8,.2,1), border-color .2s; }
+.match-card.expanded .expand-section { max-height:640px; padding-top:13px; padding-bottom:14px; border-top-color:var(--border); animation:none; }
+.match-card { transition: box-shadow .2s, transform .2s; }
+.match-card.expanded { box-shadow: 4px 4px 0 var(--ink); transform: translate(-2px,-2px); }
+@keyframes fxStamp { 0%{opacity:0;transform:scale(1.8) rotate(-14deg)} 60%{opacity:1;transform:scale(.92) rotate(3deg)} 100%{transform:none} }
+.match-card .match-result-badge { animation: fxStamp .45s cubic-bezier(.3,1.3,.5,1) both; animation-delay: inherit; }
+.match-card.expanded .scorer-tag { animation: fxPop .3s cubic-bezier(.3,1.5,.5,1) both; }
+
+/* 順位表 */
+.fx-rows tbody tr { animation: fadeUp .35s ease both; }
+.standings-table tr.is-me td { position:relative; }
+@keyframes fxSweep { from{background-position:-120% 0} to{background-position:220% 0} }
+.fx-rows tr.is-me td { background-image: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.75) 50%, transparent 70%); background-size: 60% 100%; background-repeat:no-repeat; animation: fxSweep 1.1s ease .5s both; }
+.podium-row { animation: fadeUp .4s ease both; }
+.podium-row.p1 .rank-label::before { content:'🏆 '; }
+.st-num { font-variant-numeric: tabular-nums; }
+
+/* 紙吹雪 */
+#fxConfetti { position:fixed; inset:0; pointer-events:none; z-index:1000; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; }
+}
 </style>
 </head>
 <body>
@@ -2126,6 +2200,205 @@ function copyShare() {
     fallback();
   }
 }
+
+
+// ===== 動き（FX）：既存の描画関数を包んで演出を足す =====
+const FX_REDUCE = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fxLast = {};
+function fxCount(el, to, key, dur) {
+  if (!el) return;
+  const node = [...el.childNodes].find(n => n.nodeType === 3 && n.textContent.trim() !== '') || el.firstChild;
+  if (!node) return;
+  const from = (key in fxLast) ? fxLast[key] : 0;
+  fxLast[key] = to;
+  if (FX_REDUCE || from === to) { node.textContent = to; return; }
+  const t0 = performance.now(); dur = dur || 900;
+  node.textContent = from;
+  (function tick(t) {
+    const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    node.textContent = Math.round(from + (to - from) * e);
+    if (k < 1) requestAnimationFrame(tick);
+  })(t0);
+}
+function fxEsc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+// --- タブ切り替え：進む方向にスライド ---
+let fxPrevTab = 'home';
+const _fxGoTab = goTab;
+goTab = function(name) {
+  const from = tabOrder.indexOf(fxPrevTab), to = tabOrder.indexOf(name);
+  _fxGoTab(name);
+  const scr = document.getElementById('screen-' + name);
+  if (!scr || !scr.classList.contains('active')) return;
+  scr.classList.remove('fx-from-left', 'fx-from-right');
+  void scr.offsetWidth;
+  if (to !== from) scr.classList.add(to > from ? 'fx-from-right' : 'fx-from-left');
+  fxPrevTab = name;
+};
+
+// --- ホーム：数字カウントアップ・勝敗バー・タップで内訳 ---
+let fxOpenStat = null;
+const FX_STATS = [
+  { key: 'wins',  title: '大会ごとの勝敗',     acc: 'var(--red)'  },
+  { key: 'goals', title: '大会ごとの得点・失点', acc: 'var(--gold)' },
+  { key: 'games', title: '試合の流れ（古い順）', acc: 'var(--sky)'  },
+  { key: 'rate',  title: '試合の種類別 勝率',   acc: 'var(--lime)' }
+];
+function fxStatDetailHtml(key) {
+  const ms = [...matches].sort((a, b) => (a.date || '').localeCompare(b.date || '') || (a.id || 0) - (b.id || 0));
+  if (!ms.length) return '<div class="fx-ph">まだ試合がありません</div>';
+  if (key === 'wins') {
+    const map = new Map();
+    ms.forEach(m => {
+      const t = m.tournament || '練習試合';
+      if (!map.has(t)) map.set(t, { w: 0, d: 0, l: 0 });
+      map.get(t)[m.result === 'win' ? 'w' : m.result === 'lose' ? 'l' : 'd']++;
+    });
+    const rows = [...map.entries()];
+    const max = Math.max(...rows.map(([, r]) => r.w + r.d + r.l));
+    return `<div class="fx-ph">大会ごとの勝敗<small>${rows.length}大会・PK勝ちは勝ちに含む</small></div>` +
+      rows.map(([t, r], i) => {
+        const n = r.w + r.d + r.l, pc = v => (v / max * 100) + '%';
+        return `<div class="fx-row"><span class="nm">${fxEsc(t.replace(/^第\d+回\s*/, ''))}</span>
+          <span class="fx-track"><i style="--k:${i};width:${pc(r.w)};background:var(--lime)"></i><i style="--k:${i};width:${pc(r.d)};background:var(--gold)"></i><i style="--k:${i};width:${pc(r.l)};background:var(--red)"></i></span>
+          <span class="v">${r.w}<small style="font-size:.6rem">/${n}</small></span></div>`;
+      }).join('') +
+      `<div class="fx-legend"><span><b style="background:var(--lime)"></b>勝</span><span><b style="background:var(--gold)"></b>分</span><span><b style="background:var(--red)"></b>負</span></div>`;
+  }
+  if (key === 'goals') {
+    const map = new Map();
+    ms.forEach(m => {
+      const t = m.tournament || '練習試合';
+      if (!map.has(t)) map.set(t, { f: 0, a: 0 });
+      map.get(t).f += parseInt(m.myScore) || 0; map.get(t).a += parseInt(m.oppScore) || 0;
+    });
+    const rows = [...map.entries()];
+    const max = Math.max(1, ...rows.map(([, r]) => Math.max(r.f, r.a)));
+    return `<div class="fx-ph">大会ごとの得点・失点<small>PK戦は含まない</small></div>` +
+      rows.map(([t, r], i) => `<div class="fx-row"><span class="nm">${fxEsc(t.replace(/^第\d+回\s*/, ''))}</span>
+        <span style="display:grid;gap:3px"><span class="fx-track"><i style="--k:${i};width:${r.f / max * 100}%;background:var(--gold)"></i></span><span class="fx-track" style="height:6px"><i style="--k:${i};width:${r.a / max * 100}%;background:#C9C4B4"></i></span></span>
+        <span class="v">${r.f}<small style="font-size:.6rem">-${r.a}</small></span></div>`).join('') +
+      `<div class="fx-legend"><span><b style="background:var(--gold)"></b>得点</span><span><b style="background:#C9C4B4"></b>失点</span></div>`;
+  }
+  if (key === 'games') {
+    const cls = { win: 'bg-win', draw: 'bg-draw', lose: 'bg-lose' };
+    const lbl = m => m.pk ? 'PK' : m.result === 'win' ? '勝' : m.result === 'lose' ? '負' : '分';
+    let html = '', k = 0, lastT = null;
+    ms.forEach(m => {
+      const t = m.tournament || '練習試合';
+      if (t !== lastT) { html += `<span class="t" style="--k:${k++}">${fxEsc(t.replace(/^第\d+回\s*/, '').replace(/^U-9\s*/, ''))}</span>`; lastT = t; }
+      html += `<span class="${cls[m.result] || ''}" style="--k:${k++}" title="${fxEsc(m.date)} vs ${fxEsc(m.opponent)} ${m.myScore}-${m.oppScore}">${lbl(m)}</span>`;
+    });
+    return `<div class="fx-ph">試合の流れ<small>左から古い順・全${ms.length}試合</small></div><div class="fx-seq">${html}</div>`;
+  }
+  if (key === 'rate') {
+    const grp = [
+      ['公式戦', ms.filter(m => ['public', 'tournament', 'league'].includes(m.matchType))],
+      ['練習試合', ms.filter(m => m.matchType === 'friendly')],
+      ['通算', ms]
+    ];
+    return `<div class="fx-ph">試合の種類別 勝率<small>勝ち ÷ 試合数</small></div>` +
+      grp.map(([n, list], i) => {
+        const w = list.filter(m => m.result === 'win').length, r = list.length ? Math.round(w / list.length * 100) : 0;
+        return `<div class="fx-row"><span class="nm">${n}<small style="color:var(--muted);font-size:.6rem"> ${list.length}試合</small></span>
+          <span class="fx-track"><i style="--k:${i};width:${r}%;background:var(--lime)"></i></span><span class="v">${list.length ? r + '%' : '−'}</span></div>`;
+      }).join('');
+  }
+  return '';
+}
+function fxRenderStatDetail() {
+  let box = document.getElementById('statDetail');
+  if (!box) {
+    box = document.createElement('div'); box.id = 'statDetail'; box.innerHTML = '<div></div>';
+    document.getElementById('statsGrid').after(box);
+  }
+  const cards = document.querySelectorAll('#statsGrid .stat-card');
+  cards.forEach((c, i) => c.classList.toggle('on', FX_STATS[i].key === fxOpenStat));
+  if (!fxOpenStat) { box.classList.remove('open'); return; }
+  const s = FX_STATS.find(x => x.key === fxOpenStat);
+  box.firstChild.innerHTML = `<div class="fx-panel" style="--accent:${s.acc}">${fxStatDetailHtml(s.key)}</div>`;
+  box.classList.add('open');
+}
+const _fxRenderHome = renderHome;
+renderHome = function() {
+  _fxRenderHome();
+  const total = matches.length;
+  const wins = matches.filter(m => m.result === 'win').length;
+  const draws = matches.filter(m => m.result === 'draw').length;
+  const loses = matches.filter(m => m.result === 'lose').length;
+  const gf = matches.reduce((s, m) => s + (parseInt(m.myScore) || 0), 0);
+  const rate = total ? Math.round(wins / total * 100) : 0;
+  const cards = document.querySelectorAll('#statsGrid .stat-card');
+  [wins, gf, total, rate].forEach((v, i) => {
+    const c = cards[i]; if (!c) return;
+    fxCount(c.querySelector('.num'), v, 'stat' + i);
+    c.setAttribute('role', 'button'); c.tabIndex = 0;
+    c.insertAdjacentHTML('beforeend', '<span class="fx-hint">内訳 <b>▼</b></span>');
+    const toggle = () => { fxOpenStat = fxOpenStat === FX_STATS[i].key ? null : FX_STATS[i].key; fxRenderStatDetail(); };
+    c.onclick = toggle;
+    c.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } };
+  });
+  const sub = document.getElementById('greetingSub');
+  if (sub && total) {
+    sub.insertAdjacentHTML('beforeend', `<div class="fx-wdl" aria-hidden="true"><i class="w" style="width:${wins / total * 100}%"></i><i class="d" style="width:${draws / total * 100}%"></i><i class="l" style="width:${loses / total * 100}%"></i></div>`);
+  }
+  document.querySelectorAll('.medal-num').forEach((el, i) => fxCount(el, parseInt(el.textContent) || 0, 'medal' + i, 700));
+  fxRenderStatDetail();
+};
+
+// --- 順位表：数字カウントアップ・行を順に表示・自チーム行を光らせる ---
+const _fxRenderStandings = renderStandings;
+renderStandings = function() {
+  _fxRenderStandings();
+  const t = document.getElementById('standingsTournamentSelect').value || '';
+  document.querySelectorAll('#standingsSummary .st-num').forEach((el, i) => {
+    const v = parseInt(el.textContent) || 0; delete fxLast['st' + i + t]; fxCount(el, v, 'st' + i + t, 800);
+  });
+  document.querySelectorAll('#standingsBlock .standings-table, #standingsMatchTable .standings-table').forEach(tb => {
+    tb.classList.add('fx-rows');
+    tb.querySelectorAll('tbody tr').forEach((tr, i) => { tr.style.animationDelay = (i * 60 + 80) + 'ms'; });
+  });
+  document.querySelectorAll('#standingsBlock .podium-row').forEach((r, i) => { r.style.animationDelay = (i * 80 + 200) + 'ms'; });
+};
+
+// --- 勝ち試合を保存したら紙吹雪 ---
+function fxConfetti() {
+  if (FX_REDUCE) return;
+  const cv = document.createElement('canvas'); cv.id = 'fxConfetti';
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
+  document.body.appendChild(cv);
+  const cx = cv.getContext('2d'); cx.scale(dpr, dpr);
+  const cols = ['#E8392B', '#F5B301', '#8FCB3A', '#3EA9DE', '#FFFDF6'];
+  const ps = Array.from({ length: 110 }, () => ({
+    x: innerWidth / 2 + (Math.random() - .5) * 60, y: innerHeight * .62,
+    vx: (Math.random() - .5) * 11, vy: -Math.random() * 13 - 6,
+    w: 5 + Math.random() * 6, h: 3 + Math.random() * 5, r: Math.random() * 6, vr: (Math.random() - .5) * .4,
+    c: cols[Math.floor(Math.random() * cols.length)]
+  }));
+  const t0 = performance.now();
+  (function step(t) {
+    const k = (t - t0) / 1800;
+    cx.clearRect(0, 0, innerWidth, innerHeight);
+    ps.forEach(p => {
+      p.vy += .38; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      cx.save(); cx.globalAlpha = Math.max(0, 1 - k); cx.translate(p.x, p.y); cx.rotate(p.r);
+      cx.fillStyle = p.c; cx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); cx.restore();
+    });
+    if (k < 1) requestAnimationFrame(step); else cv.remove();
+  })(t0);
+}
+const _fxSaveMatch = saveMatch;
+saveMatch = function() {
+  const n = matches.length;
+  _fxSaveMatch();
+  if (matches.length > n && matches[0] && matches[0].result === 'win') fxConfetti();
+};
+
+// --- エンブレムをタップするとボールが回る ---
+document.querySelector('.club-emblem').addEventListener('click', e => {
+  const el = e.currentTarget; el.classList.remove('spin'); void el.offsetWidth; el.classList.add('spin');
+});
 
 // ===== 初期化実行 =====
 updateYearUI();
