@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#36793C">
 <title>矢作SC チーム記録</title>
 
 <!-- アイコン設定 -->
@@ -15,633 +16,524 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bungee&family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&family=Baloo+2:wght@600;700;800&display=swap');
 
+/* =====================================================
+   グリーンピッチ・デザイン
+   緑のピッチ／ネイビーの太線＋ずらし影／動くスタジアム
+   ===================================================== */
 :root {
-  --ink: #23263A;
-  --paper: #FFFDF6;
-  --bg: #EDEAE0;
-  --red: #E8392B;
-  --red-dark: #B92216;
-  --red-light: #FDE6E3;
-  --gold: #F5B301;
-  --gold-light: #FFF4D4;
-  --lime: #8FCB3A;
-  --lime-light: #E7F5D4;
-  --sky: #3EA9DE;
+  --ink: #1B2142;
+  --navy: #1B2142;
+  --navy-light: #2E3768;
+  --paper: #FFFFFF;
+  --white: #FFFFFF;
+  --text: #1B2142;
+  --bg: #E6F2DF;
+  --green-hd: #36793C;
+  --pitch: #287637;
+  --red: #D6402F;
+  --red-dark: #A92C1F;
+  --red-light: #FFE3DE;
+  --gold: #F2C230;
+  --gold-light: #FFF3C7;
+  --lime: #A5D05A;
+  --lime-light: #E9F5D2;
+  --sky: #5BA7DC;
   --sky-light: #DCEEF9;
   --grape: #7B5EA7;
-  --muted: #8B8778;
-  --border: #DCD8CB;
-  --radius: 4px;
-  --navy: #23263A;
-  --navy-light: #3A3E58;
-  --white: #FFFDF6;
-  --text: #23263A;
-  --green: #5D8F1E;
-  --green-light: #E7F5D4;
-  --shadow: none;
+  --green: #2E7D32;
+  --green-light: #DDF0D6;
+  --muted: #4B5563;
+  --border: #B5D0AE;
+  --radius: 22px;
+  --shadow: 3px 4px 0 var(--ink);
+  --ease-pop: cubic-bezier(.34, 1.56, .64, 1);
+  --ease-out: cubic-bezier(.2, .9, .25, 1);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body {
   font-family: 'M PLUS Rounded 1c', sans-serif;
-  background: var(--bg);
-  background-image:
-    repeating-linear-gradient(45deg, rgba(0,0,0,0.012) 0 2px, transparent 2px 6px);
-  color: var(--ink); min-height: 100vh; padding-bottom: 86px;
+  background-color: var(--bg);
+  background-image: repeating-linear-gradient(180deg, rgba(255,255,255,0.5) 0 60px, rgba(255,255,255,0) 60px 120px);
+  color: var(--ink); min-height: 100vh; padding-bottom: 112px;
 }
 
 /* ===== ヘッダー ===== */
 header {
-  background: var(--ink);
-  color: var(--paper); position: sticky; top: 0; z-index: 200;
+  position: sticky; top: 0; z-index: 200; color: #fff; overflow: hidden;
+  background-color: var(--green-hd);
+  border-bottom: 3px solid #265A2B;
 }
-header::after {
-  content: ''; display: block; height: 8px;
-  background:
-    radial-gradient(circle at 6px -2px, var(--bg) 5px, transparent 5.5px) 0 0/12px 8px repeat-x;
+header::before { /* 芝のストライプがゆっくり流れる */
+  content: ''; position: absolute; top: 0; bottom: 0; left: -88px; right: 0; z-index: 0;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,0.09) 0 44px, rgba(255,255,255,0) 44px 88px);
+  animation: grassSlide 14s linear infinite;
 }
-.header-top { padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+header::after { /* 赤・黄・白のラインが流れる */
+  content: ''; display: block; height: 10px; position: relative; z-index: 1;
+  background: repeating-linear-gradient(90deg, var(--red) 0 66px, var(--gold) 66px 132px, #fff 132px 198px);
+  animation: stripeMarch 9s linear infinite;
+}
+.header-top { position: relative; z-index: 1; padding: 16px 16px 14px; display: flex; align-items: center; gap: 14px; }
 .club-emblem {
-  width: 44px; height: 44px; border-radius: 50%;
-  background: var(--red); border: 3px solid var(--paper);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.35rem; flex-shrink: 0;
+  width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0; margin: 4px 6px 4px 4px;
+  background: var(--red); display: flex; align-items: center; justify-content: center; font-size: 1.7rem;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 7px var(--gold), 0 4px 0 7px rgba(27,33,66,0.35);
+  animation: emblemKick 7s var(--ease-pop) infinite;
 }
-.header-title { flex: 1; }
-.header-title h1 {
-  font-family: 'Bungee', sans-serif; font-size: 0.95rem; font-weight: 400;
-  line-height: 1.2; letter-spacing: 0.04em;
-}
-.header-title .sub { font-size: 0.66rem; opacity: 0.85; margin-top: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.header-title { flex: 1; min-width: 0; }
+.header-title h1 { font-size: 1.22rem; line-height: 1.2; color: #fff; text-shadow: 2px 2px 0 rgba(27,33,66,0.45); font-weight: 900; }
+.header-title h1 .lat { font-family: 'Bungee', sans-serif; font-weight: 400; letter-spacing: 0.03em; }
+.header-title .sub { margin-top: 7px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .year-select-header {
-  background: var(--gold); color: var(--ink); border: 1.5px solid var(--ink);
-  border-radius: 3px; padding: 3px 8px; font-weight: 900; font-size: 0.78rem;
-  font-family: 'M PLUS Rounded 1c', sans-serif; cursor: pointer; outline: none;
+  flex: 1 1 100%; width: 100%; min-width: 0;
+  background: #EBC542; color: var(--ink); border: 3px solid rgba(255,255,255,0.92); border-radius: 999px;
+  padding: 7px 16px; font-weight: 900; font-size: 0.95rem; letter-spacing: 0.04em;
+  font-family: 'Bungee', 'M PLUS Rounded 1c', sans-serif; cursor: pointer; outline: none;
+  box-shadow: 0 3px 0 rgba(27,33,66,0.35);
 }
+#connectionBadge {
+  display: inline-flex; align-items: center; gap: 7px; padding: 4px 13px 4px 11px; border-radius: 999px;
+  background: rgba(0,0,0,0.3); color: #fff !important; font-size: 0.72rem !important; font-weight: 900 !important;
+}
+#connectionBadge::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #B8C0C8; }
+#connectionBadge[data-st="on"]::before { background: #7CFF8A; animation: dotPulse 1.8s ease-out infinite; }
+#connectionBadge[data-st="off"]::before { background: #FF7A6B; }
 
 /* ===== ボトムナビ ===== */
 .bottom-nav {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: var(--paper);
-  display: flex; justify-content: space-around;
-  z-index: 200; padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
-  border-top: 2px solid var(--ink);
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 200;
+  display: flex; gap: 2px; background: #fff;
+  border-top: 5px solid var(--green-hd); border-radius: 30px 30px 0 0;
+  padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
+  box-shadow: 0 -8px 20px rgba(27,33,66,0.16);
 }
+.nav-pill {
+  position: absolute; left: 0; top: 10px; bottom: calc(10px + env(safe-area-inset-bottom)); width: 0;
+  border-radius: 20px; background: var(--red); box-shadow: 0 3px 0 var(--red-dark); z-index: 0;
+  transition: transform 0.5s var(--ease-pop), width 0.5s var(--ease-pop);
+}
+.bottom-nav:not(.has-pill) .nav-pill { display: none; }
+.bottom-nav:not(.has-pill) .nav-btn.active { background: var(--red); }
 .nav-btn {
-  flex: 1; padding: 5px 2px;
-  background: none; border: none; cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
-  color: var(--muted); font-family: 'M PLUS Rounded 1c', sans-serif;
-  transition: color 0.15s; position: relative;
+  position: relative; z-index: 1; flex: 1; min-width: 0; padding: 9px 2px 7px; border: none; background: none; cursor: pointer;
+  border-radius: 20px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-family: 'M PLUS Rounded 1c', sans-serif; color: #384058;
 }
-.nav-btn .ico { font-size: 1.2rem; line-height: 1; filter: grayscale(1) opacity(0.5); transition: filter 0.15s; }
-.nav-btn .lbl { font-size: 0.64rem; font-weight: 800; letter-spacing: 0.04em; }
-.nav-btn.active { color: var(--ink); }
-.nav-btn.active .ico { filter: none; }
-.nav-btn.active::after { content:''; position:absolute; bottom:-8px; width: 24px; height: 3px; background: var(--red); }
+.nav-btn .ico { font-size: 1.5rem; line-height: 1; transition: transform 0.4s var(--ease-pop); }
+.nav-btn .lbl { font-size: 0.7rem; font-weight: 900; letter-spacing: 0.03em; transition: color 0.2s; }
+.nav-btn:active .ico { transform: scale(0.88); }
+.nav-btn.active .lbl { color: #fff; }
+.nav-btn.active .ico { transform: translateY(-2px) scale(1.14); animation: icoPop 0.55s var(--ease-pop); }
 
-/* ===== 画面 ===== */
-.screen { display: none; padding: 18px 14px 92px; }
-.screen.active { display: block; animation: slideIn 0.22s ease; }
-@keyframes slideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+/* ===== 画面と切り替え ===== */
+.screen { display: none; padding: 22px 16px 120px; }
+.screen.active { display: block; }
+.screen[data-dir="fwd"]  { --dx: 30px; }
+.screen[data-dir="back"] { --dx: -30px; }
+.screen.active > * { animation: popIn 0.55s var(--ease-out) both; }
+.screen.active > *:nth-child(1)  { animation-delay: 0s; }
+.screen.active > *:nth-child(2)  { animation-delay: 0.06s; }
+.screen.active > *:nth-child(3)  { animation-delay: 0.12s; }
+.screen.active > *:nth-child(4)  { animation-delay: 0.18s; }
+.screen.active > *:nth-child(5)  { animation-delay: 0.24s; }
+.screen.active > *:nth-child(6)  { animation-delay: 0.3s; }
+.screen.active > *:nth-child(7)  { animation-delay: 0.36s; }
+.screen.active > *:nth-child(8)  { animation-delay: 0.42s; }
+.screen.active > *:nth-child(n+9) { animation-delay: 0.48s; }
 
 .sec-title {
-  font-family: 'Bungee', sans-serif; font-size: 0.82rem; font-weight: 400;
-  color: var(--ink); margin-bottom: 13px; letter-spacing: 0.08em;
-  display: flex; align-items: center; gap: 9px;
+  display: flex; align-items: center; gap: 10px; margin: 0 4px 14px;
+  font-size: 1.08rem; font-weight: 900; color: var(--ink); letter-spacing: 0.04em;
 }
-.sec-title::after {
-  content:''; flex:1; height: 0;
-  border-top: 2px dashed var(--border);
-}
+.sec-title::before { content: '⚽'; font-size: 1.25rem; line-height: 1; }
+.sec-title::after { content: ''; flex: 1; height: 0; border-top: 5px dotted #9CC79B; }
 
 .card {
-  background: var(--paper); border-radius: var(--radius); padding: 16px; margin-bottom: 14px;
-  border: 1.5px solid var(--ink);
+  background: #fff; border: 3px solid var(--ink); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 16px; margin: 0 4px 18px;
 }
 
-/* ===== ホーム ===== */
-.greeting {
-  background: var(--ink);
-  color: var(--paper); border-radius: var(--radius);
-  padding: 18px 20px 17px; margin-bottom: 16px;
-  position: relative; overflow: hidden;
+/* ===== ピッチ（ホームの成績／順位表の成績） ===== */
+.greeting, .summary-ticket {
+  position: relative; overflow: hidden; color: #fff;
+  background: var(--pitch); border: 4px solid #fff; border-radius: 28px;
+  box-shadow: 0 0 0 3px var(--ink), 6px 7px 0 3px var(--ink);
+  margin: 4px 7px 26px 4px; padding: 30px 26px 26px;
 }
-.greeting::before {
-  content: ''; position: absolute; inset: 0;
-  background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 8px, transparent 8px 16px);
-  pointer-events: none;
+.greeting::before, .summary-ticket::before {
+  content: ''; position: absolute; top: 0; bottom: 0; left: -96px; right: 0; z-index: 0;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0 48px, rgba(255,255,255,0) 48px 96px);
+  animation: grassSlide 12s linear infinite;
 }
-.greeting::after {
-  content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 10px;
-  background: repeating-linear-gradient(180deg, var(--red) 0 12px, var(--gold) 12px 24px, var(--lime) 24px 36px);
+.greeting::after, .summary-ticket::after {
+  content: ''; position: absolute; inset: 12px; z-index: 1; pointer-events: none;
+  border: 3px solid rgba(255,255,255,0.8); border-radius: 18px;
+}
+.greeting > *, .summary-ticket > * { position: relative; z-index: 2; }
+.pc-halfway { position: absolute !important; z-index: 1 !important; top: 12px; bottom: 12px; right: 38.5px; width: 3px; background: rgba(255,255,255,0.8); }
+.pc-circle {
+  position: absolute !important; z-index: 1 !important; top: 50%; right: 40px; width: 132px; height: 132px; margin: -66px -66px 0 0;
+  border: 3px solid rgba(255,255,255,0.8); border-radius: 50%; animation: ringPulse 3.2s ease-in-out infinite;
+}
+.pc-ball { position: absolute !important; z-index: 3 !important; right: 26px; top: calc(50% - 20px); font-size: 28px; line-height: 1; animation: ballBounce 1.25s infinite; }
+.pc-ballshadow {
+  position: absolute !important; z-index: 2 !important; right: 28px; top: calc(50% + 12px); width: 24px; height: 7px; border-radius: 50%;
+  background: rgba(0,0,0,0.38); animation: shadowPulse 1.25s infinite;
+}
+.pc-shine {
+  position: absolute !important; z-index: 4 !important; top: -20%; bottom: -20%; left: 0; width: 56px; pointer-events: none;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.4), rgba(255,255,255,0));
+  transform: translateX(-120px) skewX(-20deg); animation: shine 1.5s ease-out 0.5s 1 both;
 }
 .greeting h2 {
-  font-family: 'Bungee', sans-serif; font-size: 1rem; font-weight: 400;
-  margin-bottom: 8px; letter-spacing: 0.03em; position: relative; z-index: 1;
+  font-family: 'Bungee', 'M PLUS Rounded 1c', sans-serif; font-weight: 400; font-size: 1.04rem; line-height: 1.45;
+  margin-bottom: 14px; color: #fff; text-shadow: 2px 2px 0 var(--ink); letter-spacing: 0.02em;
 }
-.greeting p, .greeting div { position: relative; z-index: 1; }
+.pc-line { font-weight: 900; color: #fff; text-shadow: 1px 1px 0 rgba(27,33,66,0.55); }
+.pc-line.main { display: flex; align-items: baseline; gap: 9px; flex-wrap: nowrap; white-space: nowrap; font-size: 0.98rem; margin-bottom: 10px; }
+.pc-line.sub { font-size: 0.84rem; margin-bottom: 8px; }
+.pc-line .gold { color: #FFE066; text-shadow: 2px 2px 0 var(--ink); font-size: 1.1rem; }
+.wdl-bar {
+  display: flex; height: 18px; margin-top: 16px; border: 3px solid #fff; border-radius: 999px; overflow: hidden;
+  background: rgba(255,255,255,0.25); animation: barReveal 1.1s var(--ease-out) 0.35s both;
+}
+.wdl-bar i { display: block; height: 100%; }
+.wdl-bar .w { background: var(--lime); }
+.wdl-bar .d { background: var(--gold); }
+.wdl-bar .l { background: var(--red); }
 
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-bottom: 16px; }
+/* 順位表の成績ピッチ */
+.st-label { font-size: 0.72rem; font-weight: 900; letter-spacing: 0.12em; color: #fff; opacity: 0.95; }
+.st-title { font-family: 'Bungee', 'M PLUS Rounded 1c', sans-serif; font-weight: 400; font-size: 1.05rem; margin: 6px 0 8px; color: #fff; text-shadow: 2px 2px 0 var(--ink); line-height: 1.4; }
+.st-meta { font-size: 0.8rem; font-weight: 800; color: #fff; margin-bottom: 3px; text-shadow: 1px 1px 0 rgba(27,33,66,0.55); }
+.st-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; text-align: center; margin-top: 16px; }
+.st-num { font-family: 'Bungee', 'Baloo 2', sans-serif; font-weight: 400; font-size: 1.8rem; line-height: 1; color: #FFE066; text-shadow: 2px 2px 0 var(--ink); }
+.st-cap { font-size: 0.72rem; font-weight: 900; margin-top: 6px; color: #fff; opacity: 1; }
+.st-foot { margin-top: 16px; padding-top: 13px; font-size: 0.82rem; font-weight: 800; color: #fff; border-top: 3px dotted rgba(255,255,255,0.6); }
+.st-foot b { font-family: 'Bungee', 'Baloo 2', sans-serif; font-weight: 400; font-size: 1.05rem; color: #FFE066; text-shadow: 1px 1px 0 var(--ink); }
+
+/* ===== 成績タイル（内訳つき） ===== */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 14px; margin: 0 4px 26px; align-items: start; }
 .stat-card {
-  background: var(--paper); border-radius: var(--radius); padding: 13px 14px;
-  border: 1.5px solid var(--ink); position: relative; overflow: hidden;
+  position: relative; overflow: hidden; background: #fff; cursor: pointer;
+  border: 3px solid var(--ink); border-radius: 24px; box-shadow: 3px 4px 0 var(--ink); padding: 32px 16px 14px;
+  transition: transform 0.15s, box-shadow 0.15s; animation: statPop 0.6s var(--ease-pop) both;
 }
-.stat-card::before {
-  content:''; position: absolute; top: 0; left: 0; width: 5px; height: 100%;
-  background: var(--accent, var(--red));
-}
-.stat-card .num { font-family: 'Baloo 2', sans-serif; font-size: 1.85rem; font-weight: 800; color: var(--ink); line-height: 1; }
-.stat-card .lbl { font-size: 0.68rem; color: var(--muted); margin-top: 4px; font-weight: 800; letter-spacing: 0.06em; }
-.stat-card.acc-red { --accent: var(--red); }
+.stat-card:nth-child(1) { animation-delay: 0.12s; }
+.stat-card:nth-child(2) { animation-delay: 0.2s; }
+.stat-card:nth-child(3) { animation-delay: 0.28s; }
+.stat-card:nth-child(4) { animation-delay: 0.36s; }
+.stat-card:active { transform: translate(2px,3px); box-shadow: 1px 1px 0 var(--ink); }
+.stat-card::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 15px; background: var(--accent, var(--red)); }
+.stat-card.acc-red   { --accent: var(--red); }
+.stat-card.acc-gold  { --accent: var(--gold); }
+.stat-card.acc-navy  { --accent: var(--sky); }
 .stat-card.acc-green { --accent: var(--lime); }
-.stat-card.acc-gold { --accent: var(--gold); }
-.stat-card.acc-navy { --accent: var(--sky); }
-
-.quick-action {
-  display: flex; align-items: center; gap: 13px;
-  background: var(--paper); border-radius: var(--radius); padding: 14px;
-  border: 1.5px solid var(--ink); cursor: pointer; margin-bottom: 10px; width: 100%;
-  font-family: 'M PLUS Rounded 1c', sans-serif; text-align: left; transition: background 0.15s;
+.stat-more {
+  position: absolute; top: 22px; right: 14px; display: flex; align-items: center; gap: 4px;
+  background: none; border: none; font-family: inherit; font-size: 0.72rem; font-weight: 900; color: var(--muted); pointer-events: none;
 }
-.quick-action:active { background: var(--gold-light); }
+.stat-more i { display: inline-block; font-style: normal; font-size: 0.6rem; transition: transform 0.4s var(--ease-pop); }
+.stat-card.open .stat-more i { transform: rotate(180deg); }
+.stat-card .num { font-family: 'Bungee', 'Baloo 2', sans-serif; font-weight: 400; font-size: 2.3rem; line-height: 1.1; color: var(--ink); }
+.stat-card.acc-red .num { color: var(--red); }
+.stat-card .num .unit { font-family: 'M PLUS Rounded 1c', sans-serif; font-size: 1rem; font-weight: 900; margin-left: 3px; color: inherit; }
+.stat-card .lbl { margin-top: 6px; font-size: 0.9rem; font-weight: 900; color: var(--ink); }
+.stat-detail { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.45s var(--ease-out), opacity 0.3s, margin-top 0.3s; }
+.stat-card.open .stat-detail { max-height: 170px; opacity: 1; margin-top: 12px; }
+.sd-row { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; padding: 7px 0; border-top: 3px dotted var(--border); font-size: 0.78rem; font-weight: 800; color: var(--ink); }
+.sd-row b { font-family: 'Bungee', 'Baloo 2', sans-serif; font-weight: 400; font-size: 0.86rem; white-space: nowrap; }
+
+/* ===== 大会成績（メダル） ===== */
+.medal-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px; }
+.medal-box {
+  aspect-ratio: 1; border-radius: 50%; border: 3px solid var(--ink); box-shadow: 2px 3px 0 var(--ink);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; animation: medalPop 0.65s var(--ease-pop) both;
+}
+.medal-box.m1 { background: radial-gradient(circle at 30% 25%, #FFE58A, #F2C230 60%, #D9A514); animation-delay: 0.1s; }
+.medal-box.m2 { background: radial-gradient(circle at 30% 25%, #FFFFFF, #D5DCE3 60%, #B3BCC6); animation-delay: 0.2s; }
+.medal-box.m3 { background: radial-gradient(circle at 30% 25%, #F6CDA2, #D58B4C 60%, #B8702F); animation-delay: 0.3s; }
+.medal-num { font-family: 'Bungee', 'Baloo 2', sans-serif; font-size: 1.9rem; line-height: 1; color: var(--ink); }
+.medal-lbl { margin-top: 4px; font-size: 0.7rem; font-weight: 900; color: var(--ink); }
+.award-note { font-size: 0.74rem; font-weight: 900; color: var(--muted); padding-bottom: 9px; border-bottom: 3px dotted var(--border); margin-bottom: 4px; }
+.award-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 3px dotted var(--border); }
+.award-row:last-child { border-bottom: none; padding-bottom: 0; }
+.award-place { flex-shrink: 0; min-width: 62px; text-align: center; font-size: 0.72rem; font-weight: 900; padding: 6px 8px; border-radius: 12px; border: 2.5px solid var(--ink); }
+.award-place.p1 { background: var(--gold); color: var(--ink); }
+.award-place.p2 { background: #DDE3E9; color: var(--ink); }
+.award-place.p3 { background: #E3AE80; color: var(--ink); }
+.award-place.pn { background: #EEF3EA; color: var(--ink); font-size: 0.62rem; }
+.award-meta { flex: 1; min-width: 0; }
+.award-name { font-weight: 900; font-size: 0.88rem; }
+.award-date { margin-top: 2px; font-size: 0.72rem; font-weight: 800; color: var(--muted); }
+
+/* ===== クイック操作／最近の試合 ===== */
+.quick-action {
+  display: flex; align-items: center; gap: 14px; width: calc(100% - 8px); margin: 0 4px 14px; padding: 14px;
+  background: #fff; border: 3px solid var(--ink); border-radius: 22px; box-shadow: var(--shadow);
+  cursor: pointer; text-align: left; font-family: 'M PLUS Rounded 1c', sans-serif; transition: transform 0.15s, box-shadow 0.15s;
+}
+.quick-action:active { transform: translate(2px,3px); box-shadow: 1px 1px 0 var(--ink); }
 .quick-action .qa-ico {
-  width: 42px; height: 42px; border-radius: 3px; background: var(--red-light);
-  border: 1.5px solid var(--ink); display: flex; align-items: center; justify-content: center;
-  font-size: 1.15rem; flex-shrink: 0;
+  width: 48px; height: 48px; flex-shrink: 0; border-radius: 15px; border: 2.5px solid var(--ink);
+  background: var(--red-light); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
 }
 .quick-action.alt .qa-ico { background: var(--gold-light); }
 .qa-text { flex: 1; }
-.qa-text .qa-title { font-weight: 900; font-size: 0.89rem; }
-.qa-text .qa-sub { font-size: 0.69rem; color: var(--muted); margin-top: 2px; font-weight: 700; }
-.qa-arrow { color: var(--ink); font-size: 1.1rem; font-weight: 900; }
+.qa-text .qa-title { font-weight: 900; font-size: 0.95rem; }
+.qa-text .qa-sub { margin-top: 2px; font-size: 0.74rem; font-weight: 800; color: var(--muted); }
+.qa-arrow { font-size: 1.4rem; font-weight: 900; color: var(--ink); transition: transform 0.2s; }
+.quick-action:active .qa-arrow { transform: translateX(4px); }
 
-.recent-match { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-bottom: 1px dashed var(--border); }
+.recent-match { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 3px dotted var(--border); cursor: pointer; }
 .recent-match:last-child { border-bottom: none; }
 .rm-result {
-  width: 32px; height: 32px; border-radius: 2px;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 0.72rem; flex-shrink: 0; border: 1.5px solid var(--ink);
+  width: 38px; height: 38px; flex-shrink: 0; border-radius: 13px; border: 2.5px solid var(--ink); box-shadow: 2px 2px 0 var(--ink);
+  display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem;
 }
 .rm-info { flex: 1; min-width: 0; }
-.rm-vs { font-weight: 800; font-size: 0.86rem; }
-.rm-meta { font-size: 0.69rem; color: var(--muted); font-weight: 700; }
-.rm-score { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--ink); }
+.rm-vs { font-weight: 900; font-size: 0.9rem; }
+.rm-meta { margin-top: 2px; font-size: 0.72rem; font-weight: 800; color: var(--muted); }
+.rm-score {
+  min-width: 62px; padding: 7px 10px; border-radius: 12px; background: var(--ink); text-align: center; line-height: 1;
+  font-family: 'Bungee', 'Baloo 2', sans-serif; font-size: 0.95rem; color: #FFD34D; letter-spacing: 0.04em;
+}
 
 /* ===== フォーム ===== */
-label { display: block; font-size: 0.72rem; font-weight: 900; color: var(--ink); margin-top: 14px; margin-bottom: 5px; letter-spacing: 0.06em; }
+label { display: block; margin: 14px 0 6px; font-size: 0.78rem; font-weight: 900; color: var(--ink); letter-spacing: 0.04em; }
 label:first-of-type { margin-top: 0; }
 input[type=text], input[type=date], input[type=number], input[type=password], select, textarea {
-  width: 100%; padding: 11px 12px; border: 1.5px solid var(--ink); border-radius: 3px;
-  font-size: 0.92rem; font-family: 'M PLUS Rounded 1c', sans-serif; color: var(--ink); background: #FBF9F1;
+  width: 100%; padding: 12px 14px; border: 2.5px solid var(--ink); border-radius: 14px; background: #fff;
+  font-size: 0.95rem; font-family: 'M PLUS Rounded 1c', sans-serif; color: var(--ink); transition: box-shadow 0.15s;
 }
-input:focus, select:focus, textarea:focus { outline: none; background: white; box-shadow: inset 0 -3px 0 var(--gold); }
-
+input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0 var(--gold); }
 .score-input-row { display: grid; grid-template-columns: 1fr 26px 1fr; gap: 8px; align-items: center; margin: 10px 0; }
-.score-input-row input { text-align: center; font-size: 1.85rem; font-weight: 800; font-family: 'Baloo 2', sans-serif; padding: 12px 6px; }
-.vs-x { text-align: center; font-weight: 900; color: var(--muted); font-size: 1.1rem; }
-.team-lbl { text-align: center; font-size: 0.7rem; color: var(--muted); margin-top: 5px; font-weight: 800; }
-
+.score-input-row input { text-align: center; font-family: 'Bungee', 'Baloo 2', sans-serif; font-size: 1.8rem; padding: 12px 6px; }
+.vs-x { text-align: center; font-weight: 900; font-size: 1.2rem; color: var(--muted); }
+.team-lbl { margin-top: 6px; text-align: center; font-size: 0.74rem; font-weight: 900; color: var(--muted); }
 .btn {
-  width: 100%; padding: 14px; border-radius: 3px; font-size: 0.92rem; font-weight: 900;
-  font-family: 'M PLUS Rounded 1c', sans-serif; cursor: pointer; margin-top: 15px; letter-spacing: 0.06em;
-  border: 1.5px solid var(--ink); transition: transform 0.1s;
+  width: 100%; margin-top: 16px; padding: 14px; border: 3px solid var(--ink); border-radius: 16px; box-shadow: 3px 4px 0 var(--ink);
+  font-size: 0.95rem; font-weight: 900; letter-spacing: 0.05em; font-family: 'M PLUS Rounded 1c', sans-serif; cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
 }
-.btn:active { transform: translateY(2px); }
-.btn-red { background: var(--red); color: white; }
-.btn-outline { background: var(--paper); color: var(--ink); }
-
-.scorer-section { background: var(--lime-light); border: 1.5px dashed var(--lime); border-radius: 3px; padding: 12px; margin-top: 12px; }
-.scorer-row { display: flex; gap: 7px; align-items: center; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 3px; padding: 8px; margin-bottom: 7px; }
-.scorer-row select { flex: 1; padding: 6px 8px; font-size: 0.84rem; border: 1px solid var(--border); border-radius: 2px; background: white; }
-.scorer-row input { width: 50px; padding: 6px; text-align: center; font-weight: 800; border: 1px solid var(--border); border-radius: 2px; background: white; }
-.scorer-row .del { background: none; border: none; color: var(--red); font-size: 1rem; cursor: pointer; padding: 4px 6px; font-weight: 900; }
+.btn:active { transform: translate(2px,3px); box-shadow: 1px 1px 0 var(--ink); }
+.btn-red { background: var(--red); color: #fff; }
+.btn-outline { background: #fff; color: var(--ink); }
+.scorer-section { margin-top: 12px; padding: 12px; background: var(--lime-light); border: 2.5px dashed #7FB04A; border-radius: 16px; }
+.scorer-row { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; padding: 8px; background: #fff; border: 2.5px solid var(--ink); border-radius: 14px; }
+.scorer-row select { flex: 1; padding: 7px 9px; font-size: 0.86rem; border: 2px solid var(--border); border-radius: 10px; }
+.scorer-row input { width: 52px; padding: 7px; text-align: center; font-weight: 900; border: 2px solid var(--border); border-radius: 10px; }
+.scorer-row .del { background: none; border: none; padding: 4px 6px; font-size: 1.1rem; font-weight: 900; color: var(--red); cursor: pointer; }
 .add-scorer-btn {
-  width: 100%; padding: 10px; background: var(--paper); border: 1.5px dashed var(--lime);
-  border-radius: 3px; cursor: pointer; color: #5d8f1e; font-weight: 900; font-size: 0.82rem;
-  font-family: 'M PLUS Rounded 1c', sans-serif; margin-top: 4px;
+  width: 100%; margin-top: 4px; padding: 11px; background: #fff; border: 2.5px dashed #7FB04A; border-radius: 14px;
+  font-family: 'M PLUS Rounded 1c', sans-serif; font-size: 0.85rem; font-weight: 900; color: #3E7A1C; cursor: pointer;
 }
 
 /* ===== 検索 ===== */
-.search-bar { position: relative; margin-bottom: 13px; }
-.search-bar input { padding-left: 38px; background: var(--paper); }
-.search-bar::before { content: '🔍'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; z-index: 1; }
-.filter-pills { display: flex; gap: 7px; overflow-x: auto; padding: 2px 2px 9px; margin-bottom: 6px; scrollbar-width: none; }
+.search-bar { position: relative; margin: 0 4px 14px; }
+.search-bar input { padding-left: 42px; }
+.search-bar::before { content: '🔍'; position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 1rem; z-index: 1; }
+.filter-pills { display: flex; gap: 8px; overflow-x: auto; padding: 4px 6px 12px; margin-bottom: 6px; scrollbar-width: none; }
 .filter-pills::-webkit-scrollbar { display: none; }
 .pill {
-  flex: 0 0 auto; padding: 7px 14px; border-radius: 2px;
-  border: 1.5px solid var(--ink); background: var(--paper);
-  font-size: 0.74rem; font-weight: 900; cursor: pointer; font-family: 'M PLUS Rounded 1c', sans-serif;
-  white-space: nowrap; color: var(--ink); letter-spacing: 0.04em;
+  flex: 0 0 auto; padding: 8px 16px; border: 2.5px solid var(--ink); border-radius: 999px; background: #fff; cursor: pointer;
+  font-family: 'M PLUS Rounded 1c', sans-serif; font-size: 0.8rem; font-weight: 900; color: var(--ink); white-space: nowrap;
+  transition: transform 0.2s var(--ease-pop), background 0.2s;
 }
-.pill.active { background: var(--ink); color: var(--paper); }
+.pill:active { transform: scale(0.92); }
+.pill.active { background: var(--red); color: #fff; box-shadow: 2px 3px 0 var(--ink); transform: translateY(-1px); }
 
 /* ===== 試合カード ===== */
 .match-card {
-  position: relative; background: var(--paper); border: 1.5px solid var(--ink);
-  border-radius: var(--radius); margin-bottom: 14px; cursor: pointer; animation: fadeUp 0.22s ease both;
+  position: relative; overflow: hidden; margin: 0 4px 16px; cursor: pointer;
+  background: #fff; border: 3px solid var(--ink); border-radius: 22px; box-shadow: var(--shadow);
+  animation: fadeUp 0.5s var(--ease-out) both; transition: transform 0.15s, box-shadow 0.15s;
 }
-@keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
-
-.match-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px 14px 14px; position: relative; }
-.match-head::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--stub, var(--red)); }
-
+.match-card:active { transform: translate(2px,3px); box-shadow: 1px 1px 0 var(--ink); }
+.match-head { position: relative; display: flex; align-items: center; gap: 12px; padding: 14px 14px 14px 20px; }
+.match-head::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 9px; background: var(--stub, var(--red)); }
 .match-result-badge {
-  width: 38px; height: 38px; border-radius: 2px; display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 0.82rem; flex-shrink: 0; border: 1.5px solid var(--ink); margin-left: 4px;
+  width: 44px; height: 44px; flex-shrink: 0; border-radius: 15px; border: 2.5px solid var(--ink); box-shadow: 2px 2px 0 var(--ink);
+  display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.86rem; animation: badgePop 0.5s var(--ease-pop) both;
 }
-.bg-win { background: var(--lime); color: var(--ink); }
-.bg-lose { background: var(--red-light); color: var(--red-dark); }
-.bg-draw { background: var(--gold-light); color: #8a6400; }
+.match-result-badge.is-pk { font-size: 0.68rem; }
+.bg-win  { background: var(--lime); color: var(--ink); }
+.bg-lose { background: var(--red); color: #fff; }
+.bg-draw { background: var(--gold); color: var(--ink); }
 .match-body { flex: 1; min-width: 0; }
-.match-tournament { font-weight: 900; font-size: 0.86rem; color: var(--ink); }
-.match-detail { font-size: 0.69rem; color: var(--muted); margin-top: 3px; font-weight: 700; }
-.match-score-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
-.match-score-big { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--ink); line-height: 1; }
-.pk-tag { font-size: 0.6rem; font-weight: 900; padding: 2px 6px; border-radius: 2px; border: 1.5px solid var(--ink); }
-.pk-tag.pk-win { background: var(--lime); color: var(--ink); }
-.pk-tag.pk-lose { background: var(--red-light); color: var(--red-dark); }
-.scorer-tag.pk-scorer { background: var(--sky-light, #DCEEF9); border-color: var(--sky, #3EA9DE); color: #1d5f80; }
-.pk-mini { display: inline-block; font-size: 0.56rem; font-weight: 900; padding: 0 4px; margin-right: 4px; border: 1px solid var(--sky, #3EA9DE); color: #1d5f80; border-radius: 2px; }
+.match-tournament { font-weight: 900; font-size: 0.9rem; color: var(--ink); }
+.match-detail { margin-top: 3px; font-size: 0.74rem; font-weight: 800; color: #374151; }
+.match-score-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+.match-score-big {
+  min-width: 72px; padding: 9px 11px; border-radius: 13px; background: var(--ink); text-align: center; line-height: 1;
+  font-family: 'Bungee', 'Baloo 2', sans-serif; font-size: 1.12rem; letter-spacing: 0.04em; color: #FFD34D;
+}
+.pk-tag { padding: 2px 8px; border: 2px solid var(--ink); border-radius: 8px; font-size: 0.62rem; font-weight: 900; }
+.pk-tag.pk-win  { background: var(--lime); color: var(--ink); }
+.pk-tag.pk-lose { background: var(--red); color: #fff; }
+.expand-section { display: none; position: relative; padding: 14px 16px 16px 20px; border-top: 3px dotted var(--border); }
+.match-card.expanded .expand-section { display: block; animation: fadeUp 0.35s var(--ease-out); }
+.scorer-list { font-size: 0.82rem; line-height: 2; }
+.scorer-tag {
+  display: inline-block; margin: 2px 5px 2px 0; padding: 3px 11px; border: 2px solid #D9A400; border-radius: 999px;
+  background: #FFF1C7; color: #5C4300; font-size: 0.76rem; font-weight: 900;
+}
+.scorer-tag.pk-scorer { background: #DCEEF9; border-color: #2E8FC2; color: #10506F; }
+.pk-mini { display: inline-block; margin-right: 4px; padding: 0 5px; border: 1.5px solid #2E8FC2; border-radius: 5px; font-size: 0.58rem; font-weight: 900; color: #10506F; }
+.match-memo { margin-top: 10px; padding: 9px 12px; border-left: 5px solid var(--lime); border-radius: 0 12px 12px 0; background: #F2F8EC; font-size: 0.8rem; font-weight: 800; color: #374151; }
+.match-actions { display: flex; gap: 10px; margin-top: 14px; }
+.action-btn {
+  flex: 1; padding: 10px; border: 2.5px solid var(--ink); border-radius: 14px; background: #fff; cursor: pointer;
+  font-family: 'M PLUS Rounded 1c', sans-serif; font-size: 0.8rem; font-weight: 900; color: var(--ink);
+}
+.action-btn:active { background: var(--gold-light); }
+.action-btn.danger { background: var(--red-light); border-color: var(--red); color: var(--red-dark); }
 
-.expand-section { display: none; padding: 13px 16px 14px; position: relative; border-top: 1.5px dashed var(--border); }
-.match-card.expanded .expand-section { display: block; animation: fadeUp 0.2s ease; }
-.scorer-list { font-size: 0.8rem; line-height: 1.9; }
-.scorer-tag { display: inline-block; background: var(--gold-light); border: 1.5px solid var(--gold); color: #7a5a00; border-radius: 2px; padding: 2px 9px; font-size: 0.73rem; font-weight: 800; margin: 2px 4px 2px 0; }
-.match-memo { background: #F7F5EC; border-left: 3px solid var(--border); padding: 8px 10px; font-size: 0.77rem; color: #58564c; margin-top: 9px; font-weight: 700; }
-.match-actions { display: flex; gap: 8px; margin-top: 12px; }
-.action-btn { flex: 1; padding: 8px; border: 1.5px solid var(--ink); background: var(--paper); border-radius: 2px; cursor: pointer; font-size: 0.74rem; font-weight: 900; color: var(--ink); font-family: 'M PLUS Rounded 1c', sans-serif; }
-.action-btn.danger { color: var(--red-dark); border-color: var(--red); background: var(--red-light); }
-
-/* ===== 選手一覧 ===== */
-.player-row { display: flex; align-items: center; gap: 13px; background: var(--paper); border: 1.5px solid var(--ink); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 9px; }
-.player-row.is-cap { border-color: var(--gold); border-width: 2px; background: #FFFCF2; }
-.player-row.is-vice { border-color: var(--sky); }
-.player-no { width: 34px; height: 34px; border-radius: 2px; background: var(--ink); color: var(--paper); display: flex; align-items: center; justify-content: center; font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 0.9rem; flex-shrink: 0; }
-.player-row.is-cap .player-no { background: var(--gold); color: var(--ink); }
-.player-row.is-vice .player-no { background: var(--sky); color: white; }
+/* ===== 選手 ===== */
+.player-row {
+  display: flex; align-items: center; gap: 14px; margin: 0 4px 12px; padding: 12px 16px;
+  background: #fff; border: 3px solid var(--ink); border-radius: 22px; box-shadow: var(--shadow);
+}
+.player-row.is-cap  { background: #FFF9E0; }
+.player-row.is-vice { background: #EAF5FC; }
+.player-no {
+  width: 48px; height: 46px; flex-shrink: 0; padding-top: 5px; display: flex; align-items: center; justify-content: center;
+  background: #C92A1D; color: #fff; font-family: 'Bungee', 'Baloo 2', sans-serif; font-size: 0.85rem;
+  clip-path: polygon(30% 0, 40% 10%, 60% 10%, 70% 0, 100% 20%, 88% 43%, 80% 37%, 80% 100%, 20% 100%, 20% 37%, 12% 43%, 0 20%);
+}
+.player-row.is-cap .player-no  { background: var(--gold); color: var(--ink); }
+.player-row.is-vice .player-no { background: var(--sky); color: var(--ink); }
 .player-meta { flex: 1; min-width: 0; }
-.player-nm { font-weight: 900; font-size: 0.92rem; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
-.player-yomi { font-size: 0.69rem; color: var(--muted); font-weight: 700; margin-top: 2px; }
-.role-badge { font-size: 0.62rem; font-weight: 900; padding: 2px 7px; border-radius: 2px; border: 1.5px solid var(--ink); }
-.role-badge.cap { background: var(--gold); color: var(--ink); }
-.role-badge.vice { background: var(--sky); color: white; }
+.player-nm { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 0.98rem; font-weight: 900; }
+.player-yomi { margin-top: 2px; font-size: 0.74rem; font-weight: 800; color: var(--muted); }
+.role-badge { padding: 2px 9px; border: 2px solid var(--ink); border-radius: 999px; font-size: 0.64rem; font-weight: 900; }
+.role-badge.cap  { background: var(--gold); color: var(--ink); }
+.role-badge.vice { background: var(--sky); color: var(--ink); }
 
 /* ===== モーダル ===== */
-.modal-overlay { position: fixed; inset: 0; background: rgba(35,38,58,0.6); display: none; align-items: flex-end; z-index: 500; animation: fadeIn 0.2s ease; }
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.modal-overlay { position: fixed; inset: 0; z-index: 500; display: none; align-items: flex-end; background: rgba(27,33,66,0.6); animation: fadeIn 0.2s ease; }
 .modal-overlay.show { display: flex; }
-.modal { background: var(--paper); border-radius: 6px 6px 0 0; border-top: 2px solid var(--ink); width: 100%; max-height: 85vh; overflow-y: auto; padding: 20px 18px calc(20px + env(safe-area-inset-bottom)); animation: slideUp 0.25s ease; }
-@keyframes slideUp { from{transform:translateY(100%)} to{transform:none} }
-.modal-handle { width: 42px; height: 4px; background: var(--border); border-radius: 2px; margin: -8px auto 15px; }
-.modal-title { font-family: 'Bungee', sans-serif; font-weight: 400; font-size: 0.88rem; margin-bottom: 13px; color: var(--ink); }
-.share-text { background: #FBF9F1; border-radius: 2px; padding: 14px; font-size: 0.85rem; line-height: 1.75; white-space: pre-wrap; word-wrap: break-word; color: var(--ink); border: 1.5px dashed var(--ink); }
-.copy-btn { width: 100%; padding: 14px; background: #06c755; color: white; border: 1.5px solid var(--ink); border-radius: 3px; font-weight: 900; font-size: 0.92rem; cursor: pointer; margin-top: 12px; font-family: 'M PLUS Rounded 1c', sans-serif; }
+.modal {
+  width: 100%; max-height: 85vh; overflow-y: auto; background: #fff; border-top: 4px solid var(--green-hd); border-radius: 30px 30px 0 0;
+  padding: 20px 18px calc(20px + env(safe-area-inset-bottom)); animation: slideUp 0.35s var(--ease-out);
+}
+.modal-handle { width: 46px; height: 5px; margin: -8px auto 16px; border-radius: 3px; background: var(--border); }
+.modal-title { margin-bottom: 14px; font-size: 1.05rem; font-weight: 900; color: var(--ink); }
+.share-text {
+  padding: 14px; border: 2.5px dashed var(--ink); border-radius: 16px; background: #F6FAF2;
+  font-size: 0.86rem; line-height: 1.8; white-space: pre-wrap; word-wrap: break-word; color: var(--ink);
+}
+.copy-btn {
+  width: 100%; margin-top: 12px; padding: 14px; border: 3px solid var(--ink); border-radius: 16px; background: #06c755; color: #fff;
+  box-shadow: 3px 4px 0 var(--ink); font-family: 'M PLUS Rounded 1c', sans-serif; font-size: 0.95rem; font-weight: 900; cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.copy-btn:active { transform: translate(2px,3px); box-shadow: 1px 1px 0 var(--ink); }
 
 /* ===== 名簿・設定 ===== */
-.player-chip-list { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0; }
-.player-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--red-light); color: var(--red-dark); border: 1.5px solid var(--red); border-radius: 2px; padding: 6px 11px; font-size: 0.79rem; font-weight: 800; }
-.player-chip button { background: none; border: none; cursor: pointer; color: var(--red-dark); font-size: 0.9rem; font-weight: 900; }
+.player-chip-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.player-chip {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border: 2.5px solid var(--red); border-radius: 999px;
+  background: var(--red-light); color: var(--red-dark); font-size: 0.8rem; font-weight: 900;
+}
+.player-chip button { background: none; border: none; cursor: pointer; font-size: 0.95rem; font-weight: 900; color: var(--red-dark); }
 .add-row { display: flex; gap: 8px; }
 .add-row input { flex: 1; }
-.add-row button { background: var(--red); color: white; border: 1.5px solid var(--ink); border-radius: 3px; padding: 0 16px; font-size: 1.1rem; cursor: pointer; font-weight: 900; }
-.danger-zone { background: var(--red-light); border: 1.5px dashed var(--red); border-radius: 3px; padding: 14px; margin-top: 6px; }
-.danger-title { color: var(--red-dark); font-weight: 900; font-size: 0.86rem; margin-bottom: 7px; }
+.add-row button {
+  padding: 0 18px; border: 3px solid var(--ink); border-radius: 14px; background: var(--red); color: #fff; box-shadow: 2px 3px 0 var(--ink);
+  font-size: 1.15rem; font-weight: 900; cursor: pointer; transition: transform 0.12s, box-shadow 0.12s;
+}
+.add-row button:active { transform: translate(2px,2px); box-shadow: 0 1px 0 var(--ink); }
+.danger-zone { margin-top: 6px; padding: 14px; border: 2.5px dashed var(--red); border-radius: 16px; background: var(--red-light); }
+.danger-title { margin-bottom: 7px; font-size: 0.9rem; font-weight: 900; color: var(--red-dark); }
+
+/* ===== 順位表 ===== */
+.standings-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.standings-table thead tr { background: var(--ink); }
+.standings-table th { padding: 11px 4px; text-align: center; white-space: nowrap; font-size: 0.72rem; font-weight: 900; color: #FFD34D; letter-spacing: 0.06em; }
+.standings-table th:first-child { text-align: left; padding-left: 14px; }
+.standings-table td { padding: 11px 4px; text-align: center; white-space: nowrap; font-weight: 800; border-bottom: 2px dotted var(--border); }
+.standings-table td:first-child { text-align: left; padding-left: 12px; font-weight: 900; }
+.standings-table tr:last-child td { border-bottom: none; }
+.standings-table tr.is-me td { background: #FFD8D2; font-weight: 900; }
+.standings-table tr.is-me td:first-child { box-shadow: inset 5px 0 0 var(--red); }
+.standings-table .rk {
+  display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; margin-right: 7px; border-radius: 8px;
+  background: #E3E8DD; color: var(--ink); font-family: 'Bungee', 'Baloo 2', sans-serif; font-size: 0.7rem;
+}
+.standings-table .rk.r1 { background: var(--gold); }
+.standings-table .rk.r2 { background: #C9CDD2; }
+.standings-table .rk.r3 { background: #E3AE80; }
+.standings-table .pts { font-family: 'Bungee', 'Baloo 2', sans-serif; font-size: 0.95rem; color: var(--red); }
+.block-label {
+  display: inline-block; margin: 0 0 10px 4px; padding: 5px 15px; border: 2.5px solid var(--ink); border-radius: 999px;
+  background: var(--green-hd); color: #fff; font-size: 0.78rem; font-weight: 900; box-shadow: 2px 3px 0 var(--ink);
+}
+.podium-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding: 12px 15px; border: 2.5px solid var(--ink); border-radius: 16px; background: #fff; }
+.podium-row .rank-label { font-size: 0.7rem; font-weight: 900; }
+.podium-row .rank-team { margin-top: 2px; font-size: 0.96rem; font-weight: 900; }
+.podium-row.p1 { background: var(--gold-light); }
+.podium-row.p2 { background: #EEF1F4; }
+.podium-row.p3 { background: #FBEEE2; }
+.podium-row.p4 { background: #fff; }
+.podium-row.is-me { border-color: var(--red); border-width: 3.5px; }
 
 /* ===== 共通 ===== */
-.toast { position: fixed; bottom: 96px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--paper); padding: 11px 22px; border-radius: 3px; font-size: 0.84rem; font-weight: 800; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
+.toast {
+  position: fixed; bottom: 112px; left: 50%; transform: translateX(-50%); z-index: 999; padding: 11px 24px;
+  border: 2.5px solid #fff; border-radius: 999px; background: var(--ink); color: #fff; box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+  font-size: 0.86rem; font-weight: 900; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.3s;
+}
 .toast.show { opacity: 1; }
-.empty-state { text-align: center; padding: 42px 20px; color: #b6b2a4; }
-.empty-state p { font-size: 0.86rem; font-weight: 700; }
+.empty-state { padding: 42px 20px; text-align: center; color: var(--muted); }
+.empty-state p { font-size: 0.9rem; font-weight: 800; }
 
-/* ===== 大会成績 ===== */
-.medal-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 9px; margin-bottom: 13px; }
-.medal-box { border: 1.5px solid var(--ink); border-radius: 3px; padding: 11px 6px; text-align: center; }
-.medal-box.m1 { background: var(--gold-light); border-color: var(--gold); }
-.medal-box.m2 { background: #F0F0EC; }
-.medal-box.m3 { background: #FBEEE2; border-color: #C98A4B; }
-.medal-num { font-family: 'Baloo 2', sans-serif; font-size: 1.7rem; font-weight: 800; line-height: 1; color: var(--ink); }
-.medal-lbl { font-size: 0.66rem; font-weight: 900; margin-top: 4px; color: var(--ink); }
+/* ===== アニメーション ===== */
+@keyframes grassSlide { to { transform: translateX(96px); } }
+@keyframes stripeMarch { to { background-position: 198px 0; } }
+@keyframes popIn {
+  from { opacity: 0; transform: translate(var(--dx, 0px), 18px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes statPop { from { opacity: 0; transform: translateY(24px) scale(0.9); } to { opacity: 1; transform: none; } }
+@keyframes medalPop { from { opacity: 0; transform: scale(0.3) rotate(-25deg); } to { opacity: 1; transform: none; } }
+@keyframes badgePop { from { transform: scale(0.4) rotate(-20deg); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes barReveal { from { clip-path: inset(0 100% 0 0 round 999px); } to { clip-path: inset(0 0 0 0 round 999px); } }
+@keyframes ringPulse { 0%, 100% { opacity: 0.55; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
+@keyframes shine { from { transform: translateX(-120px) skewX(-20deg); } to { transform: translateX(560px) skewX(-20deg); } }
+@keyframes ballBounce {
+  0%   { transform: translateY(0) rotate(0deg) scale(1.12, 0.88); animation-timing-function: cubic-bezier(.2,.7,.4,1); }
+  50%  { transform: translateY(-30px) rotate(180deg) scale(1, 1); animation-timing-function: cubic-bezier(.6,0,.8,.3); }
+  100% { transform: translateY(0) rotate(360deg) scale(1.12, 0.88); }
+}
+@keyframes shadowPulse { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(0.5); opacity: 0.15; } }
+@keyframes emblemKick {
+  0%, 84%, 100% { transform: rotate(0) scale(1); }
+  88% { transform: rotate(-16deg) scale(1.08); }
+  93% { transform: rotate(10deg) scale(1.04); }
+}
+@keyframes icoPop { 0% { transform: scale(0.6) rotate(-18deg); } 100% { transform: translateY(-2px) scale(1.14); } }
+@keyframes dotPulse { 0% { box-shadow: 0 0 0 0 rgba(124,255,138,0.7); } 80%, 100% { box-shadow: 0 0 0 8px rgba(124,255,138,0); } }
 
-.award-note { font-size: 0.68rem; color: var(--muted); font-weight: 800; padding-bottom: 9px; border-bottom: 1px dashed var(--border); margin-bottom: 4px; }
-.award-row { display: flex; align-items: center; gap: 11px; padding: 10px 0; border-bottom: 1px dashed var(--border); }
-.award-row:last-child { border-bottom: none; padding-bottom: 0; }
-.award-place { flex-shrink: 0; min-width: 58px; text-align: center; font-size: 0.68rem; font-weight: 900; padding: 5px 7px; border-radius: 2px; border: 1.5px solid var(--ink); }
-.award-place.p1 { background: var(--gold); color: var(--ink); }
-.award-place.p2 { background: #DDDDD8; color: var(--ink); }
-.award-place.p3 { background: #E3AE80; color: var(--ink); }
-.award-place.pn { background: var(--paper); color: var(--muted); border-style: dashed; border-color: var(--border); font-size: 0.6rem; }
-.award-meta { flex: 1; min-width: 0; }
-.award-name { font-weight: 800; font-size: 0.84rem; }
-.award-date { font-size: 0.67rem; color: var(--muted); font-weight: 700; margin-top: 2px; }
+@media (max-width: 374px) {
+  .pc-line.main { font-size: 0.88rem; gap: 7px; }
+  .pc-line .gold { font-size: 1rem; }
+  .pc-line.sub { font-size: 0.8rem; }
+  .greeting, .summary-ticket { padding: 26px 22px 22px; }
+}
 
-/* ===== 順位表サマリー ===== */
-.summary-ticket { background: var(--ink); color: var(--paper); border-radius: var(--radius); padding: 18px 20px 16px; margin-bottom: 14px; position: relative; overflow: hidden; }
-.summary-ticket::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 8px; background: repeating-linear-gradient(180deg, var(--red) 0 10px, var(--gold) 10px 20px, var(--lime) 20px 30px); }
-.st-label { font-size: 0.66rem; opacity: 0.6; font-weight: 800; }
-.st-title { font-family: 'Bungee', sans-serif; font-size: 1rem; font-weight: 400; margin: 5px 0 8px; }
-.st-meta { font-size: 0.74rem; opacity: 0.75; font-weight: 700; margin-bottom: 2px; }
-.st-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; text-align: center; margin-top: 13px; }
-.st-num { font-family: 'Baloo 2', sans-serif; font-size: 1.6rem; font-weight: 800; line-height: 1; }
-.st-cap { font-size: 0.63rem; opacity: 0.65; font-weight: 800; margin-top: 3px; }
-.st-foot { margin-top: 13px; padding-top: 11px; font-size: 0.76rem; font-weight: 700; border-top: 1px dashed rgba(255,255,255,0.25); }
-
-/* ===== 順位表テーブル ===== */
-.standings-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
-.standings-table thead tr { background: var(--ink); }
-.standings-table th { color: var(--paper); font-weight: 900; font-size: 0.68rem; padding: 9px 4px; text-align: center; white-space: nowrap; }
-.standings-table th:first-child { text-align: left; padding-left: 11px; }
-.standings-table td { padding: 10px 4px; text-align: center; font-weight: 700; border-bottom: 1px dashed var(--border); white-space: nowrap; }
-.standings-table td:first-child { text-align: left; padding-left: 11px; font-weight: 800; }
-.standings-table tr:last-child td { border-bottom: none; }
-.standings-table tr.is-me td { background: var(--red-light); font-weight: 900; }
-.standings-table .rk { font-family: 'Baloo 2', sans-serif; font-weight: 800; margin-right: 5px; }
-.standings-table .rk.r1 { color: var(--gold); }
-.standings-table .rk.r2 { color: #9AA0A6; }
-.standings-table .rk.r3 { color: #C98A4B; }
-.standings-table .pts { font-family: 'Baloo 2', sans-serif; font-weight: 800; color: var(--red); font-size: 0.95rem; }
-.block-label { display: inline-block; background: var(--ink); color: var(--paper); border-radius: 2px; padding: 4px 11px; font-size: 0.7rem; font-weight: 900; margin-bottom: 8px; }
-.podium-row { display: flex; align-items: center; gap: 12px; padding: 11px 13px; border-radius: 3px; margin-bottom: 9px; border: 1.5px solid var(--ink); }
-.podium-row .rank-label { font-size: 0.66rem; font-weight: 900; }
-.podium-row .rank-team { font-weight: 900; font-size: 0.92rem; margin-top: 2px; }
-.podium-row.p1 { background: var(--gold-light); border-color: var(--gold); }
-.podium-row.p2 { background: #F0F0EC; }
-.podium-row.p3 { background: #FBEEE2; border-color: #C98A4B; }
-.podium-row.p4 { background: var(--paper); }
-.podium-row.is-me { border-width: 2.5px; border-color: var(--red); }
-
-/* ===== 動き（FX） ===== */
-@keyframes fxSlideL { from{opacity:0;transform:translateX(26px)} to{opacity:1;transform:none} }
-@keyframes fxSlideR { from{opacity:0;transform:translateX(-26px)} to{opacity:1;transform:none} }
-.screen.active.fx-from-right { animation: fxSlideL .32s cubic-bezier(.2,.8,.2,1); }
-.screen.active.fx-from-left  { animation: fxSlideR .32s cubic-bezier(.2,.8,.2,1); }
-@keyframes fxBar { from{transform:scaleX(0)} to{transform:scaleX(1)} }
-.nav-btn.active::after { animation: fxBar .3s cubic-bezier(.2,.8,.2,1) both; transform-origin: center; }
-.nav-btn.active .ico { animation: fxHop .4s cubic-bezier(.3,1.6,.5,1); }
-@keyframes fxHop { 0%{transform:translateY(0)} 40%{transform:translateY(-5px)} 100%{transform:none} }
-@keyframes fxRoll { from{transform:translateX(-40px) rotate(-360deg);opacity:0} to{transform:none;opacity:1} }
-.club-emblem { animation: fxRoll .9s cubic-bezier(.2,.8,.2,1) both; cursor:pointer; }
-.club-emblem.spin { animation: fxSpin .7s cubic-bezier(.2,.8,.2,1); }
-@keyframes fxSpin { to{transform:rotate(360deg)} }
-
-/* 勝敗バー（あいさつカード） */
-.fx-wdl { display:flex; height:10px; margin-top:12px; border:1.5px solid var(--paper); border-radius:2px; overflow:hidden; position:relative; z-index:1; background:rgba(255,255,255,.08); }
-.fx-wdl i { display:block; height:100%; transform-origin:left; animation: fxBar .8s cubic-bezier(.2,.8,.2,1) both; }
-.fx-wdl .w { background: var(--lime); }
-.fx-wdl .d { background: var(--gold); animation-delay:.15s; }
-.fx-wdl .l { background: var(--red); animation-delay:.3s; }
-
-/* スタットカード：タップで内訳 */
-.stat-card { cursor:pointer; transition: transform .18s ease, box-shadow .18s ease; user-select:none; }
-.stat-card:active { transform: translate(1px,1px); }
-.stat-card.on { transform: translate(-2px,-2px); box-shadow: 4px 4px 0 var(--ink); }
-.stat-card .fx-hint { position:absolute; right:9px; top:9px; font-size:.58rem; font-weight:900; color:var(--muted); letter-spacing:.04em; }
-.stat-card .fx-hint b { display:inline-block; transition: transform .25s; }
-.stat-card.on .fx-hint { color: var(--ink); }
-.stat-card.on .fx-hint b { transform: rotate(180deg); }
-.stat-card .num { font-variant-numeric: tabular-nums; }
-#statDetail { display:grid; grid-template-rows:0fr; transition: grid-template-rows .35s cubic-bezier(.2,.8,.2,1), margin .35s; }
-#statDetail.open { grid-template-rows:1fr; margin-top:-4px; margin-bottom:16px; }
-#statDetail > div { overflow:hidden; min-height:0; }
-.fx-panel { background:var(--paper); border:1.5px solid var(--ink); border-radius:var(--radius); padding:14px 15px; position:relative; }
-.fx-panel::before { content:''; position:absolute; left:0; top:0; right:0; height:4px; background: var(--accent, var(--red)); }
-.fx-ph { font-weight:900; font-size:.84rem; margin:2px 0 10px; display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
-.fx-ph small { font-size:.64rem; color:var(--muted); font-weight:800; }
-.fx-row { display:grid; grid-template-columns: 7.2em 1fr 3.2em; align-items:center; gap:8px; font-size:.74rem; font-weight:800; padding:4px 0; }
-.fx-row .nm { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.fx-row .v { text-align:right; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:.95rem; }
-.fx-track { height:12px; background:#F1EEE3; border-radius:2px; overflow:hidden; display:flex; }
-.fx-track i { display:block; height:100%; transform-origin:left; animation: fxBar .7s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--k,0) * 60ms); }
-.fx-legend { display:flex; gap:12px; font-size:.62rem; font-weight:800; color:var(--muted); margin-top:8px; }
-.fx-legend b { display:inline-block; width:9px; height:9px; margin-right:4px; vertical-align:-1px; border:1px solid var(--ink); }
-.fx-seq { display:flex; flex-wrap:wrap; gap:5px; }
-.fx-seq span { width:26px; height:26px; display:grid; place-items:center; font-size:.66rem; font-weight:900; border:1.5px solid var(--ink); border-radius:2px; animation: fxPop .35s cubic-bezier(.3,1.5,.5,1) both; animation-delay: calc(var(--k,0) * 45ms); }
-@keyframes fxPop { from{opacity:0;transform:scale(.3)} to{opacity:1;transform:none} }
-.fx-seq .t { width:auto; padding:0 6px; border-style:dashed; border-color:var(--border); color:var(--muted); font-size:.58rem; }
-
-/* 試合カード：なめらかに開く＋結果スタンプ */
-.expand-section { display:block !important; max-height:0; overflow:hidden; padding-top:0; padding-bottom:0; border-top-color:transparent; transition: max-height .38s cubic-bezier(.2,.8,.2,1), padding .38s cubic-bezier(.2,.8,.2,1), border-color .2s; }
-.match-card.expanded .expand-section { max-height:640px; padding-top:13px; padding-bottom:14px; border-top-color:var(--border); animation:none; }
-.match-card { transition: box-shadow .2s, transform .2s; }
-.match-card.expanded { box-shadow: 4px 4px 0 var(--ink); transform: translate(-2px,-2px); }
-@keyframes fxStamp { 0%{opacity:0;transform:scale(1.8) rotate(-14deg)} 60%{opacity:1;transform:scale(.92) rotate(3deg)} 100%{transform:none} }
-.match-card .match-result-badge { animation: fxStamp .45s cubic-bezier(.3,1.3,.5,1) both; animation-delay: inherit; }
-.match-card.expanded .scorer-tag { animation: fxPop .3s cubic-bezier(.3,1.5,.5,1) both; }
-
-/* 順位表 */
-.fx-rows tbody tr { animation: fadeUp .35s ease both; }
-.standings-table tr.is-me td { position:relative; }
-@keyframes fxSweep { from{background-position:-120% 0} to{background-position:220% 0} }
-.fx-rows tr.is-me td { background-image: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.75) 50%, transparent 70%); background-size: 60% 100%; background-repeat:no-repeat; animation: fxSweep 1.1s ease .5s both; }
-.podium-row { animation: fadeUp .4s ease both; }
-.podium-row.p1 .rank-label::before { content:'🏆 '; }
-.st-num { font-variant-numeric: tabular-nums; }
-
-/* 紙吹雪 */
-#fxConfetti { position:fixed; inset:0; pointer-events:none; z-index:1000; }
+@media (max-width: 340px) {
+  .pc-ball, .pc-ballshadow { display: none; }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .pc-shine { display: none; }
 }
 
-/* ===================================================
-   少年サッカー テーマ（芝・白線・クラブカラー 赤×黄×白）
-   =================================================== */
-:root {
-  --ink: #1C2440;
-  --paper: #FFFFFF;
-  --bg: #E6F4DE;
-  --turf: #2F9A45;
-  --turf-dark: #1E7434;
-  --turf-light: #3DAD55;
-  --chalk: #FFFFFF;
-  --red: #E8392B;
-  --red-dark: #B92216;
-  --gold: #FFC61A;
-  --gold-light: #FFF5CC;
-  --muted: #667363;
-  --border: #CFE3C6;
-  --radius: 16px;
-  --pop: 3px 3px 0 var(--ink);
-}
-body {
-  background-color: var(--bg);
-  background-image: repeating-linear-gradient(180deg, #E6F4DE 0 56px, #DCEFD2 56px 112px);
-}
-
-/* ヘッダー：芝のしま模様＋白線 */
-header {
-  background-color: var(--turf-dark);
-  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 28px, transparent 28px 56px);
-  border-bottom: 3px solid var(--chalk);
-  box-shadow: 0 3px 0 var(--turf-dark);
-}
-header::after {
-  height: 6px;
-  background: repeating-linear-gradient(90deg, var(--red) 0 22px, var(--gold) 22px 44px, var(--chalk) 44px 66px);
-}
-.header-title h1 { font-size: 1.08rem; letter-spacing: .06em; text-shadow: 2px 2px 0 rgba(0,0,0,.25); }
-.club-emblem { background: var(--red); border: 3px solid var(--chalk); box-shadow: 0 0 0 3px var(--gold); width: 46px; height: 46px; }
-.year-select-header { border-radius: 999px; border: 2px solid var(--chalk); background: var(--gold); padding: 3px 12px; }
-#connectionBadge { background: rgba(0,0,0,.2); padding: 2px 8px; border-radius: 999px; }
-
-/* 見出し：ボール＋白線 */
-.sec-title {
-  font-size: .86rem; color: var(--turf-dark);
-}
-.sec-title::before {
-  content: '⚽'; font-size: .95rem; line-height: 1;
-}
-.sec-title::after { border-top: 3px dotted #A9D59A; }
-
-/* カード：ステッカー風（太線＋ずらし影） */
-.card, .stat-card, .quick-action, .match-card, .player-row, .medal-box, .podium-row, .fx-panel {
-  border: 2.5px solid var(--ink);
-  border-radius: var(--radius);
-  box-shadow: var(--pop);
-}
-.card { padding: 16px 16px; }
-
-/* あいさつ：ピッチ */
-.greeting {
-  background-color: var(--turf);
-  background-image:
-    linear-gradient(90deg, transparent calc(100% - 30px), rgba(255,255,255,.35) calc(100% - 30px), rgba(255,255,255,.35) calc(100% - 27px), transparent calc(100% - 27px)),
-    radial-gradient(circle at calc(100% - 28px) 50%, transparent 52px, rgba(255,255,255,.35) 53px, rgba(255,255,255,.35) 56px, transparent 57px),
-    repeating-linear-gradient(90deg, rgba(255,255,255,.07) 0 34px, transparent 34px 68px);
-  border: 3px solid var(--chalk);
-  outline: 2.5px solid var(--ink);
-  border-radius: var(--radius);
-  box-shadow: 5px 5px 0 var(--ink);
-  padding: 20px 20px 18px;
-}
-.greeting::before {
-  background: none;
-  border: 3px solid rgba(255,255,255,.8); border-radius: 10px; inset: 10px;
-}
-.greeting::after { width: 0; }
-.greeting h2 { font-size: 1.05rem; text-shadow: 2px 2px 0 rgba(0,0,0,.28); }
-.greeting p, .greeting div { text-shadow: 1px 1px 0 rgba(0,0,0,.25); }
-.greeting b { color: var(--gold); }
-.fx-wdl { border: 2px solid var(--chalk); border-radius: 999px; height: 12px; }
-
-/* 数字カード：スコアボード */
-.stat-card { padding: 14px 14px 12px; }
-.stat-card::before { width: 100%; height: 7px; top: 0; left: 0; }
-.stat-card .num { font-size: 2.1rem; margin-top: 4px; }
-.stat-card.acc-red .num { color: var(--red); }
-.stat-card .lbl { color: var(--ink); }
-.stat-card.on { box-shadow: 5px 5px 0 var(--ink); }
-.fx-panel::before { height: 7px; border-radius: 13px 13px 0 0; }
-
-/* ボタン */
-.btn { border-radius: 999px; border: 2.5px solid var(--ink); box-shadow: var(--pop); }
-.btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
-.btn-red { background: var(--red); }
-.btn-outline { background: var(--paper); }
-.copy-btn { border-radius: 999px; border: 2.5px solid var(--ink); box-shadow: var(--pop); }
-.quick-action .qa-ico { border-radius: 50%; border: 2.5px solid var(--ink); background: var(--gold-light); }
-.quick-action:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
-.qa-arrow { width: 30px; height: 30px; border-radius: 50%; background: var(--red); color: #fff; display: grid; place-items: center; border: 2px solid var(--ink); font-size: 1rem; }
-
-/* 最近の試合・結果バッジ（まる） */
-.rm-result, .match-result-badge { border-radius: 50%; border: 2.5px solid var(--ink); }
-.bg-win { background: var(--red); color: #fff; }
-.bg-lose { background: #E7ECF3; color: #3B4868; }
-.bg-draw { background: var(--gold); color: var(--ink); }
-.rm-score, .match-score-big { color: var(--ink); }
-
-/* 試合カード */
-.match-card { overflow: hidden; }
-.match-head::before { width: 8px; }
-.match-card.expanded { box-shadow: 5px 5px 0 var(--ink); }
-.scorer-tag { border-radius: 999px; background: var(--gold-light); border: 2px solid var(--gold); color: #6B5200; }
-.scorer-tag.pk-scorer { border-radius: 999px; }
-.pk-tag { border-radius: 999px; border-width: 2px; }
-.action-btn { border-radius: 999px; border-width: 2px; }
-.match-memo { border-radius: 10px; border-left: 4px solid var(--turf); background: #F1F8EC; }
-
-/* 検索・フィルター */
-.search-bar input { border-radius: 999px; border: 2.5px solid var(--ink); box-shadow: var(--pop); }
-.search-bar::before { content: '⚽'; }
-.pill { border-radius: 999px; border: 2.5px solid var(--ink); background: var(--paper); }
-.pill.active { background: var(--turf); color: #fff; box-shadow: 2px 2px 0 var(--ink); }
-
-/* フォーム */
-input[type=text], input[type=date], input[type=number], input[type=password], select, textarea {
-  border-radius: 12px; border: 2px solid var(--ink); background: #F7FBF4;
-}
-input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 3px var(--gold); background: #fff; }
-.score-input-row input { background: var(--turf-dark); color: #fff; border: 3px solid var(--chalk); outline: 2px solid var(--ink); font-size: 2.2rem; }
-.score-input-row input::placeholder { color: rgba(255,255,255,.4); }
-.vs-x { color: var(--turf-dark); font-size: 1.4rem; }
-.scorer-section { border-radius: 12px; border: 2px dashed var(--turf); background: #EEF8E8; }
-.scorer-row { border-radius: 10px; border-width: 2px; }
-.add-scorer-btn { border-radius: 999px; border: 2px dashed var(--turf); color: var(--turf-dark); }
-.add-row button { border-radius: 12px; border-width: 2.5px; box-shadow: 2px 2px 0 var(--ink); }
-
-/* 大会成績：メダル */
-.medal-box { border-radius: 50% 50% 16px 16px / 36% 36% 16px 16px; padding-top: 14px; }
-.medal-box.m1 { background: #FFE680; }
-.medal-box.m2 { background: #E9EDF1; }
-.medal-box.m3 { background: #F6D2B0; }
-.medal-box.m1 .medal-lbl::before { content: '🥇 '; }
-.medal-box.m2 .medal-lbl::before { content: '🥈 '; }
-.medal-box.m3 .medal-lbl::before { content: '🥉 '; }
-.award-place { border-radius: 999px; border-width: 2px; }
-.award-place.p1 { background: var(--gold); }
-
-/* 順位表 */
-.summary-ticket {
-  background-color: var(--turf-dark);
-  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 30px, transparent 30px 60px);
-  border: 3px solid var(--chalk); outline: 2.5px solid var(--ink);
-  border-radius: var(--radius); box-shadow: 5px 5px 0 var(--ink);
-}
-.summary-ticket::after { width: 0; }
-.st-num { font-size: 1.9rem; color: var(--gold); text-shadow: 2px 2px 0 rgba(0,0,0,.3); }
-.st-grid > div { background: rgba(0,0,0,.22); border-radius: 12px; padding: 8px 0 6px; }
-.standings-table thead tr { background: var(--turf-dark); }
-.standings-table tr.is-me td { background: #FFE9E6; }
-.block-label { border-radius: 999px; background: var(--turf-dark); padding: 4px 14px; }
-.podium-row.p1 { background: #FFE680; border-color: var(--ink); }
-.podium-row.p2 { background: #EEF1F4; }
-.podium-row.p3 { background: #F9DEC5; border-color: var(--ink); }
-.podium-row.is-me { outline: 3px solid var(--red); outline-offset: 2px; border-color: var(--ink); }
-
-/* 選手：ユニフォーム型の背番号 */
-.player-row { padding: 12px 14px; }
-.player-no {
-  width: 42px; height: 40px; border-radius: 0; background: var(--red); color: #fff; font-size: 1rem;
-  clip-path: polygon(22% 0, 38% 0, 50% 12%, 62% 0, 78% 0, 100% 20%, 88% 42%, 80% 36%, 80% 100%, 20% 100%, 20% 36%, 12% 42%, 0 20%);
-  padding-top: 8px;
-}
-.player-row.is-cap { border-color: var(--ink); background: #FFFBE6; }
-.player-row.is-cap .player-no { background: var(--gold); color: var(--ink); }
-.player-row.is-vice { border-color: var(--ink); background: #F0F8FE; }
-.player-row.is-vice .player-no { background: var(--sky); color: #fff; }
-.role-badge { border-radius: 999px; border-width: 2px; }
-
-/* 設定 */
-.player-chip { border-radius: 999px; border-width: 2px; }
-.danger-zone { border-radius: 12px; }
-
-/* 下のナビ */
-.bottom-nav {
-  border-top: 3px solid var(--ink); border-radius: 20px 20px 0 0;
-  box-shadow: 0 -3px 0 var(--turf);
-}
-.nav-btn { border-radius: 14px; margin: 0 2px; }
-.nav-btn.active { background: var(--red); color: #fff; }
-.nav-btn.active::after { display: none; }
-.nav-btn .ico { filter: grayscale(1) opacity(.55); }
-
-/* モーダル・トースト */
-.modal { border-radius: 22px 22px 0 0; border-top: 3px solid var(--ink); }
-.modal-title { color: var(--turf-dark); }
-.share-text { border-radius: 12px; border: 2px dashed var(--turf); }
-.toast { background: var(--turf-dark); border: 2.5px solid var(--chalk); border-radius: 999px; box-shadow: var(--pop); }
-.empty-state { color: #8FA88A; }
-.empty-state::before { content: '⚽'; display: block; font-size: 2rem; margin-bottom: 8px; opacity: .6; }
 </style>
 </head>
 <body>
@@ -650,7 +542,7 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 3px var(--gold); b
   <div class="header-top">
     <div class="club-emblem">⚽</div>
     <div class="header-title">
-      <h1>矢作SC 記録</h1>
+      <h1><span class="jp">矢作</span><span class="lat">SC</span><span class="jp"> 記録</span></h1>
       <div class="sub">
         <select id="headerYearSelect" class="year-select-header" onchange="changeYear(this.value)"></select>
         <span id="connectionBadge" style="font-size:0.65rem;font-weight:800"> 接続中...</span>
@@ -662,6 +554,11 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 3px var(--gold); b
 <!-- ===== ホーム ===== -->
 <div id="screen-home" class="screen active">
   <div class="greeting">
+    <span class="pc-halfway"></span>
+    <span class="pc-circle"></span>
+    <span class="pc-ballshadow"></span>
+    <span class="pc-ball">⚽</span>
+    <span class="pc-shine"></span>
     <h2 id="greetingTitle">こんにちは！</h2>
     <p id="greetingSub">今シーズンの活躍を記録していきましょう</p>
   </div>
@@ -854,6 +751,7 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 3px var(--gold); b
 
     <div class="sec-title" style="margin-top:18px">データの管理</div>
     <div class="card">
+      <button class="btn btn-outline" style="margin-top:0;margin-bottom:8px" onclick="recoverMatchesManually()">試合データを他の保存先から復元</button>
       <button class="btn btn-outline" style="margin-top:0" onclick="exportData()">データをエクスポート（JSON）</button>
       <button class="btn btn-outline" style="margin-top:8px" onclick="document.getElementById('importFile').click()">データをインポート</button>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
@@ -887,6 +785,7 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 3px var(--gold); b
 </div>
 
 <nav class="bottom-nav">
+  <span class="nav-pill"></span>
   <button class="nav-btn active" onclick="goTab('home')"><span class="ico">🏠</span><span class="lbl">ホーム</span></button>
   <button class="nav-btn" onclick="goTab('input')"><span class="ico">📝</span><span class="lbl">入力</span></button>
   <button class="nav-btn" onclick="goTab('records')"><span class="ico">🔍</span><span class="lbl">検索</span></button>
@@ -1057,6 +956,20 @@ function sanitizeYears(data) {
 }
 
 // ===== 初期データ =====
+// 背番号（年度ごと）。新しい選手や年度が増えたらここに追記
+const PLAYER_NUMBERS = {
+  '2026 U-9': {
+    '西村 春真': 26, '石井 佑空': 16, '高野 珀翔': 36, '澤地 玲臣': 19,
+    '柏木 陸人': 25, '玉木 洸人': 29, '遠藤 碧人': 32, '田中 瑛就': 35,
+    '香川 紡希': 39, '平城 岳': 37, '増田 朔大': 41, '尾崎 蒼': 40,
+    '石井 聡一郎': 42
+  }
+};
+function playerNumber(name) {
+  const m = PLAYER_NUMBERS[currentYear];
+  return m ? (m[name] != null ? m[name] : null) : undefined; // undefined＝この年度は背番号の設定なし
+}
+
 const INIT_PLAYERS = [
   '石井 聡一郎（いしい そういちろう）',
   '石井 佑空（いしい ゆら）',
@@ -1407,7 +1320,7 @@ function initFirebase() {
   if (typeof db === 'undefined' || !db) {
     console.warn('Firebase未接続。ローカルモードで動作します');
     const badge = document.getElementById('connectionBadge');
-    if (badge) { badge.textContent = ' ローカル'; badge.style.color = '#999'; }
+    if (badge) { badge.textContent = ' ローカル'; badge.style.color = '#999'; badge.dataset.st = 'local'; }
     matches = [...INIT_MATCHES]; players = [...INIT_PLAYERS];
     renderActiveScreen();
     return;
@@ -1419,6 +1332,7 @@ function initFirebase() {
     if (badge) {
       badge.textContent = connected ? ' 同期中' : ' オフライン';
       badge.style.color = connected ? '#27ae60' : '#e74c3c';
+      badge.dataset.st = connected ? 'on' : 'off';
     }
   });
 
@@ -1433,6 +1347,94 @@ function initFirebase() {
 }
 
 let matchesRef = null, playersRef = null, videosRef = null;
+
+// ===== 旧保存先からの試合データ復元（2026 U-9） =====
+function toMatchList(v) {
+  if (!v) return [];
+  const list = Array.isArray(v) ? v.filter(Boolean) : Object.values(v);
+  return list.filter(m => m && typeof m === 'object' && m.id);
+}
+
+// DB直下を調べ、試合データが入っている旧保存先を全て集める
+// ・年度ごとの正規の保存先（year_2027_U-10 など）は他年度のデータなので対象外
+function collectLegacySources(rootVal) {
+  const out = [];
+  if (!rootVal || typeof rootVal !== 'object') return out;
+  Object.keys(rootVal).forEach(k => {
+    const node = rootVal[k];
+    if (k === 'availableYears') return;
+    if (k === 'matches') { out.push({ path: 'matches', list: toMatchList(node) }); return; }
+    if (k === 'seasons') {
+      if (node && node['2026-u9']) out.push({ path: 'seasons/2026-u9/matches', list: toMatchList(node['2026-u9'].matches) });
+      return;
+    }
+    if (/^year_\d{4}_U-\d+$/.test(k)) return;
+    if (node && typeof node === 'object' && node.matches) out.push({ path: k + '/matches', list: toMatchList(node.matches) });
+  });
+  return out.filter(s => s.list.length);
+}
+
+// 初期データ・旧保存先・現在の保存先を1つに統合
+function mergeMatches2026(currentMatches, legacySources) {
+  const map = new Map();
+  INIT_MATCHES.forEach(m => { if (m && m.id) map.set(m.id, m); });
+  legacySources.forEach(s => s.list.forEach(m => map.set(m.id, m)));
+  currentMatches.forEach(m => { if (m && m.id) map.set(m.id, m); });
+  // 初期データ側で修正した試合（revが新しいもの）は保存済みデータを上書き
+  INIT_MATCHES.forEach(im => {
+    if (!im.rev) return;
+    const cur = map.get(im.id);
+    if (!cur || (cur.rev || 0) < im.rev) map.set(im.id, im);
+  });
+  // アプリで手入力済みの同じ試合があれば初期データ側を除外
+  const norm = s => (s || '').replace(/[（(].*?[）)]/g, '').replace(/[\s.．・]/g, '').replace(/FC|SC|SSS|PP/gi, '').toLowerCase();
+  const initIds = new Set(INIT_MATCHES.map(m => m.id));
+  const currentIds = new Set(currentMatches.map(m => m && m.id));
+  INIT_MATCHES.forEach(im => {
+    if (currentIds.has(im.id)) return;
+    const dup = Array.from(map.values()).some(x =>
+      !initIds.has(x.id) && x.date === im.date && x.tournament === im.tournament &&
+      x.myScore === im.myScore && x.oppScore === im.oppScore &&
+      norm(x.opponent) && norm(im.opponent) &&
+      (norm(x.opponent).includes(norm(im.opponent)) || norm(im.opponent).includes(norm(x.opponent)))
+    );
+    if (dup) map.delete(im.id);
+  });
+  return Array.from(map.values()).sort((a,b) => new Date(b.date) - new Date(a.date));
+}
+
+// 旧保存先の検索は初回だけ（統合済みの印を保存）。以後は、アプリで削除した試合が復活しない
+function syncLegacy2026(currentMatches, force) {
+  const key = getDbKey('2026 U-9');
+  return db.ref(`${key}/legacyMergedV2`).once('value')
+    .then(fs => (fs.val() === true && !force) ? null : db.ref('/').once('value').then(rs => rs.val() || {}))
+    .then(root => {
+      const sources = root ? collectLegacySources(root) : [];
+      const merged = mergeMatches2026(currentMatches, sources);
+      const curIds = new Set(currentMatches.map(m => m.id));
+      const initIds = new Set(INIT_MATCHES.map(m => m.id));
+      const recovered = merged.filter(m => !curIds.has(m.id) && !initIds.has(m.id)).length;
+      const updates = {};
+      updates[`${key}/matches`] = merged;
+      if (root) updates[`${key}/legacyMergedV2`] = true;
+      return db.ref().update(updates).then(() => ({ merged, recovered, sources }));
+    });
+}
+
+// 設定画面のボタン：旧保存先を再検索して復元（結果を表示）
+function recoverMatchesManually() {
+  if (!db) { toast('オンラインで操作してください'); return; }
+  if (currentYear !== '2026 U-9') { toast('2026 U-9 の年度で操作してください'); return; }
+  toast('他の保存先を検索中…');
+  db.ref(`${getDbKey('2026 U-9')}/matches`).once('value')
+    .then(s => syncLegacy2026(toMatchList(s.val()), true))
+    .then(r => {
+      matches = r.merged; renderActiveScreen();
+      const detail = r.sources.length ? r.sources.map(x => `・${x.path}：${x.list.length}件`).join('\n') : '・見つかりませんでした';
+      alert(`検索結果\n${detail}\n\n新しく復元した試合：${r.recovered}件\n現在の試合数：${r.merged.length}件`);
+    })
+    .catch(err => { console.warn(err); toast('検索に失敗しました'); });
+}
 
 function initFirebaseYearListener() {
   const key = getDbKey(currentYear);
@@ -1456,57 +1458,16 @@ function initFirebaseYearListener() {
 
   matchesRef.on('value', snap => {
     const data = snap.val();
-    let currentMatches = data ? (Array.isArray(data) ? data.filter(Boolean) : Object.values(data)) : [];
+    const currentMatches = toMatchList(data);
 
     if (currentYear === '2026 U-9') {
-      // 過去に別キー（/matches, /year_2026 など）に保存されていたデータも全て検索・自動合約
-      Promise.all([
-        db.ref('matches').once('value'),
-        db.ref('year_2026/matches').once('value'),
-        db.ref('year_U-9/matches').once('value'),
-        db.ref('year_3年生大会記録/matches').once('value')
-      ]).then(snaps => {
-        const map = new Map();
-        // 初期データを追加
-        INIT_MATCHES.forEach(m => { if(m && m.id) map.set(m.id, m); });
-        // 旧ノードのデータを追加
-        snaps.forEach(s => {
-          const val = s.val();
-          if (val) {
-            const list = Array.isArray(val) ? val.filter(Boolean) : Object.values(val);
-            list.forEach(m => { if(m && m.id) map.set(m.id, m); });
-          }
-        });
-        // 現在ノードのデータを登録（最新データを優先）
-        currentMatches.forEach(m => { if(m && m.id) map.set(m.id, m); });
-        // 初期データ側で修正した試合（revが新しいもの）は保存済みデータを上書き
-        INIT_MATCHES.forEach(im => {
-          if (!im.rev) return;
-          const cur = map.get(im.id);
-          if (!cur || (cur.rev || 0) < im.rev) map.set(im.id, im);
-        });
-
-        // アプリで手入力済みの同じ試合（同日・同大会・同スコア・相手名が近い）があれば初期データ側を除外
-        const norm = s => (s || '').replace(/[（(].*?[）)]/g, '').replace(/[\s.．・]/g, '').replace(/FC|SC|SSS|PP/gi, '').toLowerCase();
-        const initIds = new Set(INIT_MATCHES.map(m => m.id));
-        const currentIds = new Set(currentMatches.map(m => m && m.id));
-        INIT_MATCHES.forEach(im => {
-          if (currentIds.has(im.id)) return;
-          const dup = Array.from(map.values()).some(x =>
-            !initIds.has(x.id) && x.date === im.date && x.tournament === im.tournament &&
-            x.myScore === im.myScore && x.oppScore === im.oppScore &&
-            norm(x.opponent) && norm(im.opponent) &&
-            (norm(x.opponent).includes(norm(im.opponent)) || norm(im.opponent).includes(norm(x.opponent)))
-          );
-          if (dup) map.delete(im.id);
-        });
-        matches = Array.from(map.values()).sort((a,b) => new Date(b.date) - new Date(a.date));
-        
-        // 統合結果を正しいノードに書き保存
-        matchesRef.set(matches);
+      syncLegacy2026(currentMatches, false).then(r => {
+        matches = r.merged;
+        if (r.recovered > 0) toast(`他の保存先から${r.recovered}件の試合を復元しました`);
         renderActiveScreen();
-      }).catch(e => {
-        matches = currentMatches.length > 0 ? currentMatches : [...INIT_MATCHES];
+      }).catch(err => {
+        console.warn('旧保存先の統合に失敗', err);
+        matches = mergeMatches2026(currentMatches, []);
         renderActiveScreen();
       });
     } else {
@@ -1542,7 +1503,8 @@ function initFirebaseYearListener() {
   });
 }
 
-function renderActiveScreen() {
+function renderActiveScreen(fromNav) {
+  if (!fromNav) window.__dataReady = true;
   const activeScreen = document.querySelector('.screen.active');
   if (activeScreen) {
     const id = activeScreen.id.replace('screen-', '');
@@ -1570,6 +1532,7 @@ function applyEditMode() {
   document.querySelectorAll('.viewer-only').forEach(el => { el.style.display = isEditor ? 'none' : ''; });
   const inputNav = document.querySelectorAll('.nav-btn')[1];
   if (inputNav) inputNav.style.display = isEditor ? '' : 'none';
+  updateNavPill();
 
   const badge = document.getElementById('editModeBadge');
   const text  = document.getElementById('editModeText');
@@ -1610,24 +1573,79 @@ function goTab(name) {
   if (name === 'input' && !isEditor) {
     toast('入力には編集モードの解除が必要です'); return;
   }
+  const prev = document.querySelector('.screen.active');
+  const prevName = prev ? prev.id.replace('screen-', '') : name;
+  const dir = tabOrder.indexOf(name) >= tabOrder.indexOf(prevName) ? 'fwd' : 'back';
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(t => t.classList.remove('active'));
-  document.getElementById('screen-' + name).classList.add('active');
+  const scr = document.getElementById('screen-' + name);
+  scr.dataset.dir = dir;
+  scr.classList.add('active');
   document.querySelectorAll('.nav-btn')[tabOrder.indexOf(name)].classList.add('active');
-  
-  renderActiveScreen();
+  if (name === 'home') lastHomeSig = null;   // ホームに戻るたびに数字をもう一度カウントアップ
+  renderActiveScreen(true);
   if (name === 'input') prepareInput();
+  updateNavPill();
   window.scrollTo(0, 0);
 }
 
 // ===== ホーム =====
+// ===== ホームの動き：数字のカウントアップ／内訳の開閉 =====
+let lastHomeSig = null;
+
+function animateCounts(root) {
+  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  root.querySelectorAll('[data-count]').forEach(el => {
+    const target = Number(el.dataset.count) || 0;
+    if (reduce || target === 0) { el.textContent = target; return; }
+    el.textContent = '0';
+    setTimeout(() => {
+      const t0 = performance.now(), dur = 900;
+      const tick = now => {
+        const p = Math.min(1, (now - t0) / dur);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(tick); else el.textContent = target;
+      };
+      requestAnimationFrame(tick);
+    }, 300 + (Number(el.dataset.delay) || 0));
+  });
+}
+
+function toggleStat(card) {
+  const open = card.classList.toggle('open');
+  card.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+// 下メニューの赤いタブが、選んだボタンへ滑って移動する
+function updateNavPill() {
+  const nav = document.querySelector('.bottom-nav');
+  if (!nav) return;
+  const pill = nav.querySelector('.nav-pill');
+  const act = nav.querySelector('.nav-btn.active');
+  if (!pill || !act || act.offsetWidth === 0) return;
+  const nr = nav.getBoundingClientRect(), ar = act.getBoundingClientRect();
+  const first = !nav.classList.contains('has-pill');
+  if (first) pill.style.transition = 'none';
+  pill.style.width = (ar.width - 4) + 'px';
+  pill.style.transform = `translateX(${ar.left - nr.left + 2}px)`;
+  if (first) { void pill.offsetWidth; pill.style.transition = ''; nav.classList.add('has-pill'); }
+}
+
 function renderHome() {
   const total = matches.length;
+  // 内容が変わっていなければ描き直さない（動きが途中で途切れないように）
+  const sig = currentYear + '|' + (window.__dataReady ? 'r' : 'l') + '|' +
+    matches.map(m => [m.id, m.myScore, m.oppScore, m.result, m.matchType, m.tournament, m.date, m.opponent].join(',')).join(';');
+  if (sig === lastHomeSig) return;
+  lastHomeSig = sig;
+
   const wins = matches.filter(m => m.result === 'win').length;
   const draws = matches.filter(m => m.result === 'draw').length;
   const loses = matches.filter(m => m.result === 'lose').length;
   const gf = matches.reduce((s,m)=>s+m.myScore,0);
-  const winRate = total > 0 ? Math.round(wins / total * 100) : 0;
+  const ga = matches.reduce((s,m)=>s+m.oppScore,0);
+  const pct = (a, b) => b > 0 ? Math.round(a / b * 100) : 0;
+  const winRate = pct(wins, total);
 
   const official = matches.filter(m => ['public','tournament','league'].includes(m.matchType));
   const friendly = matches.filter(m => m.matchType === 'friendly');
@@ -1637,39 +1655,50 @@ function renderHome() {
   const friW = friendly.filter(m=>m.result==='win').length;
   const friD = friendly.filter(m=>m.result==='draw').length;
   const friL = friendly.filter(m=>m.result==='lose').length;
+  const offGf = official.reduce((s,m)=>s+m.myScore,0);
+  const friGf = friendly.reduce((s,m)=>s+m.myScore,0);
+  const tourCount = new Set(official.map(m => m.tournament).filter(Boolean)).size;
+  const loading = total === 0 && !window.__dataReady;
 
-  document.getElementById('greetingTitle').textContent = total === 0 ? 'はじめまして！' : `${currentYear} ${total}試合 戦いました！`;
+  const titleEl = document.getElementById('greetingTitle');
+  const subEl = document.getElementById('greetingSub');
+  const gridEl = document.getElementById('statsGrid');
 
-  document.getElementById('greetingSub').innerHTML = total === 0
-    ? '最初の試合結果を記録しましょう'
-    : `
-      <div style="margin-top:6px;line-height:2">
-        <div>通算　<b style="font-size:1rem">${wins}勝${draws}分${loses}敗</b>　勝率 ${winRate}%</div>
-        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:2px">
-          <span style="opacity:0.9">公式戦　${offW}勝${offD}分${offL}敗（${official.length}試合）</span>
-          <span style="opacity:0.9">練習試合　${friW}勝${friD}分${friL}敗（${friendly.length}試合）</span>
-        </div>
-      </div>
+  if (loading) {
+    titleEl.textContent = 'データを読み込み中…';
+    subEl.innerHTML = '';
+    gridEl.innerHTML = '';
+  } else if (total === 0) {
+    titleEl.textContent = 'はじめまして！';
+    subEl.innerHTML = '<div class="pc-line main">最初の試合結果を記録しましょう</div>';
+    gridEl.innerHTML = '';
+  } else {
+    titleEl.innerHTML = `${currentYear} <span data-count="${total}">${total}</span>試合 戦いました！`;
+    subEl.innerHTML = `
+      <div class="pc-line main"><span>通算</span><b class="gold"><span data-count="${wins}">${wins}</span>勝<span data-count="${draws}">${draws}</span>分<span data-count="${loses}">${loses}</span>敗</b><span>勝率 <span data-count="${winRate}">${winRate}</span>%</span></div>
+      <div class="pc-line sub">公式戦　${offW}勝${offD}分${offL}敗（${official.length}試合）</div>
+      <div class="pc-line sub">練習試合　${friW}勝${friD}分${friL}敗（${friendly.length}試合）</div>
+      <div class="wdl-bar" role="img" aria-label="勝${wins} 分${draws} 敗${loses}"><i class="w" style="flex:${wins}"></i><i class="d" style="flex:${draws}"></i><i class="l" style="flex:${loses}"></i></div>
     `;
 
-  document.getElementById('statsGrid').innerHTML = `
-    <div class="stat-card acc-red">
-      <div class="num">${wins}<small style="font-size:0.85rem;color:var(--muted)">勝</small></div>
-      <div class="lbl">勝利数</div>
-    </div>
-    <div class="stat-card acc-gold">
-      <div class="num">${gf}</div>
-      <div class="lbl">総得点</div>
-    </div>
-    <div class="stat-card acc-navy">
-      <div class="num">${total}</div>
-      <div class="lbl">試合数</div>
-    </div>
-    <div class="stat-card acc-green">
-      <div class="num">${winRate}<small style="font-size:0.85rem;color:var(--muted)">%</small></div>
-      <div class="lbl">勝率</div>
-    </div>
-  `;
+    const stat = (cls, numHtml, label, rows) => `
+      <div class="stat-card ${cls}" onclick="toggleStat(this)" aria-expanded="false">
+        <span class="stat-more">内訳 <i>▼</i></span>
+        <div class="num">${numHtml}</div>
+        <div class="lbl">${label}</div>
+        <div class="stat-detail">${rows.map(([k, v]) => `<div class="sd-row"><span>${k}</span><b>${v}</b></div>`).join('')}</div>
+      </div>`;
+    gridEl.innerHTML =
+      stat('acc-red',   `<span data-count="${wins}">${wins}</span><small class="unit">勝</small>`, '勝利数',
+           [['公式戦', offW + '勝'], ['練習試合', friW + '勝'], ['引き分け', draws + '分'], ['敗戦', loses + '敗']]) +
+      stat('acc-gold',  `<span data-count="${gf}">${gf}</span>`, '総得点',
+           [['公式戦', offGf + '点'], ['練習試合', friGf + '点'], ['総失点', ga + '点'], ['1試合平均', (gf / total).toFixed(1) + '点']]) +
+      stat('acc-navy',  `<span data-count="${total}">${total}</span>`, '試合数',
+           [['公式戦', official.length + '試合'], ['練習試合', friendly.length + '試合'], ['出場大会', tourCount + '大会']]) +
+      stat('acc-green', `<span data-count="${winRate}">${winRate}</span><small class="unit">%</small>`, '勝率',
+           [['公式戦', pct(offW, official.length) + '%'], ['練習試合', pct(friW, friendly.length) + '%']]);
+    animateCounts(document.getElementById('screen-home'));
+  }
 
   renderAwards();
 
@@ -1944,7 +1973,7 @@ function renderRecords() {
           <div class="scorer-list">
             ${scorers.map(s => `<span class="scorer-tag">${s.player} ${s.goals > 1 ? '×'+s.goals : ''}</span>`).join('')}
           </div>
-        ` : '<div style="font-size:0.78rem;color:#bbb">得点者の記録なし</div>'}
+        ` : '<div style="font-size:0.78rem;color:#8B8778">得点者の記録なし</div>'}
         ${pkScorerList(m).length > 0 ? `
           <div style="font-size:0.78rem;color:var(--muted);font-weight:700;margin:8px 0 4px">PK得点</div>
           <div class="scorer-list">
@@ -2036,11 +2065,12 @@ function renderStandings() {
             let [cls, lbl] = bMap[m.result];
             if (m.pk) lbl = m.pk.result === 'win' ? 'PK勝' : 'PK負';
             const scorers = (m.scorers||[]).filter(s=>s.player);
-            const scorerText = scorers.length > 0 ? scorers.map(s => s.player.split('（')[0] + (s.goals>1?`×${s.goals}`:'')).join('、') : '−';
+            const nw = t => `<span style="white-space:nowrap">${t}</span>`;
+            const scorerText = scorers.length > 0 ? scorers.map(s => nw(s.player.split('（')[0] + (s.goals>1?`×${s.goals}`:''))).join('、') : '−';
             const pkList = pkScorerList(m);
-            const pkText = pkList.length > 0 ? `<div style="margin-top:3px;font-size:0.62rem"><span class="pk-mini">PK</span>${pkList.map(shortName).join('、')}</div>` : '';
+            const pkText = pkList.length > 0 ? `<div style="margin-top:3px;font-size:0.62rem"><span class="pk-mini">PK</span>${pkList.map(p => nw(shortName(p))).join('、')}</div>` : '';
             return `<tr>
-              <td>vs ${m.opponent}</td>
+              <td style="white-space:normal;min-width:96px">vs ${m.opponent}</td>
               <td style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:0.95rem">${m.myScore}−${m.oppScore}</td>
               <td><span class="match-result-badge ${cls}" style="width:auto;height:24px;padding:0 6px;margin:0">${lbl}</span></td>
               <td style="font-size:0.68rem;color:var(--muted);white-space:normal">${scorerText}${pkText}</td>
@@ -2127,7 +2157,7 @@ function renderStandingsPhotos(tournament) {
   section.innerHTML = `
     <div class="sec-title" style="margin-top:4px">大会フォトアルバム</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-      ${grid || '<div style="grid-column:span 2;text-align:center;padding:20px;color:#bbb;font-size:0.85rem">写真がありません</div>'}
+      ${grid || '<div style="grid-column:span 2;text-align:center;padding:20px;color:#D3EBDB;font-size:0.85rem">写真がありません</div>'}
     </div>
     <button onclick="openPhotoModal('${tournament}')" class="btn btn-outline" style="margin-top:0;margin-bottom:16px">＋ 写真を追加する</button>
   `;
@@ -2205,7 +2235,7 @@ function renderStandingsVideos(tournament) {
   section.innerHTML = `
     <div class="sec-title" style="margin-top:4px">大会動画</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-      ${grid || '<div style="grid-column:span 2;text-align:center;padding:20px;color:#bbb;font-size:0.85rem">動画がありません</div>'}
+      ${grid || '<div style="grid-column:span 2;text-align:center;padding:20px;color:#D3EBDB;font-size:0.85rem">動画がありません</div>'}
     </div>
     <button onclick="openVideoModal('${tournament}')" class="btn btn-outline" style="margin-top:0;margin-bottom:16px">＋ 動画を追加する</button>
   `;
@@ -2269,10 +2299,12 @@ function renderPlayerRanking() {
 
   container.innerHTML = sorted.map((p, i) => {
     const name = p.split('（')[0].trim();
+    const no = playerNumber(name);
+    const noText = no === undefined ? (i + 1) : (no === null ? '–' : no);
     const yomi = p.match(/（(.+?)）/)?.[1] || '';
     const badge = name === CAPTAIN ? '<span class="role-badge cap">キャプテン</span>' : name === VICE_CAPTAIN ? '<span class="role-badge vice">副キャプテン</span>' : '';
     return `<div class="player-row${name === CAPTAIN ? ' is-cap' : name === VICE_CAPTAIN ? ' is-vice' : ''}">
-      <div class="player-no">${i + 1}</div>
+      <div class="player-no">${noText}</div>
       <div class="player-meta">
         <div class="player-nm">${name}${badge}</div>
         ${yomi ? `<div class="player-yomi">${yomi}</div>` : ''}
@@ -2288,7 +2320,7 @@ function renderSettings() {
   const wrap = document.getElementById('playerChips');
   if (!wrap) return;
   if (players.length === 0) {
-    wrap.innerHTML = '<p style="font-size:0.8rem;color:#bbb">選手が未登録です</p>'; return;
+    wrap.innerHTML = '<p style="font-size:0.8rem;color:#8B8778">選手が未登録です</p>'; return;
   }
   wrap.innerHTML = players.map(p =>
     `<div class="player-chip">${p}<button onclick="removePlayer('${p}')">×</button></div>`
@@ -2401,210 +2433,23 @@ function copyShare() {
   }
 }
 
-
-// ===== 動き（FX）：既存の描画関数を包んで演出を足す =====
-const FX_REDUCE = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-const fxLast = {};
-function fxCount(el, to, key, dur) {
-  if (!el) return;
-  const node = [...el.childNodes].find(n => n.nodeType === 3 && n.textContent.trim() !== '') || el.firstChild;
-  if (!node) return;
-  const from = (key in fxLast) ? fxLast[key] : 0;
-  fxLast[key] = to;
-  if (FX_REDUCE || from === to) { node.textContent = to; return; }
-  const t0 = performance.now(); dur = dur || 900;
-  node.textContent = from;
-  (function tick(t) {
-    const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
-    node.textContent = Math.round(from + (to - from) * e);
-    if (k < 1) requestAnimationFrame(tick);
-  })(t0);
-}
-function fxEsc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
-
-// --- タブ切り替え：進む方向にスライド ---
-let fxPrevTab = 'home';
-const _fxGoTab = goTab;
-goTab = function(name) {
-  const from = tabOrder.indexOf(fxPrevTab), to = tabOrder.indexOf(name);
-  _fxGoTab(name);
-  const scr = document.getElementById('screen-' + name);
-  if (!scr || !scr.classList.contains('active')) return;
-  scr.classList.remove('fx-from-left', 'fx-from-right');
-  void scr.offsetWidth;
-  if (to !== from) scr.classList.add(to > from ? 'fx-from-right' : 'fx-from-left');
-  fxPrevTab = name;
-};
-
-// --- ホーム：数字カウントアップ・勝敗バー・タップで内訳 ---
-let fxOpenStat = null;
-const FX_STATS = [
-  { key: 'wins',  title: '大会ごとの勝敗',     acc: 'var(--red)'  },
-  { key: 'goals', title: '大会ごとの得点・失点', acc: 'var(--gold)' },
-  { key: 'games', title: '試合の流れ（古い順）', acc: 'var(--sky)'  },
-  { key: 'rate',  title: '試合の種類別 勝率',   acc: 'var(--lime)' }
-];
-function fxStatDetailHtml(key) {
-  const ms = [...matches].sort((a, b) => (a.date || '').localeCompare(b.date || '') || (a.id || 0) - (b.id || 0));
-  if (!ms.length) return '<div class="fx-ph">まだ試合がありません</div>';
-  if (key === 'wins') {
-    const map = new Map();
-    ms.forEach(m => {
-      const t = m.tournament || '練習試合';
-      if (!map.has(t)) map.set(t, { w: 0, d: 0, l: 0 });
-      map.get(t)[m.result === 'win' ? 'w' : m.result === 'lose' ? 'l' : 'd']++;
-    });
-    const rows = [...map.entries()];
-    const max = Math.max(...rows.map(([, r]) => r.w + r.d + r.l));
-    return `<div class="fx-ph">大会ごとの勝敗<small>${rows.length}大会・PK勝ちは勝ちに含む</small></div>` +
-      rows.map(([t, r], i) => {
-        const n = r.w + r.d + r.l, pc = v => (v / max * 100) + '%';
-        return `<div class="fx-row"><span class="nm">${fxEsc(t.replace(/^第\d+回\s*/, ''))}</span>
-          <span class="fx-track"><i style="--k:${i};width:${pc(r.w)};background:var(--lime)"></i><i style="--k:${i};width:${pc(r.d)};background:var(--gold)"></i><i style="--k:${i};width:${pc(r.l)};background:var(--red)"></i></span>
-          <span class="v">${r.w}<small style="font-size:.6rem">/${n}</small></span></div>`;
-      }).join('') +
-      `<div class="fx-legend"><span><b style="background:var(--lime)"></b>勝</span><span><b style="background:var(--gold)"></b>分</span><span><b style="background:var(--red)"></b>負</span></div>`;
-  }
-  if (key === 'goals') {
-    const map = new Map();
-    ms.forEach(m => {
-      const t = m.tournament || '練習試合';
-      if (!map.has(t)) map.set(t, { f: 0, a: 0 });
-      map.get(t).f += parseInt(m.myScore) || 0; map.get(t).a += parseInt(m.oppScore) || 0;
-    });
-    const rows = [...map.entries()];
-    const max = Math.max(1, ...rows.map(([, r]) => Math.max(r.f, r.a)));
-    return `<div class="fx-ph">大会ごとの得点・失点<small>PK戦は含まない</small></div>` +
-      rows.map(([t, r], i) => `<div class="fx-row"><span class="nm">${fxEsc(t.replace(/^第\d+回\s*/, ''))}</span>
-        <span style="display:grid;gap:3px"><span class="fx-track"><i style="--k:${i};width:${r.f / max * 100}%;background:var(--gold)"></i></span><span class="fx-track" style="height:6px"><i style="--k:${i};width:${r.a / max * 100}%;background:#C9C4B4"></i></span></span>
-        <span class="v">${r.f}<small style="font-size:.6rem">-${r.a}</small></span></div>`).join('') +
-      `<div class="fx-legend"><span><b style="background:var(--gold)"></b>得点</span><span><b style="background:#C9C4B4"></b>失点</span></div>`;
-  }
-  if (key === 'games') {
-    const cls = { win: 'bg-win', draw: 'bg-draw', lose: 'bg-lose' };
-    const lbl = m => m.pk ? 'PK' : m.result === 'win' ? '勝' : m.result === 'lose' ? '負' : '分';
-    let html = '', k = 0, lastT = null;
-    ms.forEach(m => {
-      const t = m.tournament || '練習試合';
-      if (t !== lastT) { html += `<span class="t" style="--k:${k++}">${fxEsc(t.replace(/^第\d+回\s*/, '').replace(/^U-9\s*/, ''))}</span>`; lastT = t; }
-      html += `<span class="${cls[m.result] || ''}" style="--k:${k++}" title="${fxEsc(m.date)} vs ${fxEsc(m.opponent)} ${m.myScore}-${m.oppScore}">${lbl(m)}</span>`;
-    });
-    return `<div class="fx-ph">試合の流れ<small>左から古い順・全${ms.length}試合</small></div><div class="fx-seq">${html}</div>`;
-  }
-  if (key === 'rate') {
-    const grp = [
-      ['公式戦', ms.filter(m => ['public', 'tournament', 'league'].includes(m.matchType))],
-      ['練習試合', ms.filter(m => m.matchType === 'friendly')],
-      ['通算', ms]
-    ];
-    return `<div class="fx-ph">試合の種類別 勝率<small>勝ち ÷ 試合数</small></div>` +
-      grp.map(([n, list], i) => {
-        const w = list.filter(m => m.result === 'win').length, r = list.length ? Math.round(w / list.length * 100) : 0;
-        return `<div class="fx-row"><span class="nm">${n}<small style="color:var(--muted);font-size:.6rem"> ${list.length}試合</small></span>
-          <span class="fx-track"><i style="--k:${i};width:${r}%;background:var(--lime)"></i></span><span class="v">${list.length ? r + '%' : '−'}</span></div>`;
-      }).join('');
-  }
-  return '';
-}
-function fxRenderStatDetail() {
-  let box = document.getElementById('statDetail');
-  if (!box) {
-    box = document.createElement('div'); box.id = 'statDetail'; box.innerHTML = '<div></div>';
-    document.getElementById('statsGrid').after(box);
-  }
-  const cards = document.querySelectorAll('#statsGrid .stat-card');
-  cards.forEach((c, i) => c.classList.toggle('on', FX_STATS[i].key === fxOpenStat));
-  if (!fxOpenStat) { box.classList.remove('open'); return; }
-  const s = FX_STATS.find(x => x.key === fxOpenStat);
-  box.firstChild.innerHTML = `<div class="fx-panel" style="--accent:${s.acc}">${fxStatDetailHtml(s.key)}</div>`;
-  box.classList.add('open');
-}
-const _fxRenderHome = renderHome;
-renderHome = function() {
-  _fxRenderHome();
-  const total = matches.length;
-  const wins = matches.filter(m => m.result === 'win').length;
-  const draws = matches.filter(m => m.result === 'draw').length;
-  const loses = matches.filter(m => m.result === 'lose').length;
-  const gf = matches.reduce((s, m) => s + (parseInt(m.myScore) || 0), 0);
-  const rate = total ? Math.round(wins / total * 100) : 0;
-  const cards = document.querySelectorAll('#statsGrid .stat-card');
-  [wins, gf, total, rate].forEach((v, i) => {
-    const c = cards[i]; if (!c) return;
-    fxCount(c.querySelector('.num'), v, 'stat' + i);
-    c.setAttribute('role', 'button'); c.tabIndex = 0;
-    c.insertAdjacentHTML('beforeend', '<span class="fx-hint">内訳 <b>▼</b></span>');
-    const toggle = () => { fxOpenStat = fxOpenStat === FX_STATS[i].key ? null : FX_STATS[i].key; fxRenderStatDetail(); };
-    c.onclick = toggle;
-    c.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } };
-  });
-  const sub = document.getElementById('greetingSub');
-  if (sub && total) {
-    sub.insertAdjacentHTML('beforeend', `<div class="fx-wdl" aria-hidden="true"><i class="w" style="width:${wins / total * 100}%"></i><i class="d" style="width:${draws / total * 100}%"></i><i class="l" style="width:${loses / total * 100}%"></i></div>`);
-  }
-  document.querySelectorAll('.medal-num').forEach((el, i) => fxCount(el, parseInt(el.textContent) || 0, 'medal' + i, 700));
-  fxRenderStatDetail();
-};
-
-// --- 順位表：数字カウントアップ・行を順に表示・自チーム行を光らせる ---
-const _fxRenderStandings = renderStandings;
-renderStandings = function() {
-  _fxRenderStandings();
-  const t = document.getElementById('standingsTournamentSelect').value || '';
-  document.querySelectorAll('#standingsSummary .st-num').forEach((el, i) => {
-    const v = parseInt(el.textContent) || 0; delete fxLast['st' + i + t]; fxCount(el, v, 'st' + i + t, 800);
-  });
-  document.querySelectorAll('#standingsBlock .standings-table, #standingsMatchTable .standings-table').forEach(tb => {
-    tb.classList.add('fx-rows');
-    tb.querySelectorAll('tbody tr').forEach((tr, i) => { tr.style.animationDelay = (i * 60 + 80) + 'ms'; });
-  });
-  document.querySelectorAll('#standingsBlock .podium-row').forEach((r, i) => { r.style.animationDelay = (i * 80 + 200) + 'ms'; });
-};
-
-// --- 勝ち試合を保存したら紙吹雪 ---
-function fxConfetti() {
-  if (FX_REDUCE) return;
-  const cv = document.createElement('canvas'); cv.id = 'fxConfetti';
-  const dpr = window.devicePixelRatio || 1;
-  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
-  document.body.appendChild(cv);
-  const cx = cv.getContext('2d'); cx.scale(dpr, dpr);
-  const cols = ['#E8392B', '#F5B301', '#8FCB3A', '#3EA9DE', '#FFFDF6'];
-  const ps = Array.from({ length: 110 }, () => ({
-    x: innerWidth / 2 + (Math.random() - .5) * 60, y: innerHeight * .62,
-    vx: (Math.random() - .5) * 11, vy: -Math.random() * 13 - 6,
-    w: 5 + Math.random() * 6, h: 3 + Math.random() * 5, r: Math.random() * 6, vr: (Math.random() - .5) * .4,
-    c: cols[Math.floor(Math.random() * cols.length)]
-  }));
-  const t0 = performance.now();
-  (function step(t) {
-    const k = (t - t0) / 1800;
-    cx.clearRect(0, 0, innerWidth, innerHeight);
-    ps.forEach(p => {
-      p.vy += .38; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
-      cx.save(); cx.globalAlpha = Math.max(0, 1 - k); cx.translate(p.x, p.y); cx.rotate(p.r);
-      cx.fillStyle = p.c; cx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); cx.restore();
-    });
-    if (k < 1) requestAnimationFrame(step); else cv.remove();
-  })(t0);
-}
-const _fxSaveMatch = saveMatch;
-saveMatch = function() {
-  const n = matches.length;
-  _fxSaveMatch();
-  if (matches.length > n && matches[0] && matches[0].result === 'win') fxConfetti();
-};
-
-// --- エンブレムをタップするとボールが回る ---
-document.querySelector('.club-emblem').addEventListener('click', e => {
-  const el = e.currentTarget; el.classList.remove('spin'); void el.offsetWidth; el.classList.add('spin');
-});
-
 // ===== 初期化実行 =====
 updateYearUI();
 initFirebase();
 applyEditMode();
 renderHome();
+// データが長時間届かないとき（圏外など）は、読み込み中のままにしない
+setTimeout(() => {
+  if (!window.__dataReady) {
+    const t = document.getElementById('greetingTitle');
+    if (t) t.textContent = 'データを取得できていません。通信状態を確認してください';
+  }
+}, 8000);
+updateNavPill();
+window.addEventListener('resize', updateNavPill);
+window.addEventListener('orientationchange', () => setTimeout(updateNavPill, 250));
+window.addEventListener('load', updateNavPill);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateNavPill);
 </script>
 </body>
 </html>
