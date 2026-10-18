@@ -518,6 +518,88 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
 @keyframes icoPop { 0% { transform: scale(0.6) rotate(-18deg); } 100% { transform: translateY(-2px) scale(1.14); } }
 @keyframes dotPulse { 0% { box-shadow: 0 0 0 0 rgba(124,255,138,0.7); } 80%, 100% { box-shadow: 0 0 0 8px rgba(124,255,138,0); } }
 
+/* ===== 次の大会カード ===== */
+.next-card {
+  margin: 0 4px 26px; overflow: hidden; cursor: pointer; background: #fff;
+  border: 3px solid var(--ink); border-radius: 26px; box-shadow: var(--shadow);
+  transition: transform 0.15s, box-shadow 0.15s; animation: statPop 0.6s var(--ease-pop) 0.1s both;
+}
+.next-card:active { transform: translate(2px,3px); box-shadow: 1px 1px 0 var(--ink); }
+.nc-head {
+  display: flex; align-items: center; gap: 10px; padding: 9px 16px; background: var(--red); color: #fff;
+  border-bottom: 3px solid var(--ink); font-size: 0.82rem; font-weight: 900; letter-spacing: 0.05em;
+}
+.nc-tag {
+  padding: 2px 10px; border: 2px solid var(--ink); border-radius: 999px; background: #fff; color: var(--red-dark);
+  font-family: 'Bungee', sans-serif; font-size: 0.72rem; font-weight: 400; letter-spacing: 0.1em;
+}
+.nc-body { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 16px 8px; }
+.nc-title { font-size: 1.08rem; font-weight: 900; line-height: 1.35; }
+.nc-sub { margin-top: 4px; font-size: 0.8rem; font-weight: 800; color: var(--muted); }
+.nc-count {
+  flex-shrink: 0; min-width: 96px; padding: 10px 12px 9px; border-radius: 16px; background: var(--ink); color: #fff; text-align: center;
+  animation: ncGlow 2.4s ease-in-out infinite;
+}
+.nc-count .pre { font-size: 0.68rem; font-weight: 900; letter-spacing: 0.06em; }
+.nc-count .big { margin-top: 2px; font-family: 'Bungee', 'Baloo 2', sans-serif; font-size: 2.1rem; line-height: 1.05; color: #FFE066; }
+.nc-count .big.txt { font-family: 'M PLUS Rounded 1c', sans-serif; font-size: 1.6rem; font-weight: 900; }
+.nc-count .unit { margin-left: 3px; font-family: 'M PLUS Rounded 1c', sans-serif; font-size: 0.85rem; font-weight: 900; color: #fff; }
+.nc-rows { padding: 4px 16px 2px; }
+.nc-row { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-top: 3px dotted var(--border); font-size: 0.86rem; font-weight: 800; line-height: 1.5; }
+.nc-row:first-child { border-top: none; }
+.nc-row i { flex-shrink: 0; width: 22px; text-align: center; font-style: normal; }
+.nc-row b { font-weight: 900; }
+.nc-row small { font-size: 0.78rem; font-weight: 800; color: var(--muted); }
+.nc-foot {
+  display: flex; align-items: center; justify-content: center; gap: 8px; margin: 6px 16px 16px; padding: 11px;
+  border: 2.5px solid var(--ink); border-radius: 14px; background: var(--gold-light); font-size: 0.86rem; font-weight: 900;
+}
+.nc-foot span { display: inline-block; animation: nudge 1.4s ease-in-out infinite; }
+@keyframes ncGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,224,102,0); } 50% { box-shadow: 0 0 0 6px rgba(255,224,102,0.35); } }
+@keyframes nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
+
+/* ===== 星取り表 ===== */
+.star-hint { margin: 0 4px 14px; padding: 11px 14px; border: 2.5px dashed #7FB04A; border-radius: 16px; background: var(--lime-light); font-size: 0.8rem; font-weight: 800; line-height: 1.6; }
+.star-note { margin: 0 6px 24px; font-size: 0.74rem; font-weight: 800; line-height: 1.6; color: var(--muted); }
+.star-block { margin: 0 4px 22px; }
+.star-head { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+.star-progress { font-size: 0.76rem; font-weight: 900; color: var(--muted); }
+.star-card { overflow: hidden; background: #fff; border: 3px solid var(--ink); border-radius: 22px; box-shadow: var(--shadow); }
+.star-card.mine { border-color: var(--red); box-shadow: 3px 4px 0 var(--red-dark); }
+.star-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.star-table th, .star-table td { border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); text-align: center; font-weight: 900; }
+.star-table th:last-child, .star-table td:last-child { border-right: none; }
+.star-table .corner { width: 42%; background: var(--ink); }
+.star-table .colhd { padding: 8px 2px; background: var(--ink); color: #FFE066; font-family: 'Bungee', sans-serif; font-size: 0.74rem; font-weight: 400; }
+.star-table .colhd.me { background: var(--red); color: #fff; }
+.star-table .rowhd { padding: 8px 10px; background: #F4F9EE; text-align: left; font-size: 0.8rem; line-height: 1.35; }
+.star-table tr.me .rowhd { background: #FFE3DE; }
+.star-table .code { display: inline-block; margin-right: 6px; padding: 1px 6px; border: 2px solid var(--ink); border-radius: 7px; background: var(--gold-light); font-family: 'Bungee', sans-serif; font-size: 0.62rem; font-weight: 400; }
+.star-table .diag { background: repeating-linear-gradient(45deg, #CFD8CA 0 4px, #E6ECE2 4px 8px); }
+.star-cell { height: 50px; font-family: 'Bungee', 'Baloo 2', sans-serif; font-size: 0.95rem; font-weight: 400; }
+.star-cell.w { background: var(--lime-light); }
+.star-cell.l { background: var(--red-light); }
+.star-cell.d { background: var(--gold-light); }
+.star-cell .blank { color: #6B7280; font-family: 'M PLUS Rounded 1c', sans-serif; font-weight: 900; }
+.star-cell.edit { cursor: pointer; transition: background 0.15s; }
+.star-cell.edit .blank { color: var(--red); font-size: 1.15rem; }
+.star-cell.edit:active { background: var(--gold); }
+.star-rank { border-top: 3px solid var(--ink); }
+.star-rank th, .star-rank td { padding-left: 2px; padding-right: 2px; }
+.star-rank th:first-child, .star-rank td:first-child { text-align: left; padding-left: 10px; white-space: normal; }
+
+/* ===== 予選日程・会場 ===== */
+.sch-card { margin: 0 4px 22px; padding: 4px 16px 2px; background: #fff; border: 3px solid var(--ink); border-radius: 22px; box-shadow: var(--shadow); }
+.sch-block { padding: 14px 0 6px; border-top: 3px dotted var(--border); }
+.sch-block:first-child { border-top: none; }
+.sch-bname { display: inline-block; margin-bottom: 10px; padding: 3px 13px; border: 2.5px solid var(--ink); border-radius: 999px; background: var(--green-hd); color: #fff; font-size: 0.76rem; font-weight: 900; }
+.sch-block.mine .sch-bname { background: var(--red); }
+.sch-row { display: flex; gap: 10px; margin-bottom: 11px; font-size: 0.84rem; font-weight: 800; line-height: 1.5; }
+.sch-kind { flex-shrink: 0; align-self: flex-start; min-width: 54px; padding: 2px 6px; border: 2px solid var(--ink); border-radius: 8px; background: var(--gold); text-align: center; font-size: 0.68rem; font-weight: 900; }
+.sch-kind.spare { background: #E3E8DD; }
+.sch-note { margin-top: 1px; font-size: 0.78rem; color: var(--ink); }
+.sch-venue { margin-top: 1px; font-size: 0.78rem; font-weight: 800; color: var(--muted); }
+
 @media (max-width: 374px) {
   .pc-line.main { font-size: 0.88rem; gap: 7px; }
   .pc-line .gold { font-size: 1rem; }
@@ -563,6 +645,7 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
     <p id="greetingSub">今シーズンの活躍を記録していきましょう</p>
   </div>
 
+  <div id="nextTournament"></div>
   <div class="stats-grid" id="statsGrid"></div>
 
   <div class="sec-title">大会成績</div>
@@ -876,6 +959,22 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
     <div class="share-text" id="shareText"></div>
     <button class="copy-btn" onclick="copyShare()">コピーする</button>
     <button class="btn btn-outline" onclick="closeShare()">閉じる</button>
+  </div>
+</div>
+
+<!-- 星取り表：結果入力 -->
+<div class="modal-overlay" id="starModal" onclick="if(event.target===this)closeStarModal()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="starModalTitle">結果を入力</div>
+    <div class="score-input-row">
+      <div><input type="number" id="starA" min="0" max="99" inputmode="numeric" placeholder="0"><div class="team-lbl" id="starALbl"></div></div>
+      <div class="vs-x">−</div>
+      <div><input type="number" id="starB" min="0" max="99" inputmode="numeric" placeholder="0"><div class="team-lbl" id="starBLbl"></div></div>
+    </div>
+    <button class="btn btn-red" onclick="saveStarModal()">保存する</button>
+    <button class="btn btn-outline" onclick="clearStarModal()">この結果を消す</button>
+    <button class="btn btn-outline" onclick="closeStarModal()">閉じる</button>
   </div>
 </div>
 
@@ -1444,6 +1543,7 @@ function initFirebaseYearListener() {
     } else {
       matches = []; players = [];
     }
+    loadLocalTourResults();
     renderActiveScreen();
     return;
   }
@@ -1451,10 +1551,13 @@ function initFirebaseYearListener() {
   if (matchesRef) matchesRef.off();
   if (playersRef) playersRef.off();
   if (videosRef) videosRef.off();
+  if (tourResultsRef) tourResultsRef.off();
+  tourResults = {};
 
   matchesRef = db.ref(`${key}/matches`);
   playersRef = db.ref(`${key}/players`);
   videosRef = db.ref(`${key}/videos`);
+  tourResultsRef = db.ref(`${key}/tournamentResults`);
 
   matchesRef.on('value', snap => {
     const data = snap.val();
@@ -1499,6 +1602,14 @@ function initFirebaseYearListener() {
     if (document.querySelector('#screen-standings.active')) {
       const tour = document.getElementById('standingsTournamentSelect').value;
       if (tour) renderStandingsVideos(tour);
+    }
+  });
+
+  tourResultsRef.on('value', snap => {
+    tourResults = snap.val() || {};
+    if (document.querySelector('#screen-standings.active')) {
+      const tour = document.getElementById('standingsTournamentSelect').value;
+      if (tour && findScheduled(tour)) renderStandings();
     }
   });
 }
@@ -1582,7 +1693,7 @@ function goTab(name) {
   scr.dataset.dir = dir;
   scr.classList.add('active');
   document.querySelectorAll('.nav-btn')[tabOrder.indexOf(name)].classList.add('active');
-  if (name === 'home') lastHomeSig = null;   // ホームに戻るたびに数字をもう一度カウントアップ
+  if (name === 'home') { lastHomeSig = null; lastNextSig = null; }   // ホームに戻るたびに数字をもう一度カウントアップ
   renderActiveScreen(true);
   if (name === 'input') prepareInput();
   updateNavPill();
@@ -1590,6 +1701,317 @@ function goTab(name) {
 }
 
 // ===== ホーム =====
+// ===== 予定の大会（次の大会カード・星取り表） =====
+// 大会が決まったら、ここに追加する。日付(date)は矢作SCのブロックだけカウントダウンに使う
+const SCHEDULED_TOURNAMENTS = {
+  '2026 U-9': [{
+    id: 'kyokai58-4',
+    name: '第58回 協会長杯 4部',
+    full: '2026年 第58回 協会長杯 4部',
+    myTeam: '矢作',
+    myBlock: 'A',
+    blocks: {
+      A: ['久野', '矢作', 'YSGEM'],
+      B: ['足柄', '東富水・千代豊川', '三の丸ブルー'],
+      C: ['山王・新玉・町田', 'ザウルス', '芦子 国府津・下曽我', 'SKJ'],
+      D: ['三の丸レッド', '桜井報徳', '岩原', '早川・Colors']
+    },
+    // 予選日程（予備日含む）＆会場：主催の表のとおり
+    schedule: {
+      A: [
+        { kind: '開催日', date: '2026-10-31', label: '10/31(土) 午後', cars: '6台', venue: '箱根町社会福祉協議会（YSGEM）' },
+        { kind: '予備日', date: '2026-11-01', label: '11/1(日) 午後', cars: '6台', venue: '箱根町社会福祉協議会（YSGEM）' }
+      ],
+      B: [
+        { kind: '開催日', label: '11/3(祝火)', cars: '5台', note: '東富水・千代豊川 vs 三の丸ブルー', venue: '南足柄市運動公園（早川・Colors）' },
+        { kind: '開催日', label: '11/14(土) 午後', cars: '制限なし', note: '足柄 vs 三の丸ブルー', venue: '河川敷下流（足柄）' },
+        { kind: '開催日', label: '11/22(土) 午前', cars: '5台', note: '足柄 vs 東富水・千代豊川', venue: '東富水小学校（東富水・千代豊川）' }
+      ],
+      C: [
+        { kind: '開催日', label: '11/3(祝火) 午前', cars: '4台', venue: '山王小学校 または 新玉小学校（山王・新玉・町田）' },
+        { kind: '予備日', label: '11/15(日) 午前', cars: '4台', venue: '山王小学校 または 新玉小学校（山王・新玉・町田）' }
+      ],
+      D: [
+        { kind: '開催日', label: '11/3(祝火)', cars: '5台', venue: '南足柄市運動公園（早川・Colors）' }
+      ]
+    }
+  }]
+};
+
+function scheduledList() { return SCHEDULED_TOURNAMENTS[currentYear] || []; }
+function findScheduled(name) { return scheduledList().find(t => t.name === name) || null; }
+function scheduleMain(t) { const a = t.schedule[t.myBlock] || []; return a.find(s => s.kind === '開催日') || a[0] || null; }
+function scheduleSpare(t) { return (t.schedule[t.myBlock] || []).find(s => s.kind === '予備日') || null; }
+
+let tourResults = {};          // { 大会id: { 'A_0_2': {a:2, b:1}, ... } }  a＝番号の小さいチームの得点
+let tourResultsRef = null;
+let starCtx = null;
+let lastNextSig = null;
+
+const pairKey = (b, i, j) => `${b}_${i}_${j}`;
+const normTeam = s => (s || '').toLowerCase().replace(/[（(].*?[）)]/g, '').replace(/[\s\u3000・·.．、,\-]/g, '').replace(/fc|sc/g, '');
+
+function loadLocalTourResults() {
+  try { tourResults = JSON.parse(localStorage.getItem(`yhg9_tour_${currentYear}`)) || {}; } catch (e) { tourResults = {}; }
+}
+function saveTourResult(tid, key, val) {
+  tourResults[tid] = tourResults[tid] || {};
+  if (val) tourResults[tid][key] = val; else delete tourResults[tid][key];
+  if (db) {
+    const ref = db.ref(`${getDbKey(currentYear)}/tournamentResults/${tid}/${key}`);
+    (val ? ref.set(val) : ref.remove()).catch(err => { console.warn(err); toast('保存に失敗しました'); });
+  } else {
+    try { localStorage.setItem(`yhg9_tour_${currentYear}`, JSON.stringify(tourResults)); } catch (e) {}
+  }
+}
+
+// 矢作SCの試合（入力タブの記録）から、星取り表の矢作SCの欄を自動で作る
+// ・同じ相手との最初の1試合だけを使う（予選の試合。決勝トーナメントの再戦は含めない）
+function deriveMyResults(t) {
+  const out = {};
+  const teams = t.blocks[t.myBlock] || [];
+  const myIdx = teams.indexOf(t.myTeam);
+  if (myIdx < 0) return out;
+  const list = matches.filter(m => m.tournament === t.name)
+    .sort((a, b) => (a.date || '').localeCompare(b.date || '') || (a.id || 0) - (b.id || 0));
+  list.forEach(m => {
+    const n = normTeam(m.opponent);
+    if (!n) return;
+    let oi = -1;
+    teams.forEach((tm, idx) => {
+      if (oi >= 0 || idx === myIdx) return;
+      const tn = normTeam(tm);
+      if (tn === n || (n.length >= 2 && tn.length >= 2 && (tn.includes(n) || n.includes(tn)))) oi = idx;
+    });
+    if (oi < 0) return;
+    const k = pairKey(t.myBlock, Math.min(myIdx, oi), Math.max(myIdx, oi));
+    if (out[k]) return;
+    out[k] = myIdx < oi ? { a: m.myScore, b: m.oppScore } : { a: m.oppScore, b: m.myScore };
+  });
+  return out;
+}
+
+// ブロックの成績を計算（順位は 勝点 → 得失点差 → 総得点。同じなら同順位）
+function calcBlock(teams, results, b) {
+  const rows = teams.map((name, idx) => ({ idx, name, p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, gd: 0, rank: null }));
+  let done = 0;
+  for (let i = 0; i < teams.length; i++) for (let j = i + 1; j < teams.length; j++) {
+    const r = results[pairKey(b, i, j)];
+    if (!r) continue;
+    done++;
+    const A = rows[i], B = rows[j];
+    A.p++; B.p++; A.gf += r.a; A.ga += r.b; B.gf += r.b; B.ga += r.a;
+    if (r.a > r.b) { A.w++; B.l++; A.pts += 3; }
+    else if (r.a < r.b) { B.w++; A.l++; B.pts += 3; }
+    else { A.d++; B.d++; A.pts++; B.pts++; }
+  }
+  rows.forEach(r => { r.gd = r.gf - r.ga; });
+  const played = rows.filter(r => r.p > 0).sort((x, y) => y.pts - x.pts || y.gd - x.gd || y.gf - x.gf || x.idx - y.idx);
+  let rank = 0, prev = null;
+  played.forEach((r, k) => { const key = [r.pts, r.gd, r.gf].join(','); if (key !== prev) { rank = k + 1; prev = key; } r.rank = rank; });
+  return { order: [...played, ...rows.filter(r => r.p === 0)], done, total: teams.length * (teams.length - 1) / 2 };
+}
+
+function blockStarHtml(t, b, resAll, derived) {
+  const teams = t.blocks[b], n = teams.length;
+  const isMine = b === t.myBlock;
+  const myIdx = isMine ? teams.indexOf(t.myTeam) : -1;
+  const results = {};
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
+    const k = pairKey(b, i, j);
+    if (isMine && derived[k]) results[k] = { ...derived[k], derived: true };
+    else if (resAll[k] && resAll[k].a != null && resAll[k].b != null) results[k] = { a: resAll[k].a, b: resAll[k].b };
+  }
+  const st = calcBlock(teams, results, b);
+  const code = i => `${b}${i + 1}`;
+  const head = `<tr><th class="corner"></th>${teams.map((_, j) => `<th class="colhd${j === myIdx ? ' me' : ''}">${code(j)}</th>`).join('')}</tr>`;
+  const body = teams.map((rt, i) => `<tr class="${i === myIdx ? 'me' : ''}">
+      <th class="rowhd"><span class="code">${code(i)}</span>${rt}</th>
+      ${teams.map((_, j) => {
+        if (i === j) return '<td class="diag"></td>';
+        const lo = Math.min(i, j), hi = Math.max(i, j);
+        const r = results[pairKey(b, lo, hi)];
+        let txt = '', cls = '';
+        if (r) {
+          const mine = i < j ? [r.a, r.b] : [r.b, r.a];
+          txt = `${mine[0]}-${mine[1]}`;
+          cls = mine[0] > mine[1] ? 'w' : mine[0] < mine[1] ? 'l' : 'd';
+        }
+        const editable = isEditor && !(r && r.derived);
+        const click = editable ? ` onclick="openStarModal('${t.id}','${b}',${lo},${hi})"` : '';
+        return `<td class="star-cell ${cls}${editable ? ' edit' : ''}"${click}>${txt || `<span class="blank">${editable ? '＋' : '－'}</span>`}</td>`;
+      }).join('')}
+    </tr>`).join('');
+  const table = st.order.map(r => `<tr class="${r.idx === myIdx ? 'is-me' : ''}">
+      <td>${r.rank != null ? `<span class="rk${r.rank <= 3 ? ' r' + r.rank : ''}">${r.rank}</span>` : '<span class="rk">－</span>'}${r.name}</td>
+      <td>${r.w}</td><td>${r.l}</td><td>${r.d}</td><td class="pts">${r.pts}</td>
+      <td>${r.gd >= 0 ? '+' : ''}${r.gd}</td><td>${r.gf}</td>
+    </tr>`).join('');
+  const prog = st.done === 0 ? 'まだ試合なし' : st.done >= st.total ? '全試合 終了' : `途中経過 ${st.done}/${st.total}試合`;
+  return `<div class="star-block">
+    <div class="star-head"><span class="block-label" style="margin:0${isMine ? ';background:var(--red)' : ''}">${b}ブロック${isMine ? '　矢作SC' : ''}</span><span class="star-progress">${prog}</span></div>
+    <div class="star-card${isMine ? ' mine' : ''}">
+      <table class="star-table"><thead>${head}</thead><tbody>${body}</tbody></table>
+      <table class="standings-table star-rank">
+        <thead><tr><th>チーム</th><th>勝</th><th>負</th><th>分</th><th>勝点</th><th>得失</th><th>得点</th></tr></thead>
+        <tbody>${table}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function scheduleHtml(t) {
+  const blocks = Object.keys(t.blocks);
+  return `<div class="sec-title">予選日程（予備日含む）＆会場</div>
+    <div class="sch-card">${blocks.map(b => `
+      <div class="sch-block${b === t.myBlock ? ' mine' : ''}">
+        <span class="sch-bname">${b}ブロック${b === t.myBlock ? '　矢作SC' : ''}</span>
+        ${(t.schedule[b] || []).map(s => `
+          <div class="sch-row">
+            <span class="sch-kind${s.kind === '予備日' ? ' spare' : ''}">${s.kind}</span>
+            <div><b>${s.label}</b>　配車 ${s.cars}${s.note ? `<div class="sch-note">${s.note}</div>` : ''}<div class="sch-venue">${s.venue}</div></div>
+          </div>`).join('')}
+      </div>`).join('')}
+    </div>`;
+}
+
+function scheduledBlocksHtml(t) {
+  const resAll = tourResults[t.id] || {};
+  const derived = deriveMyResults(t);
+  const hint = isEditor
+    ? `<div class="star-hint">編集モード：マスをタップして結果を入力できます（もう一度タップで修正）。矢作SCの試合は「入力」タブの記録から自動で入ります。</div>`
+    : '';
+  return `<div class="sec-title">予選の星取り表</div>${hint}
+    ${Object.keys(t.blocks).map(b => blockStarHtml(t, b, resAll, derived)).join('')}
+    <div class="star-note">順位は 勝点 → 得失点差 → 総得点 の順で並べています。主催の表と違う場合は、主催の表を優先してください。</div>
+    ${scheduleHtml(t)}`;
+}
+
+function scheduledSummaryHtml(t, ms) {
+  const main = scheduleMain(t), spare = scheduleSpare(t);
+  const opp = (t.blocks[t.myBlock] || []).filter(x => x !== t.myTeam).join('・');
+  let rec;
+  if (ms && ms.length) {
+    const w = ms.filter(m => m.result === 'win').length, d = ms.filter(m => m.result === 'draw').length, l = ms.filter(m => m.result === 'lose').length;
+    const gf = ms.reduce((s, m) => s + m.myScore, 0), ga = ms.reduce((s, m) => s + m.oppScore, 0);
+    rec = `<div class="st-grid">
+        <div><div class="st-num">${w}</div><div class="st-cap">勝</div></div>
+        <div><div class="st-num">${d}</div><div class="st-cap">分</div></div>
+        <div><div class="st-num">${l}</div><div class="st-cap">敗</div></div>
+        <div><div class="st-num">${w * 3 + d}</div><div class="st-cap">勝点</div></div>
+      </div>
+      <div class="st-foot">得点 <b>${gf}</b> ／ 失点 <b>${ga}</b> ／ 得失点差 <b>${gf - ga >= 0 ? '+' : ''}${gf - ga}</b></div>`;
+  } else {
+    rec = `<div class="st-foot">試合はまだありません。結果が入ると、ここに成績が出ます。</div>`;
+  }
+  return `<div class="summary-ticket">
+      <div class="st-label">矢作SC の大会</div>
+      <div class="st-title">${t.full}</div>
+      <div class="st-meta">予選：${t.myBlock}ブロック（${opp}）</div>
+      ${main ? `<div class="st-meta">日程：${main.label}${spare ? `（予備日 ${spare.label}）` : ''}</div>
+      <div class="st-meta">会場：${main.venue}　<span style="white-space:nowrap">配車 ${main.cars}</span></div>` : ''}
+      ${rec}
+    </div>`;
+}
+
+// 星取り表の結果入力
+function openStarModal(tid, b, lo, hi) {
+  if (!isEditor) return;
+  const t = scheduledList().find(x => x.id === tid);
+  if (!t) return;
+  starCtx = { tid, b, lo, hi };
+  const r = (tourResults[tid] || {})[pairKey(b, lo, hi)];
+  document.getElementById('starModalTitle').textContent = `${b}ブロック　結果を入力`;
+  document.getElementById('starALbl').textContent = `${b}${lo + 1} ${t.blocks[b][lo]}`;
+  document.getElementById('starBLbl').textContent = `${b}${hi + 1} ${t.blocks[b][hi]}`;
+  document.getElementById('starA').value = r ? r.a : '';
+  document.getElementById('starB').value = r ? r.b : '';
+  document.getElementById('starModal').classList.add('show');
+}
+function closeStarModal() { document.getElementById('starModal').classList.remove('show'); starCtx = null; }
+function saveStarModal() {
+  if (!starCtx) return;
+  const sa = parseInt(document.getElementById('starA').value, 10);
+  const sb = parseInt(document.getElementById('starB').value, 10);
+  if (isNaN(sa) || isNaN(sb) || sa < 0 || sb < 0 || sa > 99 || sb > 99) { toast('スコアを入力してください'); return; }
+  saveTourResult(starCtx.tid, pairKey(starCtx.b, starCtx.lo, starCtx.hi), { a: sa, b: sb });
+  closeStarModal(); renderStandings(); toast('結果を保存しました');
+}
+function clearStarModal() {
+  if (!starCtx) return;
+  saveTourResult(starCtx.tid, pairKey(starCtx.b, starCtx.lo, starCtx.hi), null);
+  closeStarModal(); renderStandings(); toast('結果を消しました');
+}
+
+// 次の大会カード（ホーム）
+function daysUntil(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((new Date(y, m - 1, d) - today) / 86400000);
+}
+function nextTournamentState(t) {
+  const main = scheduleMain(t), spare = scheduleSpare(t);
+  if (!main || !main.date) return null;
+  const dMain = daysUntil(main.date);
+  if (dMain > 0) return { kind: 'before', days: dMain, target: main, spare };
+  if (dMain === 0) return { kind: 'today', days: 0, target: main, spare };
+  // 開催日を過ぎても記録がなければ、雨天順延の可能性として予備日を表示
+  if (spare && spare.date && !matches.some(m => m.tournament === t.name)) {
+    const dSp = daysUntil(spare.date);
+    if (dSp > 0) return { kind: 'spare', days: dSp, target: spare, spare: null };
+    if (dSp === 0) return { kind: 'spareToday', days: 0, target: spare, spare: null };
+  }
+  return null;
+}
+function renderNextTournament() {
+  const el = document.getElementById('nextTournament');
+  if (!el) return;
+  let best = null;
+  scheduledList().forEach(t => {
+    const s = nextTournamentState(t);
+    if (s && (!best || s.days < best.s.days)) best = { t, s };
+  });
+  const sig = best ? [best.t.id, best.s.kind, best.s.days].join('|') : 'none';
+  if (sig === lastNextSig) return;
+  lastNextSig = sig;
+  if (!best) { el.innerHTML = ''; return; }
+  const { t, s } = best;
+  const opp = (t.blocks[t.myBlock] || []).filter(x => x !== t.myTeam).join('・');
+  let count;
+  if (s.kind === 'before' && s.days > 1) count = `<div class="pre">あと</div><div class="big"><span data-count="${s.days}">${s.days}</span><span class="unit">日</span></div>`;
+  else if (s.kind === 'before') count = `<div class="pre">いよいよ</div><div class="big txt">明日</div>`;
+  else if (s.kind === 'today') count = `<div class="pre">いよいよ</div><div class="big txt">今日</div>`;
+  else if (s.kind === 'spare') count = `<div class="pre">予備日まで あと</div><div class="big"><span data-count="${s.days}">${s.days}</span><span class="unit">日</span></div>`;
+  else count = `<div class="pre">予備日</div><div class="big txt">今日</div>`;
+  const isSpare = s.kind === 'spare' || s.kind === 'spareToday';
+  el.innerHTML = `
+    <div class="next-card" onclick='openTournament(${JSON.stringify(t.name)})'>
+      <div class="nc-head"><span class="nc-tag">NEXT</span><span>${isSpare ? '次の大会（雨天順延の場合）' : '次の大会'}</span></div>
+      <div class="nc-body">
+        <div>
+          <div class="nc-title">${t.name}</div>
+          <div class="nc-sub">予選　${t.myBlock}ブロック</div>
+        </div>
+        <div class="nc-count${s.kind === 'before' && s.days > 1 || s.kind === 'spare' ? '' : ' today'}">${count}</div>
+      </div>
+      <div class="nc-rows">
+        <div class="nc-row"><i>📅</i><span><b>${isSpare ? '予備日　' : ''}${s.target.label}</b>${s.spare ? `<small>　予備日 ${s.spare.label}</small>` : ''}</span></div>
+        <div class="nc-row"><i>📍</i><span>${s.target.venue}</span></div>
+        <div class="nc-row"><i>🚗</i><span>配車　${s.target.cars}</span></div>
+        <div class="nc-row"><i>👥</i><span>${t.myBlock}ブロック：<b>${opp}</b> と対戦</span></div>
+      </div>
+      <div class="nc-foot">星取り表を見る <span>▶</span></div>
+    </div>`;
+  animateCounts(el);
+}
+function openTournament(name) {
+  goTab('standings');
+  const sel = document.getElementById('standingsTournamentSelect');
+  sel.value = name;
+  renderStandings();
+}
+
 // ===== ホームの動き：数字のカウントアップ／内訳の開閉 =====
 let lastHomeSig = null;
 
@@ -1632,6 +2054,7 @@ function updateNavPill() {
 }
 
 function renderHome() {
+  renderNextTournament();
   const total = matches.length;
   // 内容が変わっていなければ描き直さない（動きが途中で途切れないように）
   const sig = currentYear + '|' + (window.__dataReady ? 'r' : 'l') + '|' +
@@ -1782,8 +2205,10 @@ function prepareInput() {
   if (!document.getElementById('iDate').value) {
     document.getElementById('iDate').value = new Date().toISOString().split('T')[0];
   }
-  const tournaments = [...new Set(matches.map(m=>m.tournament).filter(Boolean))];
-  const opponents = [...new Set(matches.map(m=>m.opponent).filter(Boolean))];
+  const sch = scheduledList();
+  const tournaments = [...new Set([...matches.map(m=>m.tournament), ...sch.map(t=>t.name)].filter(Boolean))];
+  const extraOpp = sch.flatMap(t => (t.blocks[t.myBlock] || []).filter(x => x !== t.myTeam));
+  const opponents = [...new Set([...matches.map(m=>m.opponent), ...extraOpp].filter(Boolean))];
   document.getElementById('tournamentList').innerHTML = tournaments.map(t=>`<option value="${t}">`).join('');
   document.getElementById('opponentList').innerHTML = opponents.map(o=>`<option value="${o}">`).join('');
   if (scorerRows.length === 0) addScorerRow();
@@ -2002,11 +2427,17 @@ function delMatch(id) {
 
 // ===== 順位表・成績表 =====
 function initStandings() {
-  const tournaments = [...new Set(matches.map(m => m.tournament).filter(Boolean))];
+  const names = new Set(matches.map(m => m.tournament).filter(Boolean));
+  scheduledList().forEach(t => names.add(t.name));
+  const tournaments = [...names];
   const sel = document.getElementById('standingsTournamentSelect');
+  const prev = sel.value;   // 再描画しても選んでいる大会を保つ
   sel.innerHTML = '<option value="">大会を選んでください</option>' +
     tournaments.map(t => `<option value="${t}">${t}</option>`).join('');
-  if (tournaments.length === 1) {
+  if (prev && tournaments.includes(prev)) {
+    sel.value = prev;
+    renderStandings();
+  } else if (tournaments.length === 1) {
     sel.value = tournaments[0];
     renderStandings();
   } else {
@@ -2025,9 +2456,16 @@ function renderStandings() {
     return;
   }
   const ms = matches.filter(m => m.tournament === tournament);
-  if (ms.length === 0) return;
+  const sched = findScheduled(tournament);
+  if (ms.length === 0 && !sched) return;
   renderStandingsPhotos(tournament);
   renderStandingsVideos(tournament);
+  if (ms.length === 0) {   // これから始まる大会：日程と星取り表だけを表示
+    document.getElementById('standingsSummary').innerHTML = scheduledSummaryHtml(sched, ms);
+    document.getElementById('standingsMatchTable').innerHTML = '';
+    document.getElementById('standingsBlock').innerHTML = scheduledBlocksHtml(sched);
+    return;
+  }
 
   const wins = ms.filter(m => m.result === 'win').length;
   const draws = ms.filter(m => m.result === 'draw').length;
@@ -2036,7 +2474,7 @@ function renderStandings() {
   const ga = ms.reduce((s,m) => s + m.oppScore, 0);
   const pts = wins * 3 + draws;
 
-  document.getElementById('standingsSummary').innerHTML = `
+  document.getElementById('standingsSummary').innerHTML = sched ? scheduledSummaryHtml(sched, ms) : `
     <div class="summary-ticket">
       <div class="st-label">矢作SC の成績</div>
       <div class="st-title">${tournament}</div>
@@ -2082,6 +2520,7 @@ function renderStandings() {
     <button class="copy-btn" style="margin:12px 0 18px" onclick="shareTournament()">この大会のLINE用テキストを作成</button>
   `;
 
+  if (sched) { document.getElementById('standingsBlock').innerHTML = scheduledBlocksHtml(sched); return; }
   const sd = (currentYear === '2026 U-9') ? STANDINGS_DATA[tournament] : null;
   if (!sd) {
     document.getElementById('standingsBlock').innerHTML = '';
@@ -2375,6 +2814,8 @@ function buildTournamentText(tournament) {
   t += `${tournament}\n`;
   if (dateText) t += `日程：${dateText}\n`;
   if (sd && sd.venue) t += `会場：${sd.venue}\n`;
+  const schT = findScheduled(tournament);
+  if (schT && scheduleMain(schT)) t += `会場：${scheduleMain(schT).venue}\n`;
 
   t += `\n【試合結果】\n`;
   ms.forEach((m, i) => {
