@@ -600,6 +600,68 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
 .sch-note { margin-top: 1px; font-size: 0.78rem; color: var(--ink); }
 .sch-venue { margin-top: 1px; font-size: 0.78rem; font-weight: 800; color: var(--muted); }
 
+/* ===== 出欠・配車 ===== */
+.nc-att { margin: 0 16px; padding: 12px 0 6px; border-top: 3px dotted var(--border); }
+.nc-att-title { margin-bottom: 8px; font-size: 0.78rem; font-weight: 900; letter-spacing: 0.05em; color: var(--muted); }
+.att-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ac { padding: 4px 10px; border: 2px solid var(--ink); border-radius: 999px; font-size: 0.76rem; font-weight: 900; }
+.ac.y { background: var(--lime-light); }
+.ac.n { background: var(--red-light); }
+.ac.u { background: var(--gold-light); }
+.ac.none { background: #EEF1EC; }
+.att-empty { font-size: 0.84rem; font-weight: 800; color: var(--muted); }
+.nc-att-car, .att-carline { margin-top: 9px; font-size: 0.8rem; font-weight: 900; }
+.nc-att-car.over, .att-carline.over { color: var(--red-dark); }
+.nc-foot.att { margin: 12px 0 0; background: var(--red); color: #fff; }
+
+.att-info { margin-bottom: 10px; font-size: 0.8rem; font-weight: 800; line-height: 1.5; color: var(--muted); }
+.att-car-sum { margin: 10px 0 14px; padding: 9px 12px; border: 2.5px dashed #7FB04A; border-radius: 14px; background: var(--lime-light); font-size: 0.8rem; font-weight: 900; }
+.att-car-sum > div + div { margin-top: 4px; }
+.att-car-sum .short { color: var(--red-dark); }
+.att-car-sum.over { border-color: var(--red); background: var(--red-light); color: var(--red-dark); }
+.att-hint { margin: -6px 2px 14px; font-size: 0.74rem; font-weight: 800; line-height: 1.6; color: var(--muted); }
+.att-row { margin-bottom: 10px; padding: 11px 12px; border: 2.5px solid var(--ink); border-radius: 18px; background: #fff; transition: background 0.25s; }
+.att-row.s-y { background: #F3FAE6; }
+.att-row.s-n { background: #FFF1EE; }
+.att-row.s-u { background: #FFF9E0; }
+.att-name { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; font-size: 0.96rem; font-weight: 900; }
+.att-no { min-width: 30px; padding: 2px 6px; border-radius: 8px; background: var(--ink); color: #FFE066; text-align: center; font-family: 'Bungee', sans-serif; font-size: 0.7rem; }
+.att-no:empty { display: none; }
+.att-seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.att-seg button {
+  padding: 10px 4px; border: 2.5px solid var(--ink); border-radius: 12px; background: #fff; cursor: pointer;
+  font-family: inherit; font-size: 0.88rem; font-weight: 900; color: var(--ink); transition: transform 0.15s var(--ease-pop), background 0.15s;
+}
+.att-seg button:active { transform: scale(0.93); }
+.att-seg button.on.y { background: var(--lime); }
+.att-seg button.on.n { background: var(--red); color: #fff; }
+.att-seg button.on.u { background: var(--gold); }
+.att-car { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.att-car .chip { padding: 8px 13px; border: 2.5px solid var(--ink); border-radius: 999px; background: #fff; cursor: pointer; font-family: inherit; font-size: 0.82rem; font-weight: 900; color: var(--ink); }
+.att-car .chip.car.on { background: var(--sky); }
+.att-car .chip.ride.on { background: var(--gold); }
+.att-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 10px; }
+.att-load { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 900; }
+.att-load button { min-width: 38px; height: 32px; padding: 0 10px; border: 2.5px solid var(--ink); border-radius: 10px; background: #fff; cursor: pointer; font-family: inherit; font-size: 0.86rem; font-weight: 900; color: var(--ink); }
+.att-load button.on.y { background: var(--lime); }
+.att-load button.on.n { background: var(--red); color: #fff; }
+.nc-att-car + .nc-att-car { margin-top: 4px; }
+.att-seats { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 900; }
+.att-seats button { width: 32px; height: 32px; border: 2.5px solid var(--ink); border-radius: 10px; background: #fff; cursor: pointer; font-size: 1rem; font-weight: 900; line-height: 1; color: var(--ink); }
+.att-seats button:active { background: var(--gold); }
+.att-seats b { min-width: 18px; text-align: center; font-family: 'Bungee', sans-serif; font-size: 1rem; font-weight: 400; }
+
+.att-card { margin: 0 4px 22px; padding: 6px 16px 16px; background: #fff; border: 3px solid var(--ink); border-radius: 22px; box-shadow: var(--shadow); }
+.ag { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-top: 3px dotted var(--border); font-size: 0.84rem; font-weight: 800; line-height: 1.7; }
+.ag:first-child { border-top: none; }
+.ag-l { flex-shrink: 0; min-width: 78px; padding: 2px 8px; border: 2px solid var(--ink); border-radius: 999px; text-align: center; font-size: 0.7rem; font-weight: 900; }
+.ag-l.y { background: var(--lime-light); }
+.ag-l.n { background: var(--red-light); }
+.ag-l.u { background: var(--gold-light); }
+.ag-l.none { background: #EEF1EC; }
+.ag-l.car { background: var(--sky-light); }
+.ag-l.ride { background: var(--gold-light); }
+
 @media (max-width: 374px) {
   .pc-line.main { font-size: 0.88rem; gap: 7px; }
   .pc-line .gold { font-size: 1rem; }
@@ -959,6 +1021,17 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
     <div class="share-text" id="shareText"></div>
     <button class="copy-btn" onclick="copyShare()">コピーする</button>
     <button class="btn btn-outline" onclick="closeShare()">閉じる</button>
+  </div>
+</div>
+
+<!-- 出欠・配車 -->
+<div class="modal-overlay" id="attModal" onclick="if(event.target===this)closeAttendance()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="attTitle">出欠・配車</div>
+    <div id="attBody"></div>
+    <button class="copy-btn editor-only" onclick="shareAttendance()">出欠をLINE用テキストにする</button>
+    <button class="btn btn-outline" onclick="closeAttendance()">閉じる</button>
   </div>
 </div>
 
@@ -1544,6 +1617,7 @@ function initFirebaseYearListener() {
       matches = []; players = [];
     }
     loadLocalTourResults();
+    loadLocalAttendance();
     renderActiveScreen();
     return;
   }
@@ -1552,12 +1626,15 @@ function initFirebaseYearListener() {
   if (playersRef) playersRef.off();
   if (videosRef) videosRef.off();
   if (tourResultsRef) tourResultsRef.off();
+  if (attendanceRef) attendanceRef.off();
+  attendance = {};
   tourResults = {};
 
   matchesRef = db.ref(`${key}/matches`);
   playersRef = db.ref(`${key}/players`);
   videosRef = db.ref(`${key}/videos`);
   tourResultsRef = db.ref(`${key}/tournamentResults`);
+  attendanceRef = db.ref(`${key}/attendance`);
 
   matchesRef.on('value', snap => {
     const data = snap.val();
@@ -1611,6 +1688,12 @@ function initFirebaseYearListener() {
       const tour = document.getElementById('standingsTournamentSelect').value;
       if (tour && findScheduled(tour)) renderStandings();
     }
+  });
+
+  attendanceRef.on('value', snap => {
+    attendance = snap.val() || {};
+    refreshAttendanceViews();
+    if (attCtx) renderAttendance();
   });
 }
 
@@ -1881,7 +1964,7 @@ function scheduledBlocksHtml(t) {
   const hint = isEditor
     ? `<div class="star-hint">編集モード：マスをタップして結果を入力できます（もう一度タップで修正）。矢作SCの試合は「入力」タブの記録から自動で入ります。</div>`
     : '';
-  return `<div class="sec-title">予選の星取り表</div>${hint}
+  return `${attendanceCardHtml(t)}<div class="sec-title">予選の星取り表</div>${hint}
     ${Object.keys(t.blocks).map(b => blockStarHtml(t, b, resAll, derived)).join('')}
     <div class="star-note">順位は 勝点 → 得失点差 → 総得点 の順で並べています。主催の表と違う場合は、主催の表を優先してください。</div>
     ${scheduleHtml(t)}`;
@@ -1964,7 +2047,7 @@ function nextTournamentState(t) {
   }
   return null;
 }
-function renderNextTournament() {
+function renderNextTournament(quiet) {
   const el = document.getElementById('nextTournament');
   if (!el) return;
   let best = null;
@@ -1972,11 +2055,12 @@ function renderNextTournament() {
     const s = nextTournamentState(t);
     if (s && (!best || s.days < best.s.days)) best = { t, s };
   });
-  const sig = best ? [best.t.id, best.s.kind, best.s.days].join('|') : 'none';
+  const sig = best ? [best.t.id, best.s.kind, best.s.days, JSON.stringify(attSummary(best.t.id))].join('|') : 'none';
   if (sig === lastNextSig) return;
   lastNextSig = sig;
   if (!best) { el.innerHTML = ''; return; }
   const { t, s } = best;
+  const had = !!el.querySelector('.next-card');
   const opp = (t.blocks[t.myBlock] || []).filter(x => x !== t.myTeam).join('・');
   let count;
   if (s.kind === 'before' && s.days > 1) count = `<div class="pre">あと</div><div class="big"><span data-count="${s.days}">${s.days}</span><span class="unit">日</span></div>`;
@@ -2001,15 +2085,250 @@ function renderNextTournament() {
         <div class="nc-row"><i>🚗</i><span>配車　${s.target.cars}</span></div>
         <div class="nc-row"><i>👥</i><span>${t.myBlock}ブロック：<b>${opp}</b> と対戦</span></div>
       </div>
+      ${attBlockHtml(t)}
       <div class="nc-foot">星取り表を見る <span>▶</span></div>
     </div>`;
-  animateCounts(el);
+  if (quiet && had) {   // 出欠の更新だけのときは、入場の動きとカウントアップをやり直さない
+    const cd = el.querySelector('.next-card'); if (cd) cd.style.animation = 'none';
+    el.querySelectorAll('[data-count]').forEach(x => { x.textContent = x.dataset.count; });
+  } else animateCounts(el);
 }
 function openTournament(name) {
   goTab('standings');
   const sel = document.getElementById('standingsTournamentSelect');
   sel.value = name;
   renderStandings();
+}
+
+// ===== 出欠・配車（予定の大会） =====
+// 保護者がスマホから、子どもの参加・欠席・未定と、配車（車を出せる／荷物を積めるか／乗合希望）を入力する（全員が入力できる）
+let attendance = {};        // { 大会id: { '選手名': { s:'y'|'n'|'u', car:0|1, seats:同乗できる子ども, load:'y'|'n'(荷物 可/否), ride:0|1, riders:乗せてほしい人数, t:時刻 } } }
+let attendanceRef = null;
+let attCtx = null;          // 開いている出欠シートの大会id
+
+const attClean = o => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined && v !== null));
+
+function loadLocalAttendance() {
+  try { attendance = JSON.parse(localStorage.getItem(`yhg9_att_${currentYear}`)) || {}; } catch (e) { attendance = {}; }
+}
+function attPlayers() {   // 選手一覧と同じ並び（キャプテン→副キャプテン→ふりがな順）
+  const yomi = p => (p.match(/（(.+?)）/)?.[1] || p).trim();
+  const rk = n => n === CAPTAIN ? 0 : n === VICE_CAPTAIN ? 1 : 2;
+  return [...players].sort((a, b) => rk(shortName(a)) - rk(shortName(b)) || yomi(a).localeCompare(yomi(b), 'ja')).map(shortName);
+}
+function carLimitOf(t) {
+  const m = scheduleMain(t); const n = m ? parseInt(m.cars, 10) : NaN;
+  return isNaN(n) ? null : n;
+}
+function attSummary(tid) {
+  const data = attendance[tid] || {};
+  const sum = { y: 0, n: 0, u: 0, none: 0, cars: 0, seats: 0, loadY: 0, loadN: 0, loadNone: 0, rides: 0, riders: 0 };
+  attPlayers().forEach(n => {
+    const r = data[n];
+    if (!r || !r.s) { sum.none++; return; }
+    sum[r.s]++;
+    if (r.s !== 'y') return;
+    if (r.car) {
+      sum.cars++; sum.seats += Number(r.seats) || 0;
+      if (r.load === 'y') sum.loadY++; else if (r.load === 'n') sum.loadN++; else sum.loadNone++;
+    }
+    if (r.ride) { sum.rides++; sum.riders += Number(r.riders) || 1; }
+  });
+  return sum;
+}
+function saveAttendance(tid, name, rec) {
+  attendance[tid] = attendance[tid] || {};
+  if (rec) attendance[tid][name] = rec; else delete attendance[tid][name];
+  if (db) {
+    const ref = db.ref(`${getDbKey(currentYear)}/attendance/${tid}/${name}`);
+    (rec ? ref.set(rec) : ref.remove()).catch(err => { console.warn(err); toast('保存に失敗しました'); });
+  } else {
+    try { localStorage.setItem(`yhg9_att_${currentYear}`, JSON.stringify(attendance)); } catch (e) {}
+  }
+}
+function refreshAttendanceViews() {
+  lastNextSig = null;
+  renderNextTournament(true);
+  if (document.querySelector('#screen-standings.active')) {
+    const tour = document.getElementById('standingsTournamentSelect').value;
+    if (tour && findScheduled(tour)) renderStandings();
+  }
+}
+function attCurrent(i) {
+  const name = attPlayers()[i];
+  return { name, cur: name ? ((attendance[attCtx] || {})[name] || {}) : {} };
+}
+function attCommit(name, rec) { saveAttendance(attCtx, name, attClean({ ...rec, t: Date.now() })); renderAttendance(); refreshAttendanceViews(); }
+
+function attSet(i, s) {   // 同じボタンをもう一度押すと「未回答」に戻る
+  if (!attCtx) return;
+  const { name, cur } = attCurrent(i); if (!name) return;
+  if (cur.s === s) { saveAttendance(attCtx, name, null); renderAttendance(); refreshAttendanceViews(); return; }
+  if (s === 'y') attCommit(name, { s, car: cur.car || 0, seats: cur.seats || 0, load: cur.load, ride: cur.ride || 0, riders: cur.riders || 0 });
+  else attCommit(name, { s, car: 0, seats: 0, ride: 0, riders: 0 });   // 参加でなければ配車の入力は消える
+}
+function attCar(i) {      // 車を出せる（乗合希望とはどちらか一方）
+  if (!attCtx) return;
+  const { name, cur } = attCurrent(i); if (!name || cur.s !== 'y') return;
+  if (cur.car) attCommit(name, { ...cur, car: 0, seats: 0, load: undefined });
+  else attCommit(name, { ...cur, car: 1, seats: cur.seats || 3, ride: 0, riders: 0 });
+}
+function attSeats(i, d) {
+  if (!attCtx) return;
+  const { name, cur } = attCurrent(i); if (!name || !cur.car) return;
+  attCommit(name, { ...cur, seats: Math.max(0, Math.min(6, (Number(cur.seats) || 0) + d)) });
+}
+function attLoad(i, v) {  // 荷物を積める：可('y')／否('n')。同じボタンをもう一度で未回答
+  if (!attCtx) return;
+  const { name, cur } = attCurrent(i); if (!name || !cur.car) return;
+  attCommit(name, { ...cur, load: cur.load === v ? undefined : v });
+}
+function attRide(i) {     // 乗合希望（乗せてほしい）
+  if (!attCtx) return;
+  const { name, cur } = attCurrent(i); if (!name || cur.s !== 'y') return;
+  if (cur.ride) attCommit(name, { ...cur, ride: 0, riders: 0 });
+  else attCommit(name, { ...cur, ride: 1, riders: cur.riders || 1, car: 0, seats: 0, load: undefined });
+}
+function attRiders(i, d) {
+  if (!attCtx) return;
+  const { name, cur } = attCurrent(i); if (!name || !cur.ride) return;
+  attCommit(name, { ...cur, riders: Math.max(1, Math.min(6, (Number(cur.riders) || 1) + d)) });
+}
+
+function attChipsHtml(s) {
+  return `<span class="ac y">✅ 参加 ${s.y}</span><span class="ac n">❌ 欠席 ${s.n}</span><span class="ac u">❔ 未定 ${s.u}</span><span class="ac none">⏳ 未回答 ${s.none}</span>`;
+}
+function attCarText(s, limit) {
+  const over = limit != null && s.cars > limit;
+  return `🚗 車を出せる ${s.cars}台${limit != null ? `／上限 ${limit}台` : ''}　同乗できる子ども ${s.seats}名${over ? '　※上限を超えています' : ''}`;
+}
+function attLoadText(s) {
+  if (!s.cars) return '';
+  return `📦 荷物を積める 可${s.loadY}台・否${s.loadN}台${s.loadNone ? `・未回答${s.loadNone}台` : ''}`;
+}
+function attRideText(s) {
+  const short = s.riders > s.seats ? s.riders - s.seats : 0;
+  return `🙋 乗合希望 ${s.rides}組（${s.riders}名）${short ? `　※同乗できる人数があと${short}名分足りません` : ''}`;
+}
+const attShort = s => s.riders > s.seats;
+
+function renderAttendance() {
+  const t = scheduledList().find(x => x.id === attCtx);
+  if (!t) return;
+  const sheet = document.querySelector('#attModal .modal');
+  const keep = sheet.scrollTop;
+  const names = attPlayers(), data = attendance[t.id] || {};
+  const s = attSummary(t.id), limit = carLimitOf(t), main = scheduleMain(t);
+  const over = limit != null && s.cars > limit;
+  document.getElementById('attBody').innerHTML = `
+    ${main ? `<div class="att-info">${main.label}　${main.venue}</div>` : ''}
+    <div class="att-chips">${attChipsHtml(s)}</div>
+    <div class="att-car-sum${over ? ' over' : ''}">
+      <div>${attCarText(s, limit)}</div>
+      ${attLoadText(s) ? `<div>${attLoadText(s)}</div>` : ''}
+      <div class="${attShort(s) ? 'short' : ''}">${attRideText(s)}</div>
+    </div>
+    <div class="att-hint">「同乗できる子ども」は、自分の子のほかに乗せてあげられる人数です。「乗合希望」は、車を出せず乗せてほしいご家庭が、乗せてほしい人数を入れてください（車を出す場合は選べません）。同じボタンをもう一度押すと、未回答に戻ります。</div>
+    ${names.map((n, i) => {
+      const r = data[n] || {}, st = r.s || '', no = playerNumber(n);
+      return `<div class="att-row${st ? ' s-' + st : ''}">
+        <div class="att-name"><span class="att-no">${no == null ? '' : no}</span><span>${n}</span></div>
+        <div class="att-seg">
+          <button class="${st === 'y' ? 'on y' : ''}" onclick="attSet(${i},'y')">参加</button>
+          <button class="${st === 'n' ? 'on n' : ''}" onclick="attSet(${i},'n')">欠席</button>
+          <button class="${st === 'u' ? 'on u' : ''}" onclick="attSet(${i},'u')">未定</button>
+        </div>
+        ${st === 'y' ? `<div class="att-car">
+          <button class="chip car${r.car ? ' on' : ''}" onclick="attCar(${i})">🚗 車を出せる</button>
+          <button class="chip ride${r.ride ? ' on' : ''}" onclick="attRide(${i})">🙋 乗合希望</button>
+        </div>
+        ${r.car ? `<div class="att-sub">
+          <span class="att-seats">同乗できる子ども <button onclick="attSeats(${i},-1)">−</button><b>${r.seats || 0}</b><button onclick="attSeats(${i},1)">＋</button> 名</span>
+          <span class="att-load">📦 荷物を積める
+            <button class="${r.load === 'y' ? 'on y' : ''}" onclick="attLoad(${i},'y')">可</button><button class="${r.load === 'n' ? 'on n' : ''}" onclick="attLoad(${i},'n')">否</button></span>
+        </div>` : ''}
+        ${r.ride ? `<div class="att-sub">
+          <span class="att-seats">乗せてほしい人数 <button onclick="attRiders(${i},-1)">−</button><b>${r.riders || 1}</b><button onclick="attRiders(${i},1)">＋</button> 名</span>
+        </div>` : ''}` : ''}
+      </div>`;
+    }).join('')}`;
+  sheet.scrollTop = keep;
+}
+function openAttendance(tid) {
+  const t = scheduledList().find(x => x.id === tid);
+  if (!t) return;
+  attCtx = tid;
+  document.getElementById('attTitle').textContent = `出欠・配車　${t.name}`;
+  renderAttendance();
+  document.getElementById('attModal').classList.add('show');
+  document.querySelector('#attModal .modal').scrollTop = 0;
+}
+function closeAttendance() { document.getElementById('attModal').classList.remove('show'); attCtx = null; }
+
+const loadLabel = r => r.load === 'y' ? '荷物 可' : r.load === 'n' ? '荷物 否' : '荷物 未回答';
+function buildAttendanceText(t) {
+  const names = attPlayers(), data = attendance[t.id] || {}, main = scheduleMain(t), limit = carLimitOf(t), sum = attSummary(t.id);
+  const by = k => names.filter(n => (data[n] || {}).s === k);
+  const none = names.filter(n => !(data[n] || {}).s);
+  const list = a => a.length ? a.join('、') : 'なし';
+  const drivers = names.filter(n => (data[n] || {}).s === 'y' && (data[n] || {}).car);
+  const riders = names.filter(n => (data[n] || {}).s === 'y' && (data[n] || {}).ride);
+  let x = `【出欠・配車】${t.name}\n`;
+  if (main) x += `${main.label}　${main.venue}\n`;
+  x += `\n参加（${by('y').length}名）：${list(by('y'))}\n欠席（${by('n').length}名）：${list(by('n'))}\n未定（${by('u').length}名）：${list(by('u'))}\n未回答（${none.length}名）：${list(none)}\n`;
+  x += `\n配車：${sum.cars}台${limit != null ? `（上限${limit}台）` : ''}／同乗できる子ども ${sum.seats}名\n`;
+  if (drivers.length) x += `車を出せる：${drivers.map(n => `${n}（同乗${data[n].seats || 0}名／${loadLabel(data[n])}）`).join('、')}\n`;
+  x += `乗合希望：${riders.length ? riders.map(n => `${n}（${data[n].riders || 1}名）`).join('、') : 'なし'}\n`;
+  if (attShort(sum)) x += `※同乗できる人数があと${sum.riders - sum.seats}名分足りません\n`;
+  x += `\nまだの方は、アプリの出欠ボタンから入力をお願いします。`;
+  return x;
+}
+function shareAttendance() {
+  const t = scheduledList().find(x => x.id === attCtx);
+  if (!t) return;
+  const text = buildAttendanceText(t);
+  closeAttendance();
+  document.getElementById('shareText').textContent = text;
+  document.getElementById('shareModal').classList.add('show');
+}
+
+// 次の大会カード／順位表に出す出欠の要約
+function attBlockHtml(t) {
+  const s = attSummary(t.id), limit = carLimitOf(t);
+  const empty = s.y + s.n + s.u === 0;
+  const over = limit != null && s.cars > limit;
+  return `<div class="nc-att">
+      <div class="nc-att-title">出欠・配車</div>
+      <div class="att-chips">${empty ? '<span class="att-empty">まだ誰も回答していません</span>' : attChipsHtml(s)}</div>
+      <div class="nc-att-car${over ? ' over' : ''}">🚗 車を出せる ${s.cars}台${limit != null ? `／上限 ${limit}台` : ''}${over ? '（超過）' : ''}</div>
+      ${attLoadText(s) ? `<div class="nc-att-car">${attLoadText(s)}</div>` : ''}
+      <div class="nc-att-car${attShort(s) ? ' over' : ''}">${attRideText(s)}</div>
+      <div class="nc-foot att" onclick="event.stopPropagation();openAttendance('${t.id}')">出欠・配車を入力する <span>▶</span></div>
+    </div>`;
+}
+function attendanceCardHtml(t) {
+  const main = scheduleMain(t);
+  if (main && main.date && daysUntil(main.date) < -1) return '';   // 大会が終わったら出さない
+  const names = attPlayers(), data = attendance[t.id] || {}, s = attSummary(t.id), limit = carLimitOf(t);
+  const over = limit != null && s.cars > limit;
+  const group = (k, label) => {
+    const a = names.filter(n => (data[n] || {}).s === k);
+    return a.length ? `<div class="ag"><span class="ag-l ${k}">${label} ${a.length}</span><span class="ag-n">${a.join('、')}</span></div>` : '';
+  };
+  const none = names.filter(n => !(data[n] || {}).s);
+  const drivers = names.filter(n => (data[n] || {}).s === 'y' && (data[n] || {}).car);
+  const riders = names.filter(n => (data[n] || {}).s === 'y' && (data[n] || {}).ride);
+  return `<div class="sec-title">出欠・配車</div>
+    <div class="att-card">
+      ${group('y', '参加')}${group('n', '欠席')}${group('u', '未定')}
+      ${none.length ? `<div class="ag"><span class="ag-l none">未回答 ${none.length}</span><span class="ag-n">${none.join('、')}</span></div>` : ''}
+      ${drivers.length ? `<div class="ag"><span class="ag-l car">車を出せる ${drivers.length}</span><span class="ag-n">${drivers.map(n => `${n}（同乗${data[n].seats || 0}名・${loadLabel(data[n])}）`).join('、')}</span></div>` : ''}
+      ${riders.length ? `<div class="ag"><span class="ag-l ride">乗合希望 ${riders.length}</span><span class="ag-n">${riders.map(n => `${n}（${data[n].riders || 1}名）`).join('、')}</span></div>` : ''}
+      <div class="att-carline${over ? ' over' : ''}">${attCarText(s, limit)}</div>
+      ${attLoadText(s) ? `<div class="att-carline">${attLoadText(s)}</div>` : ''}
+      <div class="att-carline${attShort(s) ? ' over' : ''}">${attRideText(s)}</div>
+      <button class="btn btn-red" style="margin-top:12px" onclick="openAttendance('${t.id}')">出欠・配車を入力する</button>
+    </div>`;
 }
 
 // ===== ホームの動き：数字のカウントアップ／内訳の開閉 =====
