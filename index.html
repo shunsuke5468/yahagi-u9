@@ -788,6 +788,16 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
 .tb-btn.play { min-width: 84px; background: var(--ink); color: #fff; }
 .tb-tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; padding: 6px 12px 12px; }
 .tb-tools .tb-btn { padding: 6px 2px; font-size: 0.78rem; }
+.tb-tools.ro [data-tbtool], .tb-tools.ro #tbEdit, .tb-tools.ro #tbDel { display: none; }
+.tb-lock { margin: 0 4px 14px; }
+.tb-arrowbar { display: flex; flex-direction: column; gap: 7px; padding: 8px 12px 2px; border-top: 2.5px dashed var(--border); }
+.tb-kinds, .tb-aops { display: grid; gap: 7px; }
+.tb-kinds { grid-template-columns: repeat(3, 1fr); }
+.tb-aops { grid-template-columns: repeat(4, 1fr); }
+.tb-arrowbar .tb-btn { min-height: 38px; padding: 4px 2px; font-size: 0.74rem; }
+.tb-kinds .tb-btn[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.tb-arrowbar .sw { display: inline-block; width: 14px; height: 6px; margin-right: 4px; vertical-align: middle; border-radius: 3px; border: 1px solid rgba(0,0,0,.35); }
+.tb-arrowbar .sw.pass { background: #FFD400; } .tb-arrowbar .sw.drib { background: #FF5CC8; } .tb-arrowbar .sw.run { background: #22D3EE; }
 .tb-sub { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 4px 18px; }
 .tb-sub .tb-btn { min-height: 44px; padding: 6px 2px; font-size: 0.76rem; }
 .tb-note { margin: 0 6px 24px; font-size: 0.74rem; font-weight: 800; line-height: 1.6; color: var(--muted); }
@@ -1132,14 +1142,19 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
   </div>
 
   <div id="tbPaneBoard">
+    <div class="fm-lock tb-lock" id="tbLock" hidden>
+      <b>🔒 閲覧モードです</b>
+      <span>再生や見え方の切り替えはできます。選手を動かす・矢印を描くなどの編集は、編集モードで行えます。</span>
+      <div class="fm-lock-row"><input type="password" id="tbPass" placeholder="合言葉"><button type="button" id="tbUnlock">編集モードにする</button></div>
+    </div>
     <div class="tb-ctx" id="tbCtx" hidden>
       <span id="tbCtxText"></span>
       <div class="row2"><button class="tb-btn" type="button" id="tbCtxCancel">やめる</button><button class="tb-btn red" type="button" id="tbCtxSave">図を保存してもどる</button></div>
     </div>
     <div class="card tb-card">
       <div class="tb-views" role="tablist" aria-label="見え方">
-        <button type="button" role="tab" data-tbview="top" aria-selected="true">上から</button>
-        <button type="button" role="tab" data-tbview="tv" aria-selected="false">テレビ</button>
+        <button type="button" role="tab" data-tbview="top" aria-selected="true">俯瞰</button>
+        <button type="button" role="tab" data-tbview="tv" aria-selected="false">3D</button>
         <button type="button" role="tab" data-tbview="goal" aria-selected="false">ゴール裏</button>
         <button type="button" role="tab" data-tbview="pov" aria-selected="false">選手目線</button>
       </div>
@@ -1155,9 +1170,25 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
         <div class="tb-scenes" id="tbScenes" role="list" aria-label="場面"></div>
         <button class="tb-btn" id="tbAdd" type="button">＋ 場面</button>
       </div>
+      <div class="tb-arrowbar" id="tbArrowBar" hidden>
+        <div class="tb-kinds" role="group" aria-label="矢印の種類">
+          <button class="tb-btn" type="button" data-tbkind="pass" aria-pressed="true"><i class="sw pass"></i>パス</button>
+          <button class="tb-btn" type="button" data-tbkind="drib" aria-pressed="false"><i class="sw drib"></i>ドリブル</button>
+          <button class="tb-btn" type="button" data-tbkind="run" aria-pressed="false"><i class="sw run"></i>走り込み</button>
+        </div>
+        <div class="tb-aops">
+          <button class="tb-btn" type="button" id="tbArDelOne" aria-pressed="false">1本消す</button>
+          <button class="tb-btn" type="button" id="tbArClear">全部消す</button>
+          <button class="tb-btn" type="button" id="tbUndo" aria-label="元に戻す">↶ 戻す</button>
+          <button class="tb-btn" type="button" id="tbRedo" aria-label="やり直し">↷ やり直し</button>
+        </div>
+      </div>
       <div class="tb-tools">
         <button class="tb-btn" type="button" data-tbtool="move" aria-pressed="true">動かす</button>
-        <button class="tb-btn" type="button" data-tbtool="pass" aria-pressed="false">パス</button>
+        <button class="tb-btn" type="button" data-tbtool="draw" aria-pressed="false">矢印を描く</button>
+        <button class="tb-btn" type="button" data-tbtool="pass" aria-pressed="false">パスの場面</button>
+        <button class="tb-btn" type="button" data-tbtool="away" aria-pressed="false">相手を置く</button>
+        <button class="tb-btn" type="button" data-tbtool="ball" aria-pressed="false">ボールを置く</button>
         <button class="tb-btn" type="button" data-tbtool="cone" aria-pressed="false">コーン</button>
         <button class="tb-btn" type="button" id="tbLanes" aria-pressed="true">パスコース</button>
         <button class="tb-btn" type="button" id="tbEdit" disabled>選手名</button>
@@ -1172,7 +1203,7 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
       <button class="tb-btn" type="button" id="tbImg">画像にする</button>
       <button class="tb-btn" type="button" id="tbFormat">8人制</button>
     </div>
-    <p class="tb-note">動いた選手の線のまん中に出る白い丸をドラッグすると、走る線を曲げられます（タップでまっすぐに戻ります）。ボールを持ったまま動いた選手は、ドリブルの波線になります。</p>
+    <p class="tb-note">「矢印を描く」で、指でなぞるとパス（黄の点線）・ドリブル（ピンクの波線）・走り込み（水色）の矢印が描けます。矢印は場面ごとに残り、編集モードの内容はチームで共有されます。<br>動いた選手の線のまん中に出る白い丸をドラッグすると、走る線を曲げられます（タップでまっすぐに戻ります）。ボールを持ったまま動いた選手は、ドリブルの波線になります。</p>
   </div>
 
   <div id="tbPaneMenus" hidden>
@@ -1905,6 +1936,7 @@ function recoverMatchesManually() {
 
 function initFirebaseYearListener() {
   const key = getDbKey(currentYear);
+  if (window.TB && TB.onYear) TB.onYear();   // 戦術ボードも年度ごとの保存先に切り替える
   if (!db) {
     if (currentYear === '2026 U-9') {
       matches = [...INIT_MATCHES]; players = [...INIT_PLAYERS];
@@ -2050,6 +2082,7 @@ function applyEditMode() {
   if (text) text.textContent = isEditor ? '入力・編集ができます' : '閲覧のみ可能です';
   if (locked)   locked.style.display   = isEditor ? 'none' : '';
   if (unlocked) unlocked.style.display = isEditor ? '' : 'none';
+  if (window.TB && TB.onEditMode) TB.onEditMode();
 }
 
 function unlockEdit() {
@@ -3922,6 +3955,8 @@ const FORM = {
 const NUMS = {8:[1,2,4,3,7,10,11,9], 11:[1,2,4,5,3,7,6,8,11,9,10]};
 const COL = {home:'#D6402F', homeGK:'#F2C230', away:'#2856C9', awayGK:'#3A3A3A', pass:'#F2C230', ok:'#00E676', ng:'#FF2D2D', cone:'#FF8A1F'};
 const TRANS = 1.6;
+// 描く矢印：パス（黄の点線・まっすぐ）、ドリブル（ピンクの波線）、走り込み（水色）
+const ARROW = {pass:{c:'#FFD400', name:'パス'}, drib:{c:'#FF5CC8', name:'ドリブル'}, run:{c:'#22D3EE', name:'走り込み'}};
 const KEY_DRAFT = 'yhg9_tactics_draft', KEY_LOCAL = 'yhg9_tactics_local', KEY_PR = 'yhg9_practice_';
 const LABELS = ['ウォーミングアップ', 'トレーニング', 'ゲーム', 'クールダウン', 'その他'];
 
@@ -4077,6 +4112,7 @@ function normalize(d){
       sc.p[t+i] = {x:+v.x, z:+v.z};
     }
     for (const id in (s.curve || {})) { const c = s.curve[id]; if (sc.p[id] && c && Number.isFinite(+c.x) && Number.isFinite(+c.z)) sc.curve[id] = {x:+c.x, z:+c.z}; }
+    sc.arrows = arr(s.arrows).filter(a => a && ARROW[a.k]).map(a => ({k:a.k, pts: arr(a.pts).filter(p => p && Number.isFinite(+p.x) && Number.isFinite(+p.z)).map(p => ({x:+p.x, z:+p.z}))})).filter(a => a.pts.length >= 2);
     if (sc.ball.owner && (!sc.p[sc.ball.owner] || out.hide[sc.ball.owner])) sc.ball.owner = null;
     out.scenes.push(sc);
   }
@@ -4094,7 +4130,9 @@ function pathPoints(a, b, c, wavy, scale){
     const t = i/N, u = 1 - t;
     pts.push({x:u*u*a.x + 2*u*t*cx + t*t*b.x, z:u*u*a.z + 2*u*t*cz + t*t*b.z});
   }
-  if (!wavy) return pts;
+  return wavy ? wave(pts, scale) : pts;
+}
+function wave(pts, scale){
   const amp = .42*scale, wl = 2.3*scale; let d = 0;
   return pts.map((p, i) => {
     if (i) d += Math.hypot(p.x - pts[i-1].x, p.z - pts[i-1].z);
@@ -4105,6 +4143,36 @@ function pathPoints(a, b, c, wavy, scale){
     return {x:p.x - dz/l*o, z:p.z + dx/l*o};
   });
 }
+// 指でなぞった線をなめらかにして、ほぼ等間隔の点に並べ直す
+function chaikin(pts, n){
+  for (let k = 0; k < n && pts.length > 2; k++) {
+    const out = [pts[0]];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i], b = pts[i+1];
+      out.push({x:.75*a.x + .25*b.x, z:.75*a.z + .25*b.z}, {x:.25*a.x + .75*b.x, z:.25*a.z + .75*b.z});
+    }
+    out.push(pts[pts.length - 1]); pts = out;
+  }
+  return pts;
+}
+function resample(pts, step){
+  const out = [pts[0]]; let acc = 0;
+  for (let i = 1; i < pts.length; i++) {
+    let a = pts[i-1]; const b = pts[i]; let l = Math.hypot(b.x - a.x, b.z - a.z);
+    while (acc + l >= step) { const t = (step - acc)/l; a = {x:lerp(a.x, b.x, t), z:lerp(a.z, b.z, t)}; out.push(a); l = Math.hypot(b.x - a.x, b.z - a.z); acc = 0; }
+    acc += l;
+  }
+  const e = pts[pts.length - 1], o = out[out.length - 1];
+  if (Math.hypot(e.x - o.x, e.z - o.z) > .05) out.push(e);
+  return out;
+}
+const arrowsOf = s => s.arrows || (s.arrows = []);
+function arrowPts(a, ws){
+  if (a.k === 'pass') return [a.pts[0], a.pts[a.pts.length - 1]];
+  const pts = resample(chaikin(a.pts, 2), .35);
+  return a.k === 'drib' ? wave(pts, ws) : pts;
+}
+function arrowLen(a){ let d = 0; for (let i = 1; i < a.pts.length; i++) d += Math.hypot(a.pts[i].x - a.pts[i-1].x, a.pts[i].z - a.pts[i-1].z); return d; }
 function trimPts(pts, da, db){
   const out = pts.slice();
   const cut = (list, len) => {
@@ -4130,6 +4198,7 @@ function moveInfo(prev, s, id){
 
 /* ---------- 状態 ---------- */
 let state, cur = 0, view = 'top', tool = 'move', lanesOn = true, selectedId = null, playing = null;
+let kind = 'pass', delOne = false, drawing = null, dragActive = false;
 let dispOwner = null, ready = false, loadingThree = false, running = false, pane = 'board', ctx = null;
 const disp = {p:{}, ball:{x:0, y:0, z:0}};
 {
@@ -4138,9 +4207,80 @@ const disp = {p:{}, ball:{x:0, y:0, z:0}};
 }
 const F = () => FORMATS[state.format];
 const hidden = id => !!state.hide[id];
-function saveDraft(){ if (!ctx) store(KEY_DRAFT, {state, cur}); }
+function saveDraft(){ if (!ctx) { store(KEY_DRAFT, {state, cur}); queueShare(); } }
+const canEdit = () => appEditor();
 
-let THREE, renderer, scene3, ortho, persp, pitchGroup, playersGroup, ghostGroup, overlay, laneGroup, coneGroup, raycaster, plane;
+/* ---------- 元に戻す・やり直し ---------- */
+const hist = {undo:[], redo:[]};
+const snap = () => JSON.stringify({state, cur});
+function pushHist(sn){ hist.undo.push(sn || snap()); if (hist.undo.length > 40) hist.undo.shift(); hist.redo = []; updUndo(); }
+function clearHist(){ hist.undo = []; hist.redo = []; updUndo(); }
+function updUndo(){ const u = q('#tbUndo'), r = q('#tbRedo'); if (u) u.disabled = !hist.undo.length || !!playing; if (r) r.disabled = !hist.redo.length || !!playing; }
+function restoreSnap(sn){
+  const d = JSON.parse(sn), ok = normalize(d.state); if (!ok) return;
+  const fmt = ok.format !== state.format, names = JSON.stringify(ok.roster) !== JSON.stringify(state.roster);
+  state = ok; cur = clamp(d.cur|0, 0, ok.scenes.length - 1);
+  if (ready) { if (fmt) { buildPitch(); buildPlayers(); resize(); } else if (names) for (const id in pl) setPlayerTextures(id); setDispFromScene(cur); }
+  saveDraft(); refresh();
+}
+function undo(){ if (!canEdit() || playing || !hist.undo.length) return; hist.redo.push(snap()); restoreSnap(hist.undo.pop()); updUndo(); hint('1つ前に戻しました。'); }
+function redo(){ if (!canEdit() || playing || !hist.redo.length) return; hist.undo.push(snap()); restoreSnap(hist.redo.pop()); updUndo(); hint('やり直しました。'); }
+
+/* ---------- チームで共有（フォーメーションと同じく {年度}/tacticsBoard に保存） ---------- */
+const CID = uid('c');
+let shareRef = null, shareYear = null, shareTimer = null, sharePending = false, shareArgs = null, lastShareJson = '', applyingRemote = false, pendingRemote = null;
+const shareLocalKey = yr => 'yhg9_tboard_' + yr;
+// Firebase に undefined・NaN を送らない（null や空の物も外す。読むときは normalize が補う）
+function dbClean(v){
+  if (Array.isArray(v)) return v.map(dbClean).filter(x => x !== undefined && x !== null);
+  if (v && typeof v === 'object') { const o = {}; for (const k in v) { const c = dbClean(v[k]); if (c !== undefined && c !== null) o[k] = c; } return o; }
+  if (typeof v === 'number') return Number.isFinite(v) ? Math.round(v*100)/100 : undefined;
+  return v === undefined ? undefined : v;
+}
+const canon = d => JSON.stringify(dbClean(normalize(clone(d)) || {}));   // 送る形・戻ってきた形を同じ物差しで比べる
+function queueShare(){
+  if (applyingRemote || ctx || !canEdit()) return;
+  const yk = yearKey(), yr = appYear();
+  sharePending = true; shareArgs = [yk, yr]; clearTimeout(shareTimer);
+  shareTimer = setTimeout(() => pushShare(yk, yr), 700);
+}
+function pushShare(yk, yr){
+  sharePending = false;
+  if (!canEdit()) return;
+  const data = dbClean(clone(state)), json = canon(state);
+  if (json === lastShareJson) return;
+  lastShareJson = json;
+  const rec = {data, t:Date.now(), cid:CID}, database = appDb();
+  if (database && yk) database.ref(yk + '/tacticsBoard').set(rec).catch(err => { console.warn(err); lastShareJson = ''; say('戦術ボードの保存に失敗しました'); });
+  else store(shareLocalKey(yr), rec);
+}
+function bindShare(){
+  const yr = appYear(), database = appDb(), yk = yearKey();
+  if (shareYear === yr) return;
+  if (sharePending && shareArgs) { clearTimeout(shareTimer); pushShare(shareArgs[0], shareArgs[1]); }   // 年度を変える前に、書きかけを元の年度へ
+  if (shareRef) shareRef.off();
+  shareRef = null; shareYear = yr; lastShareJson = ''; pendingRemote = null;
+  if (!database || !yk) { const v = load(shareLocalKey(yr)); if (v) applyRemote(v); return; }
+  shareRef = database.ref(yk + '/tacticsBoard');
+  shareRef.on('value', sn => applyRemote(sn.val()));
+}
+function applyRemote(v){
+  if (!v || !v.data) return;
+  if (sharePending) return;                       // 自分の変更をこれから送るので、そちらを優先
+  if (ctx || playing || dragActive) { pendingRemote = v; return; }
+  pendingRemote = null;
+  const ok = normalize(v.data); if (!ok) return;
+  lastShareJson = canon(ok);
+  if (state && canon(state) === lastShareJson) return;
+  const keep = cur;
+  applyingRemote = true;
+  try { setState(ok); cur = clamp(keep, 0, state.scenes.length - 1); if (ready) setDispFromScene(cur); refresh(); }
+  finally { applyingRemote = false; }
+  clearHist();
+}
+function flushRemote(){ if (pendingRemote) applyRemote(pendingRemote); }
+
+let THREE, renderer, scene3, ortho, persp, pitchGroup, playersGroup, ghostGroup, overlay, laneGroup, coneGroup, arrowGroup, raycaster, plane;
 let stage, canvas, activeCam;
 const pl = {};
 let ballMesh, ballTop, ring, handles = [];
@@ -4178,8 +4318,8 @@ function init(){
   const ground = new THREE.Mesh(new THREE.PlaneGeometry(800, 800), new THREE.MeshLambertMaterial({color:'#25592c'}));
   ground.rotation.x = -Math.PI/2; ground.position.y = -0.03; scene3.add(ground);
   pitchGroup = new THREE.Group(); playersGroup = new THREE.Group(); ghostGroup = new THREE.Group();
-  overlay = new THREE.Group(); laneGroup = new THREE.Group(); coneGroup = new THREE.Group();
-  scene3.add(pitchGroup, coneGroup, playersGroup, ghostGroup, overlay, laneGroup);
+  overlay = new THREE.Group(); laneGroup = new THREE.Group(); coneGroup = new THREE.Group(); arrowGroup = new THREE.Group();
+  scene3.add(pitchGroup, coneGroup, playersGroup, ghostGroup, overlay, laneGroup, arrowGroup);
   raycaster = new THREE.Raycaster(); plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   activeCam = ortho;
   bindPointer();
@@ -4440,6 +4580,33 @@ function rebuildOverlay(){
     if (Math.hypot(b.x - a.x, b.z - a.z) > .8) { const m = ribbonPts([a, b], .42*ws, COL.pass, 1, true, true, .09); if (m) overlay.add(m); }
   }
 }
+// 描いた矢印（その場面の分＋いま描いている途中の線）
+function rebuildArrows(i){
+  if (!ready) return;
+  clearGroup(arrowGroup);
+  const s = state.scenes[i == null ? cur : i]; if (!s) return;
+  const ws = F().marker/1.6, list = (s.arrows || []).slice();
+  if (drawing && i == null) list.push(drawing);
+  list.forEach(a => {
+    if (a.pts.length < 2) return;
+    const m = ribbonPts(arrowPts(a, ws), (a.k === 'drib' ? .36 : .46)*ws, ARROW[a.k].c, .96, a.k === 'pass', true, .1);
+    if (m) { m.renderOrder = 3; arrowGroup.add(m); }
+  });
+}
+function pickArrow(cx, cy){
+  const s = state.scenes[cur], ws = F().marker/1.6;
+  let best = -1, bd = 24;
+  (s.arrows || []).forEach((a, k) => {
+    const pts = arrowPts(a, ws).map(p => screenOf(p.x, .1, p.z));
+    for (let j = 1; j < pts.length; j++) {
+      const A = pts[j-1], B = pts[j]; if (!A || !B) continue;
+      const dx = B.x - A.x, dy = B.y - A.y, l2 = dx*dx + dy*dy, t = l2 ? clamp(((cx - A.x)*dx + (cy - A.y)*dy)/l2, 0, 1) : 0;
+      const d = Math.hypot(cx - (A.x + dx*t), cy - (A.y + dy*t));
+      if (d < bd) { bd = d; best = k; }
+    }
+  });
+  return best;
+}
 function segDist(p, a, b){
   const dx = b.x - a.x, dz = b.z - a.z, l2 = dx*dx + dz*dz;
   const t = l2 ? ((p.x - a.x)*dx + (p.z - a.z)*dz) / l2 : 0;
@@ -4535,13 +4702,13 @@ function applyMode(){
 let lastChip = -1;
 function startPlay(){
   if (state.scenes.length < 2) { hint('場面を2つ以上にすると再生できます。「＋ 場面」で足してください。'); return; }
-  playing = {i:0, t:-.35}; povSnap = true; setDispFromScene(0);
-  q('#tbPlay').textContent = '■ 停止'; rebuildOverlay(); setEditing(false);
+  playing = {i:0, t:-.35}; povSnap = true; setDispFromScene(0); lastChip = -1;
+  q('#tbPlay').textContent = '■ 停止'; rebuildOverlay(); rebuildArrows(0); setEditing(false);
 }
 function stopPlay(finished){
   playing = null;
   if (finished) cur = state.scenes.length - 1;
-  setDispFromScene(cur); q('#tbPlay').textContent = '▶ 再生'; setEditing(true); refresh();
+  setDispFromScene(cur); q('#tbPlay').textContent = '▶ 再生'; setEditing(true); refresh(); flushRemote();
 }
 function stepPlay(dt){
   playing.t += dt / TRANS;
@@ -4556,11 +4723,12 @@ function stepPlay(dt){
   }
   dispOwner = t < .6 ? A.ball.owner : B.ball.owner;
   const chip = playing.i + (t > .5 ? 1 : 0);
-  if (chip !== lastChip) { lastChip = chip; markChip(chip); }
+  if (chip !== lastChip) { lastChip = chip; markChip(chip); rebuildArrows(chip); }
 }
 function setEditing(on){
-  ['#tbAdd','#tbDel','#tbFormat','#tbFile','#tbLineup','#tbTpl','#tbWho','#tbImg'].forEach(s => q(s).disabled = !on);
-  qa('[data-tbtool]').forEach(b => b.disabled = !on);
+  ['#tbAdd','#tbDel','#tbFormat','#tbFile','#tbLineup','#tbTpl','#tbWho','#tbImg','#tbArDelOne','#tbArClear'].forEach(s => q(s).disabled = !on);
+  qa('[data-tbtool],[data-tbkind]').forEach(b => b.disabled = !on);
+  updUndo();
   q('#tbEdit').disabled = !on || !selectedId;
 }
 
@@ -4600,21 +4768,33 @@ function bindPointer(){
   const ptrs = new Map(); let drag = null, rafPending = false;
   const pdist = () => { const a = [...ptrs.values()]; return Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y); };
   const later = () => { if (!rafPending) { rafPending = true; requestAnimationFrame(() => { rafPending = false; rebuildOverlay(); rebuildLanes(); }); } };
+  let arPending = false;
+  const laterArrow = () => { if (!arPending) { arPending = true; requestAnimationFrame(() => { arPending = false; rebuildArrows(); }); } };
+  const clampPt = g => { const f = F(); return {x:Math.round(clamp(g.x, -f.L/2 - 3, f.L/2 + 3)*100)/100, z:Math.round(clamp(g.z, -f.W/2 - 3, f.W/2 + 3)*100)/100}; };
   canvas.addEventListener('pointerdown', e => {
     canvas.setPointerCapture(e.pointerId);
     ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
-    if (ptrs.size === 2 && (view === 'tv' || view === 'goal')) { drag = {type:'pinch', d0:pdist(), s0:camState[view].scale, moved:true}; return; }
+    if (ptrs.size === 2 && (view === 'tv' || view === 'goal')) { if (drawing) { drawing = null; rebuildArrows(); } dragActive = false; drag = {type:'pinch', d0:pdist(), s0:camState[view].scale, moved:true}; return; }
     if (ptrs.size > 1) return;
     const base = {sx:e.clientX, sy:e.clientY, lx:e.clientX, ly:e.clientY, moved:false, hit:pick(e.clientX, e.clientY)};
     if (playing) { drag = Object.assign(base, {type: view === 'pov' ? 'look' : (view === 'top' ? 'none' : 'orbit')}); return; }
     if (view === 'pov') { drag = Object.assign(base, {type:'look'}); return; }
+    // 閲覧モード：見回す・回すだけ（動かす・描くは編集モードのみ）
+    if (!canEdit()) { drag = Object.assign(base, {type: view === 'top' ? 'none' : 'orbit'}); return; }
     const h = base.hit;
-    if (tool === 'move' && h && h.type !== 'handle') {
-      const g = groundPoint(e.clientX, e.clientY), ent = h.type === 'ball' ? disp.ball : h.type === 'cone' ? state.cones[h.i] : disp.p[h.id];
-      drag = Object.assign(base, {type:h.type, id:h.id, i:h.i, ox: g ? ent.x - g.x : 0, oz: g ? ent.z - g.z : 0});
+    if (tool === 'draw') {
+      const g = !delOne && groundPoint(e.clientX, e.clientY);
+      if (g) { drawing = {k:kind, pts:[clampPt(g)]}; drag = Object.assign(base, {type:'draw'}); dragActive = true; }
+      else drag = Object.assign(base, {type: view === 'top' ? 'none' : 'orbit'});
       return;
     }
-    if (tool === 'move' && h && h.type === 'handle') { drag = Object.assign(base, {type:'handle', id:h.id}); return; }
+    if ((tool === 'move' || tool === 'away' || tool === 'ball') && h && h.type !== 'handle') {
+      const g = groundPoint(e.clientX, e.clientY), ent = h.type === 'ball' ? disp.ball : h.type === 'cone' ? state.cones[h.i] : disp.p[h.id];
+      drag = Object.assign(base, {type:h.type, id:h.id, i:h.i, ox: g ? ent.x - g.x : 0, oz: g ? ent.z - g.z : 0, snap:snap()});
+      dragActive = true;
+      return;
+    }
+    if (tool === 'move' && h && h.type === 'handle') { drag = Object.assign(base, {type:'handle', id:h.id, snap:snap()}); dragActive = true; return; }
     drag = Object.assign(base, {type: view === 'top' ? 'none' : 'orbit'});
   });
   canvas.addEventListener('pointermove', e => {
@@ -4627,6 +4807,14 @@ function bindPointer(){
     if (!drag.moved && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) > 6) drag.moved = true;
     if (!drag.moved) return;
     const f = F(), s = state.scenes[cur];
+    if (drag.type === 'draw') {
+      const g = groundPoint(e.clientX, e.clientY); if (!g || !drawing) return;
+      const pt = clampPt(g), lp = drawing.pts[drawing.pts.length - 1];
+      if (Math.hypot(pt.x - lp.x, pt.z - lp.z) < .45) return;
+      if (drawing.pts.length < 90) drawing.pts.push(pt); else drawing.pts[drawing.pts.length - 1] = pt;
+      laterArrow();
+      return;
+    }
     if (drag.type === 'player' || drag.type === 'ball' || drag.type === 'cone') {
       const g = groundPoint(e.clientX, e.clientY); if (!g) return;
       const x = clamp(g.x + drag.ox, -f.L/2 - 3, f.L/2 + 3), z = clamp(g.z + drag.oz, -f.W/2 - 3, f.W/2 + 3);
@@ -4649,8 +4837,17 @@ function bindPointer(){
     ptrs.delete(e.pointerId);
     if (!drag) return;
     if (drag.type === 'pinch') { if (ptrs.size === 0) drag = null; return; }
-    const d = drag; drag = null;
-    if (!d.moved) { onTap(d.hit, d.sx, d.sy); return; }
+    const d = drag; drag = null; dragActive = false;
+    if (d.type === 'draw') {
+      const a = drawing; drawing = null;
+      if (d.moved && a && a.pts.length >= 2 && arrowLen(a) >= 1.5) {
+        pushHist(); arrowsOf(state.scenes[cur]).push(a.k === 'pass' ? {k:a.k, pts:[a.pts[0], a.pts[a.pts.length - 1]]} : a);
+        saveDraft();
+      } else if (d.moved) hint('短すぎる線は描けません。もう少し長くなぞってください。');
+      rebuildArrows(); updUndo(); flushRemote();
+      return;
+    }
+    if (!d.moved) { flushRemote(); onTap(d.hit, d.sx, d.sy); return; }
     const s = state.scenes[cur];
     if (d.type === 'ball') {
       let best = null, bd = F().marker*1.1;
@@ -4659,7 +4856,8 @@ function bindPointer(){
       setDispFromScene(cur); rebuildOverlay(); rebuildLanes();
     }
     if (d.type === 'player' && cur > 0 && !moveInfo(state.scenes[cur - 1], s, d.id)) delete s.curve[d.id];
-    if (['player','ball','cone','handle'].includes(d.type)) { saveDraft(); rebuildOverlay(); }
+    if (['player','ball','cone','handle'].includes(d.type)) { if (d.snap) pushHist(d.snap); saveDraft(); rebuildOverlay(); }
+    flushRemote();
   };
   canvas.addEventListener('pointerup', end);
   canvas.addEventListener('pointercancel', end);
@@ -4671,20 +4869,53 @@ function bindPointer(){
 function onTap(hit, cx, cy){
   if (view === 'pov') { if (hit && hit.type === 'player') { selectedId = hit.id; povSnap = true; povOff = 0; refresh(); } return; }
   if (playing) return;
+  if (!canEdit()) { selectedId = hit && hit.type === 'player' ? (selectedId === hit.id ? null : hit.id) : null; refresh(); return; }
+  const f = F(), s = state.scenes[cur];
+  const clampPt = g => ({x:clamp(g.x, -f.L/2 - 3, f.L/2 + 3), z:clamp(g.z, -f.W/2 - 3, f.W/2 + 3)});
+  if (tool === 'draw') {
+    if (!delOne) { hint('指でなぞると矢印が描けます。'); return; }
+    const k = pickArrow(cx, cy);
+    if (k < 0) { hint('消したい矢印をタップしてください。'); return; }
+    pushHist(); const a = s.arrows.splice(k, 1)[0];
+    rebuildArrows(); saveDraft(); hint(ARROW[a.k].name + 'の矢印を1本消しました。'); return;
+  }
   if (tool === 'pass') { if (hit && hit.type === 'player') doPass(hit.id); else hint('ボールを受ける選手をタップしてください。'); return; }
   if (tool === 'cone') {
+    pushHist();
     if (hit && hit.type === 'cone') { state.cones.splice(hit.i, 1); hint('コーンを外しました。'); }
-    else { const g = groundPoint(cx, cy); if (!g) return; const f = F(); state.cones.push({x:clamp(g.x, -f.L/2 - 3, f.L/2 + 3), z:clamp(g.z, -f.W/2 - 3, f.W/2 + 3)}); }
+    else { const g = groundPoint(cx, cy); if (!g) { hist.undo.pop(); updUndo(); return; } state.cones.push(clampPt(g)); }
     buildCones(); saveDraft(); return;
   }
-  if (hit && hit.type === 'handle') { delete state.scenes[cur].curve[hit.id]; rebuildOverlay(); saveDraft(); hint('線をまっすぐに戻しました。'); return; }
+  if (tool === 'away') {
+    if (hit && hit.type === 'player' && hit.id[0] === 'a') { pushHist(); setHidden(hit.id, true); hint('相手を1人外しました。'); return; }
+    const g = groundPoint(cx, cy); if (!g) return;
+    const id = Array.from({length:FORM[state.format].length}, (_, i) => 'a' + i).find(hidden);
+    if (!id) { hint('相手は全員ピッチにいます。外すときは相手の選手をタップしてください。'); return; }
+    pushHist();
+    const pt = clampPt(g);
+    state.scenes.forEach(sc => { sc.p[id] = {x:pt.x, z:pt.z}; delete sc.curve[id]; });
+    delete state.hide[id];
+    if (ready) setDispFromScene(cur);
+    saveDraft(); refresh(); hint('相手の' + state.roster.away[idxOf(id)].num + '番を置きました。ドラッグで動かせます。');
+    return;
+  }
+  if (tool === 'ball') {
+    const g = groundPoint(cx, cy); if (!g) return;
+    pushHist();
+    if (hit && hit.type === 'player') { s.ball = {owner:hit.id, x:0, z:0}; hint('ボールをその選手に渡しました。'); }
+    else { const pt = clampPt(g); s.ball = {owner:null, x:pt.x, z:pt.z}; hint('ボールを置きました。ドラッグで動かせます。'); }
+    setDispFromScene(cur); saveDraft(); refresh();
+    return;
+  }
+  if (hit && hit.type === 'handle') { pushHist(); delete state.scenes[cur].curve[hit.id]; rebuildOverlay(); saveDraft(); hint('線をまっすぐに戻しました。'); return; }
   selectedId = hit && hit.type === 'player' ? (selectedId === hit.id ? null : hit.id) : null;
   refresh();
 }
-function newSceneFrom(s){ const ns = clone(s); ns.curve = {}; return ns; }
+function newSceneFrom(s){ const ns = clone(s); ns.curve = {}; ns.arrows = []; return ns; }
 function doPass(id){
   const s = state.scenes[cur];
   if (s.ball.owner === id) { hint('その選手がいまボールを持っています。受ける選手をタップしてください。'); return; }
+  pushHist();
   const ns = newSceneFrom(s); ns.ball = {owner:id, x:0, z:0};
   state.scenes.splice(cur + 1, 0, ns); cur++;
   setDispFromScene(cur); saveDraft(); refresh();
@@ -4698,6 +4929,10 @@ function setHint(){
   if (hintOverride) return;
   let m;
   if (view === 'pov') m = '左右にドラッグで見回す。選手をタップすると、その選手の目線に切り替わります。';
+  else if (!canEdit()) m = view === 'top' ? '▶ 再生で動きを見られます。場面の番号をタップで切り替え。' : '空いている所をドラッグで回す。2本指で拡大・縮小。';
+  else if (tool === 'draw') m = delOne ? '消したい矢印をタップしてください。' : ARROW[kind].name + 'の矢印：指でなぞって描きます。' + (view === 'top' ? '' : '（3Dでも描けます）');
+  else if (tool === 'away') m = '空いている所をタップで相手を置く。相手をタップで外す。ドラッグで動かせます。';
+  else if (tool === 'ball') m = '置きたい所をタップでボールを置く。選手をタップでその選手に渡す。';
   else if (tool === 'cone') m = '空いている所をタップでコーンを置く。コーンをタップで外す。';
   else if (view !== 'top') m = '空いている所をドラッグで回す。2本指で拡大・縮小。選手はドラッグで動かせます。';
   else if (tool === 'pass') m = 'ボールを受ける選手をタップ。パスの場面が足されます。';
@@ -4725,17 +4960,32 @@ function renderChips(){
 function refresh(){
   if (selectedId && (!disp.p[selectedId] || hidden(selectedId))) selectedId = null;
   q('#tbFormat').textContent = state.format === 8 ? '11人制にする' : '8人制にする';
+  applyRO();
   if (!ready) return;
   renderChips();
   qa('[data-tbtool]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tbtool === tool ? 'true' : 'false'));
   qa('[data-tbview]').forEach(b => b.setAttribute('aria-selected', b.dataset.tbview === view ? 'true' : 'false'));
   q('#tbLanes').setAttribute('aria-pressed', lanesOn ? 'true' : 'false');
   q('#tbEdit').disabled = !!playing || !selectedId;
-  applyMode(); rebuildOverlay(); rebuildLanes(); setHint();
+  applyMode(); rebuildOverlay(); rebuildLanes(); rebuildArrows(playing ? Math.max(0, lastChip) : null); setHint();
+}
+// 編集モードかどうかで、出すボタンを変える（閲覧モードは見るだけ）
+function applyRO(){
+  const ed = canEdit();
+  if (!ed) { if (tool !== 'move') tool = 'move'; delOne = false; drawing = null; }
+  q('#tbLock').hidden = ed;
+  q('.tb-tools').classList.toggle('ro', !ed);
+  q('#tbAdd').hidden = !ed;
+  ['#tbTpl','#tbLineup','#tbWho','#tbFormat'].forEach(sel => q(sel).hidden = !ed);
+  q('#tbArrowBar').hidden = !(ed && tool === 'draw');
+  qa('[data-tbkind]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tbkind === kind ? 'true' : 'false'));
+  q('#tbArDelOne').setAttribute('aria-pressed', delOne ? 'true' : 'false');
+  updUndo();
 }
 function setState(d, msg){
   const fmtChanged = !state || d.format !== state.format || !ready;
-  state = d; cur = 0; selectedId = null; povSnap = true;
+  if (!applyingRemote && state && ready) pushHist();
+  state = d; cur = 0; selectedId = null; povSnap = true; drawing = null;
   if (ready) {
     if (fmtChanged) buildPitch();
     buildPlayers(); camState.tv.tx = camState.goal.tx = 0; resize();
@@ -4814,6 +5064,7 @@ function diagram(play, width, key){
       if (Math.hypot(b.x - a.x, b.z - a.z) > .8) stroke([a, b], '#FFE066', .3*ws, true, true);
     }
   }
+  play.scenes.forEach(s => (s.arrows || []).forEach(a => { if (a.pts && a.pts.length >= 2) stroke(arrowPts(a, ws), ARROW[a.k].c, (a.k === 'drib' ? .26 : .32)*ws, a.k === 'pass', true); }));
   (play.cones || []).forEach(cn => {
     const r = f.marker*.45*sc;
     g.beginPath(); g.moveTo(X(cn.x), Y(cn.z) - r); g.lineTo(X(cn.x) + r*.9, Y(cn.z) + r*.7); g.lineTo(X(cn.x) - r*.9, Y(cn.z) + r*.7); g.closePath();
@@ -4841,7 +5092,7 @@ function on(sel, fn){ const el = q('#tbModalBody ' + sel); if (el) el.onclick = 
 
 function rosterList(){ try { return attPlayers().map(n => ({name:n, num: playerNumber(n)})); } catch(e) { return []; } }
 function editSheet(){
-  if (!selectedId) return;
+  if (!selectedId || !canEdit()) return;
   const id = selectedId, home = teamOf(id) === 'home', r = state.roster[teamOf(id)][idxOf(id)];
   const list = home ? rosterList() : [];
   const chips = list.length ? `<label>名簿から選ぶ</label><div class="tb-roster">${list.map((p, k) =>
@@ -4862,6 +5113,7 @@ function editSheet(){
     });
     on('#tbSaveName', () => {
       const n = parseInt(q('#tbNum').value, 10);
+      pushHist();
       r.num = isNaN(n) ? r.num : clamp(n, 0, 99); r.name = q('#tbName').value.trim().slice(0, 8);
       setPlayerTextures(id); saveDraft(); closeSheet(); say('背番号' + r.num + (r.name ? ' ' + r.name : '') + 'を保存しました');
     });
@@ -4889,9 +5141,9 @@ function whoSheet(){
     <button class="btn btn-outline" type="button" id="tbAwayOff">相手を全員外す</button>
     <button class="btn btn-outline" type="button" id="tbCancel">閉じる</button>`, () => {
     on('#tbCancel', closeSheet);
-    qa('.tb-who button').forEach(b => b.onclick = () => { const id = b.dataset.id; setHidden(id, !hidden(id)); b.classList.toggle('on', !hidden(id)); });
-    on('#tbAllOn', () => { state.hide = {}; if (ready) setDispFromScene(cur); saveDraft(); refresh(); whoSheet(); });
-    on('#tbAwayOff', () => { ids('a').forEach(id => setHidden(id, true)); whoSheet(); });
+    qa('.tb-who button').forEach(b => b.onclick = () => { const id = b.dataset.id; pushHist(); setHidden(id, !hidden(id)); b.classList.toggle('on', !hidden(id)); });
+    on('#tbAllOn', () => { pushHist(); state.hide = {}; if (ready) setDispFromScene(cur); saveDraft(); refresh(); whoSheet(); });
+    on('#tbAwayOff', () => { pushHist(); ids('a').forEach(id => setHidden(id, true)); whoSheet(); });
   });
 }
 function formatSheet(){
@@ -4938,12 +5190,12 @@ function fileSheet(){
       : shared.length ? `<div class="tb-list">${shared.map(([k, p]) => row(p, k, 's')).join('')}</div>` : '<p class="tb-empty">共有のプレーはまだありません。</p>';
     const localHtml = local.length ? `<div class="tb-list">${local.map((p, i) => row(p, i, 'l')).join('')}</div>` : '<p class="tb-empty">この端末に保存したプレーはありません。</p>';
     openSheet(`<div class="modal-title">保存・開く</div>
-      <label for="tbTitle">名前をつけて保存</label><input id="tbTitle" type="text" maxlength="30" value="${esc(def)}">
-      <button class="btn btn-red" type="button" id="tbSave">${editor && database ? 'チームで共有して保存' : 'この端末に保存'}</button>
-      ${editor ? '' : '<p class="tb-empty" style="margin-top:8px">チームで共有するには、設定から編集モードにしてください。</p>'}
+      ${editor ? `<label for="tbTitle">名前をつけて保存</label><input id="tbTitle" type="text" maxlength="30" value="${esc(def)}">
+      <button class="btn btn-red" type="button" id="tbSave">${database ? 'チームで共有して保存' : 'この端末に保存'}</button>`
+      : '<p class="tb-empty" style="margin-top:8px">閲覧モードでは開いて見ることだけできます。保存するには編集モードにしてください。</p>'}
       <div class="tb-h">チームで共有（${esc(appYear())}）</div>${sharedHtml}
       <div class="tb-h">この端末</div>${localHtml}
-      <button class="btn btn-outline" type="button" id="tbNew">新しく作る</button>
+      ${editor ? '<button class="btn btn-outline" type="button" id="tbNew">新しく作る</button>' : ''}
       <button class="btn btn-outline" type="button" id="tbCancel">閉じる</button>`, () => {
       on('#tbCancel', closeSheet);
       on('#tbNew', () => { if (!replaceOk()) return; closeSheet(); setState(makePlay(state.format), '新しいボードにしました'); });
@@ -4981,8 +5233,8 @@ function fileSheet(){
     database.ref(path).once('value').then(snap => {
       const v = snap.val() || {};
       const list = Object.entries(v).filter(([, p]) => p && p.data).sort((a, b) => (b[1].t || 0) - (a[1].t || 0));
-      if (q('#tbModal').classList.contains('show') && q('#tbSave')) render(list);
-    }).catch(() => { if (q('#tbModal').classList.contains('show') && q('#tbSave')) render([]); });
+      if (q('#tbModal').classList.contains('show') && q('#tbNew, #tbSave, .tb-h')) render(list);
+    }).catch(() => { if (q('#tbModal').classList.contains('show') && q('.tb-h')) render([]); });
   }
 }
 
@@ -5329,17 +5581,32 @@ function printPlan(p){
 function bindButtons(){
   q('#tbPlay').addEventListener('click', () => { if (!ready) return; playing ? stopPlay(false) : startPlay(); });
   q('#tbAdd').addEventListener('click', () => {
-    if (!ready) return;
+    if (!ready || !canEdit()) return;
+    pushHist();
     state.scenes.splice(cur + 1, 0, newSceneFrom(state.scenes[cur])); cur++;
     setDispFromScene(cur); saveDraft(); refresh();
     hint('場面' + (cur + 1) + 'を足しました。選手を動かすと、前の場面からの動きが線で出ます。');
   });
   q('#tbDel').addEventListener('click', () => {
     if (!ready) return;
+    if (!canEdit()) return;
     if (state.scenes.length < 2) { hint('場面が1つのときは消せません。'); return; }
+    pushHist();
     state.scenes.splice(cur, 1); cur = Math.max(0, cur - 1); setDispFromScene(cur); saveDraft(); refresh();
   });
-  qa('[data-tbtool]').forEach(b => b.addEventListener('click', () => { tool = b.dataset.tbtool; hintOverride = null; refresh(); }));
+  qa('[data-tbtool]').forEach(b => b.addEventListener('click', () => { if (!canEdit()) return; tool = b.dataset.tbtool; delOne = false; hintOverride = null; refresh(); }));
+  qa('[data-tbkind]').forEach(b => b.addEventListener('click', () => { kind = b.dataset.tbkind; delOne = false; hintOverride = null; refresh(); }));
+  q('#tbArDelOne').addEventListener('click', () => { delOne = !delOne; hintOverride = null; refresh(); });
+  q('#tbArClear').addEventListener('click', () => {
+    if (!ready || !canEdit()) return;
+    const s = state.scenes[cur];
+    if (!(s.arrows || []).length) { hint('この場面に矢印はありません。'); return; }
+    pushHist(); s.arrows = []; delOne = false; saveDraft(); refresh(); hint('この場面の矢印を全部消しました（「戻す」で戻せます）。');
+  });
+  q('#tbUndo').addEventListener('click', undo);
+  q('#tbRedo').addEventListener('click', redo);
+  q('#tbUnlock').addEventListener('click', unlock);
+  q('#tbPass').addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
   q('#tbLanes').addEventListener('click', () => { lanesOn = !lanesOn; refresh(); });
   qa('[data-tbview]').forEach(b => b.addEventListener('click', () => {
     const v = b.dataset.tbview;
@@ -5361,10 +5628,20 @@ function bindButtons(){
   q('#tbCtxSave').addEventListener('click', () => endCtx(true));
   q('#tbCtxCancel').addEventListener('click', () => endCtx(false));
 }
+function unlock(){   // 戦術ボードの中で、そのまま編集モードにする（設定タブと同じ合言葉）
+  const el = q('#tbPass'), v = (el.value || '').trim();
+  let pw = null; try { pw = EDIT_PASSWORD; } catch(e) {}
+  if (!pw || v !== pw) { say('合言葉が違います'); el.value = ''; return; }
+  isEditor = true; sessionStorage.setItem('yhg9_editor', '1'); el.value = '';
+  if (typeof applyEditMode === 'function') applyEditMode(); else refresh();
+  say('編集モードになりました');
+}
+function onEditMode(){ if (!canEdit()) { clearTimeout(shareTimer); sharePending = false; } refresh(); }
 bindButtons();
+bindShare();
 refresh();
 
-return {show, fromLineup, setPane, get state(){ return state; }, get cur(){ return cur; }, get ready(){ return ready; }, get pane(){ return pane; }, disp, PR,
+return {show, fromLineup, setPane, onEditMode, onYear: bindShare, get state(){ return state; }, get cur(){ return cur; }, get ready(){ return ready; }, get pane(){ return pane; }, disp, PR,
   at: id => { const p = id === 'ball' ? disp.ball : disp.p[id]; return screenOf(p.x, view === 'top' ? .5 : 1.2, p.z); },
   handleAt: id => { const h = handles.find(x => x.id === id); return h ? screenOf(h.x, .45, h.z) : null; }};
 })();
