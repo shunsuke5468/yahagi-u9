@@ -1202,6 +1202,7 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
       <button class="tb-btn" type="button" id="tbWho">選手の出し入れ</button>
       <button class="tb-btn" type="button" id="tbImg">画像にする</button>
       <button class="tb-btn" type="button" id="tbFormat">8人制</button>
+      <button class="tb-btn" type="button" id="tbReset">リセット</button>
     </div>
     <p class="tb-note">「矢印を描く」で、指でなぞるとパス（黄の点線）・ドリブル（ピンクの波線）・走り込み（水色）の矢印が描けます。矢印は場面ごとに残り、編集モードの内容はチームで共有されます。<br>動いた選手の線のまん中に出る白い丸をドラッグすると、走る線を曲げられます（タップでまっすぐに戻ります）。ボールを持ったまま動いた選手は、ドリブルの波線になります。</p>
   </div>
@@ -4726,7 +4727,7 @@ function stepPlay(dt){
   if (chip !== lastChip) { lastChip = chip; markChip(chip); rebuildArrows(chip); }
 }
 function setEditing(on){
-  ['#tbAdd','#tbDel','#tbFormat','#tbFile','#tbLineup','#tbTpl','#tbWho','#tbImg','#tbArDelOne','#tbArClear'].forEach(s => q(s).disabled = !on);
+  ['#tbAdd','#tbDel','#tbFormat','#tbReset','#tbFile','#tbLineup','#tbTpl','#tbWho','#tbImg','#tbArDelOne','#tbArClear'].forEach(s => q(s).disabled = !on);
   qa('[data-tbtool],[data-tbkind]').forEach(b => b.disabled = !on);
   updUndo();
   q('#tbEdit').disabled = !on || !selectedId;
@@ -4976,7 +4977,7 @@ function applyRO(){
   q('#tbLock').hidden = ed;
   q('.tb-tools').classList.toggle('ro', !ed);
   q('#tbAdd').hidden = !ed;
-  ['#tbTpl','#tbLineup','#tbWho','#tbFormat'].forEach(sel => q(sel).hidden = !ed);
+  ['#tbTpl','#tbLineup','#tbWho','#tbFormat','#tbReset'].forEach(sel => q(sel).hidden = !ed);
   q('#tbArrowBar').hidden = !(ed && tool === 'draw');
   qa('[data-tbkind]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tbkind === kind ? 'true' : 'false'));
   q('#tbArDelOne').setAttribute('aria-pressed', delOne ? 'true' : 'false');
@@ -5154,6 +5155,17 @@ function formatSheet(){
     <button class="btn btn-outline" type="button" id="tbCancel">やめる</button>`, () => {
     on('#tbCancel', closeSheet);
     on('#tbGo', () => { closeSheet(); setState(makePlay(to), to + '人制にしました'); });
+  });
+}
+// リセット：選手を初めの位置に戻し、場面・矢印・コーンを消す（「戻す」で取り消せる）
+function resetSheet(){
+  if (!canEdit()) return;
+  openSheet(`<div class="modal-title">ボードをリセット</div>
+    <p class="tb-empty">選手を初めの位置に戻し、場面・矢印・コーンをすべて消します。外していた選手もピッチに戻ります。チームで共有しているボードなので、みんなの画面もリセットされます。<br>まちがえたときは「矢印を描く」の「↶ 戻す」で元に戻せます。</p>
+    <button class="btn btn-red" type="button" id="tbGo">リセットする</button>
+    <button class="btn btn-outline" type="button" id="tbCancel">やめる</button>`, () => {
+    on('#tbCancel', closeSheet);
+    on('#tbGo', () => { closeSheet(); setState(makePlay(state.format), 'ボードをリセットしました'); });
   });
 }
 function imageSheet(){
@@ -5618,6 +5630,7 @@ function bindButtons(){
   qa('[data-tbpane]').forEach(b => b.addEventListener('click', () => { if (ctx && b.dataset.tbpane !== 'board') { say('図を作っている途中です。先に「図を保存してもどる」か「やめる」を押してください'); return; } setPane(b.dataset.tbpane); }));
   q('#tbEdit').addEventListener('click', editSheet);
   q('#tbFormat').addEventListener('click', formatSheet);
+  q('#tbReset').addEventListener('click', resetSheet);
   q('#tbFile').addEventListener('click', fileSheet);
   q('#tbTpl').addEventListener('click', templateSheet);
   q('#tbLineup').addEventListener('click', lineupSheet);
