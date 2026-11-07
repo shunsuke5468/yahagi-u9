@@ -598,6 +598,41 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
 .sch-kind { flex-shrink: 0; align-self: flex-start; min-width: 54px; padding: 2px 6px; border: 2px solid var(--ink); border-radius: 8px; background: var(--gold); text-align: center; font-size: 0.68rem; font-weight: 900; }
 .sch-kind.spare { background: #E3E8DD; }
 .sch-note { margin-top: 1px; font-size: 0.78rem; color: var(--ink); }
+.sch-row.off { opacity: .55; }
+.sch-row.off b { text-decoration: line-through; }
+.sch-st { display: inline-block; margin-left: 6px; padding: 0 8px; border: 2px solid var(--ink); border-radius: 999px; background: #E3E8DD; font-size: 0.66rem; font-weight: 900; vertical-align: 1px; }
+.sch-st.done { background: var(--lime-light); border-color: #7FB04A; }
+.ko-next { margin: 0 4px 16px; padding: 14px 16px; background: var(--ink); color: #fff; border: 3px solid var(--ink); border-radius: 22px; box-shadow: 3px 4px 0 var(--red-dark); }
+.ko-next-tag { display: inline-block; margin-bottom: 6px; padding: 2px 10px; border-radius: 999px; background: var(--red); font-size: 0.7rem; font-weight: 900; }
+.ko-next-title { font-size: 0.92rem; font-weight: 900; color: #FFE066; }
+.ko-next-vs { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 12px 0; text-align: center; }
+.ko-next-vs span { flex: 1; padding: 10px 4px; border-radius: 14px; background: #fff; color: var(--ink); font-size: 1.05rem; font-weight: 900; line-height: 1.2; }
+.ko-next-vs span.me { background: var(--red); color: #fff; }
+.ko-next-vs small { display: block; margin-top: 3px; font-family: 'Bungee', sans-serif; font-size: 0.62rem; font-weight: 400; opacity: .8; }
+.ko-next-vs b { font-family: 'Bungee', sans-serif; font-weight: 400; color: #FFE066; }
+.ko-next-row { margin-top: 5px; font-size: 0.82rem; font-weight: 800; line-height: 1.5; }
+.ko-next-note { margin-top: 10px; padding-top: 8px; border-top: 2px dashed rgba(255,255,255,.3); font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,.75); line-height: 1.5; }
+.ko-card { margin: 0 4px 16px; padding: 4px 14px 10px; background: #fff; border: 3px solid var(--ink); border-radius: 22px; box-shadow: var(--shadow); }
+.ko-card.mine { border-color: var(--red); box-shadow: 3px 4px 0 var(--red-dark); }
+.ko-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; padding: 10px 0 4px; }
+.ko-head b { font-size: 0.98rem; font-weight: 900; }
+.ko-card.mine .ko-head b { color: var(--red-dark); }
+.ko-head span { font-size: 0.72rem; font-weight: 800; color: var(--muted); }
+.ko-day { margin: 10px 0 4px; font-size: 0.74rem; font-weight: 900; color: var(--green); }
+.ko-game { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 2px dashed var(--border); }
+.ko-game.me { margin: 0 -8px; padding: 8px; border: 2.5px solid var(--red); border-radius: 14px; background: #FFE3DE; }
+.ko-game.me + .ko-game { border-top: none; }
+.ko-no { flex: none; width: 46px; text-align: center; font-family: 'Bungee', sans-serif; font-size: 1rem; line-height: 1.1; }
+.ko-no small { display: block; font-family: 'M PLUS Rounded 1c', sans-serif; font-size: 0.62rem; font-weight: 800; color: var(--muted); }
+.ko-match { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: 0.82rem; font-weight: 900; line-height: 1.35; }
+.ko-team { display: inline-flex; align-items: center; gap: 4px; }
+.ko-team.me { color: var(--red-dark); }
+.ko-code { padding: 0 5px; border: 2px solid var(--ink); border-radius: 6px; background: var(--gold-light); font-family: 'Bungee', sans-serif; font-size: 0.58rem; font-weight: 400; }
+.ko-team.me .ko-code { background: var(--red); color: #fff; }
+.ko-vs { font-size: 0.7rem; color: var(--muted); }
+.ko-tbd { color: var(--muted); font-weight: 800; font-size: 0.76rem; }
+.ko-badge { padding: 0 7px; border-radius: 999px; background: var(--gold); border: 2px solid var(--ink); font-size: 0.62rem; }
+.ko-pk { flex: none; padding: 1px 6px; border: 2px solid var(--ink); border-radius: 7px; font-family: 'Bungee', sans-serif; font-size: 0.56rem; }
 .sch-venue { margin-top: 1px; font-size: 0.78rem; font-weight: 800; color: var(--muted); }
 
 /* ===== 出欠・配車 ===== */
@@ -2146,20 +2181,66 @@ const SCHEDULED_TOURNAMENTS = {
     // 予選日程（予備日含む）＆会場：主催の表のとおり
     schedule: {
       A: [
-        { kind: '開催日', date: '2026-10-31', label: '10/31(土) 午後', cars: '6台', venue: '箱根町社会福祉協議会（YSGEM）' },
-        { kind: '予備日', date: '2026-11-01', label: '11/1(日) 午後', cars: '6台', venue: '箱根町社会福祉協議会（YSGEM）' }
+        { kind: '開催日', date: '2026-10-31', label: '10/31(土) 午後', cars: '6台', venue: '箱根町社会福祉協議会（YSGEM）', done: true },
+        { kind: '予備日', date: '2026-11-01', label: '11/1(日) 午後', cars: '6台', venue: '箱根町社会福祉協議会（YSGEM）', off: true }
       ],
       B: [
-        { kind: '開催日', label: '11/3(祝火)', cars: '5台', note: '東富水・千代豊川 vs 三の丸ブルー', venue: '南足柄市運動公園（早川・Colors）' },
+        { kind: '開催日', label: '11/3(祝火)', cars: '5台', note: '東富水・千代豊川 vs 三の丸ブルー', venue: '南足柄市運動公園（早川・Colors）', done: true },
         { kind: '開催日', label: '11/14(土) 午後', cars: '制限なし', note: '足柄 vs 三の丸ブルー', venue: '河川敷下流（足柄）' },
         { kind: '開催日', label: '11/22(土) 午前', cars: '5台', note: '足柄 vs 東富水・千代豊川', venue: '東富水小学校（東富水・千代豊川）' }
       ],
       C: [
-        { kind: '開催日', label: '11/3(祝火) 午前', cars: '4台', venue: '山王小学校 または 新玉小学校（山王・新玉・町田）' },
-        { kind: '予備日', label: '11/15(日) 午前', cars: '4台', venue: '山王小学校 または 新玉小学校（山王・新玉・町田）' }
+        { kind: '開催日', label: '11/3(祝火) 午前', cars: '2台', venue: '山王小学校（山王・新玉・町田）', done: true },
+        { kind: '予備日', label: '11/15(日) 午前', cars: '4台', venue: '新玉小学校（山王・新玉・町田）', off: true }
       ],
       D: [
-        { kind: '開催日', label: '11/3(祝火)', cars: '5台', venue: '南足柄市運動公園（早川・Colors）' }
+        { kind: '開催日', label: '11/3(祝火)', cars: '5台', venue: '南足柄市運動公園（早川・Colors）', done: true }
+      ]
+    },
+    // 主催の「予選途中経過」の結果（a＝番号の小さいチームの得点）。アプリで入力した結果があれば、そちらを優先する
+    official: {
+      asOf: '11/3',
+      results: {
+        A_0_1: { a: 2, b: 2 }, A_0_2: { a: 1, b: 1 }, A_1_2: { a: 0, b: 6 },
+        B_1_2: { a: 0, b: 3 },
+        C_0_1: { a: 0, b: 10 }, C_0_2: { a: 0, b: 12 }, C_0_3: { a: 0, b: 9 }, C_1_2: { a: 0, b: 8 }, C_1_3: { a: 1, b: 1 }, C_2_3: { a: 2, b: 3 },
+        D_0_1: { a: 0, b: 1 }, D_0_2: { a: 2, b: 1 }, D_0_3: { a: 0, b: 8 }, D_1_2: { a: 5, b: 0 }, D_1_3: { a: 0, b: 0 }, D_2_3: { a: 0, b: 5 }
+      }
+    },
+    // 予選のあと：各ブロック1・2位は決勝トーナメント、3・4位は敢闘トーナメント（主催の組み合わせ表のとおり）
+    // 試合のチームは「A3」のようなブロック順位、「1勝」「2負」（同じ日の試合番号の勝者・敗者）、「d1:3勝」（第1日の試合）で書く
+    knockout: {
+      note: '日程・会場は主催から発表され次第、追加します。',
+      brackets: [
+        { name: '敢闘トーナメント', who: '各ブロック3位・4位', days: [
+          { label: '第1日', games: [
+            { no: 1, time: '09:00〜09:35', a: 'A3', b: 'D4', pk: true },
+            { no: 2, time: '09:40〜10:15', a: 'B3', b: 'C4', pk: true },
+            { no: 3, time: '10:20〜10:55', a: 'C3', b: '1勝', pk: true },
+            { no: 4, time: '11:00〜11:35', a: '1負', b: '2負', pk: true },
+            { no: 5, time: '11:40〜12:15', a: '2勝', b: 'D3' }
+          ] },
+          { label: '第2日', games: [
+            { no: 1, time: '09:00〜09:35', a: 'd1:3負', b: 'd1:5負', pk: true },
+            { no: 2, time: '09:40〜10:15', a: 'd1:3勝', b: 'd1:5勝', pk: true, final: true }
+          ] }
+        ] },
+        { name: '決勝トーナメント', who: '各ブロック1位・2位', days: [
+          { label: '第1日', games: [
+            { no: 1, time: '09:00〜09:35', a: 'A1', b: 'D2', pk: true },
+            { no: 2, time: '09:40〜10:15', a: 'C1', b: 'B2', pk: true },
+            { no: 3, time: '10:20〜10:55', a: 'B1', b: 'C2', pk: true },
+            { no: 4, time: '11:00〜11:35', a: 'D1', b: 'A2', pk: true },
+            { no: 5, time: '11:40〜12:15', a: '1負', b: '3負' },
+            { no: 6, time: '12:20〜12:55', a: '2負', b: '4負' }
+          ] },
+          { label: '第2日', games: [
+            { no: 1, time: '09:00〜09:35', a: 'd1:1勝', b: 'd1:3勝', pk: true },
+            { no: 2, time: '09:40〜10:15', a: 'd1:2勝', b: 'd1:4勝', pk: true },
+            { no: 3, time: '10:35〜11:10', a: '1負', b: '2負', pk: true, third: true },
+            { no: 4, time: '11:15〜11:50', a: '1勝', b: '2勝', pk: true, final: true }
+          ] }
+        ] }
       ]
     }
   }]
@@ -2239,16 +2320,31 @@ function calcBlock(teams, results, b) {
   return { order: [...played, ...rows.filter(r => r.p === 0)], done, total: teams.length * (teams.length - 1) / 2 };
 }
 
+// ブロックの結果：矢作SCの記録 → アプリで入力した結果 → 主催の途中経過 の順に使う
+function blockResults(t, b, resAll, derived) {
+  const teams = t.blocks[b], n = teams.length, off = (t.official && t.official.results) || {};
+  const results = {};
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
+    const k = pairKey(b, i, j);
+    if (b === t.myBlock && derived[k]) results[k] = { ...derived[k], derived: true };
+    else if (resAll[k] && resAll[k].a != null && resAll[k].b != null) results[k] = { a: resAll[k].a, b: resAll[k].b };
+    else if (off[k]) results[k] = { a: off[k].a, b: off[k].b, official: true };
+  }
+  return results;
+}
+// 「A3」→ そのブロックの3位のチーム名（全試合が終わったブロックだけ）
+function seedTeam(t, code, resAll, derived) {
+  const m = /^([A-Z])(\d)$/.exec(code); if (!m || !t.blocks[m[1]]) return null;
+  const st = calcBlock(t.blocks[m[1]], blockResults(t, m[1], resAll, derived), m[1]);
+  if (st.done < st.total) return null;
+  const r = st.order.filter(x => x.rank === +m[2]);
+  return r.length === 1 ? r[0].name : null;
+}
 function blockStarHtml(t, b, resAll, derived) {
   const teams = t.blocks[b], n = teams.length;
   const isMine = b === t.myBlock;
   const myIdx = isMine ? teams.indexOf(t.myTeam) : -1;
-  const results = {};
-  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
-    const k = pairKey(b, i, j);
-    if (isMine && derived[k]) results[k] = { ...derived[k], derived: true };
-    else if (resAll[k] && resAll[k].a != null && resAll[k].b != null) results[k] = { a: resAll[k].a, b: resAll[k].b };
-  }
+  const results = blockResults(t, b, resAll, derived);
   const st = calcBlock(teams, results, b);
   const code = i => `${b}${i + 1}`;
   const head = `<tr><th class="corner"></th>${teams.map((_, j) => `<th class="colhd${j === myIdx ? ' me' : ''}">${code(j)}</th>`).join('')}</tr>`;
@@ -2264,7 +2360,7 @@ function blockStarHtml(t, b, resAll, derived) {
           txt = `${mine[0]}-${mine[1]}`;
           cls = mine[0] > mine[1] ? 'w' : mine[0] < mine[1] ? 'l' : 'd';
         }
-        const editable = isEditor && !(r && r.derived);
+        const editable = isEditor && !(r && r.derived);   // 主催の表の結果も、編集モードなら上書きできる
         const click = editable ? ` onclick="openStarModal('${t.id}','${b}',${lo},${hi})"` : '';
         return `<td class="star-cell ${cls}${editable ? ' edit' : ''}"${click}>${txt || `<span class="blank">${editable ? '＋' : '－'}</span>`}</td>`;
       }).join('')}
@@ -2274,7 +2370,7 @@ function blockStarHtml(t, b, resAll, derived) {
       <td>${r.w}</td><td>${r.l}</td><td>${r.d}</td><td class="pts">${r.pts}</td>
       <td>${r.gd >= 0 ? '+' : ''}${r.gd}</td><td>${r.gf}</td>
     </tr>`).join('');
-  const prog = st.done === 0 ? 'まだ試合なし' : st.done >= st.total ? '全試合 終了' : `途中経過 ${st.done}/${st.total}試合`;
+  const prog = st.done === 0 ? 'まだ試合なし' : st.done >= st.total ? '全試合 終了' : `途中経過 ${st.done}/${st.total}試合（残り${st.total - st.done}）`;
   return `<div class="star-block">
     <div class="star-head"><span class="block-label" style="margin:0${isMine ? ';background:var(--red)' : ''}">${b}ブロック${isMine ? '　矢作SC' : ''}</span><span class="star-progress">${prog}</span></div>
     <div class="star-card${isMine ? ' mine' : ''}">
@@ -2287,6 +2383,58 @@ function blockStarHtml(t, b, resAll, derived) {
   </div>`;
 }
 
+// 予選のあと（決勝トーナメント・敢闘トーナメント）
+function myKnockout(t, resAll, derived) {
+  const ko = t.knockout; if (!ko) return null;
+  const st = calcBlock(t.blocks[t.myBlock], blockResults(t, t.myBlock, resAll, derived), t.myBlock);
+  if (st.done < st.total) return null;
+  const me = st.order.find(r => r.name === t.myTeam); if (!me || me.rank == null) return null;
+  const code = t.myBlock + me.rank;
+  for (const br of ko.brackets) for (const d of br.days) for (const g of d.games) {
+    if (g.a === code || g.b === code) return { br, day: d, g, code, rank: me.rank, opp: g.a === code ? g.b : g.a };
+  }
+  return null;
+}
+const refText = c => { const m = /^(?:d(\d):)?(\d+)([勝負])$/.exec(c); return m ? `${m[1] ? '第' + m[1] + '日 ' : ''}第${m[2]}試合の${m[3] === '勝' ? '勝者' : '敗者'}` : c; };
+function knockoutHtml(t, resAll, derived) {
+  const ko = t.knockout; if (!ko) return '';
+  const mine = myKnockout(t, resAll, derived);
+  const tm = code => {
+    const name = seedTeam(t, code, resAll, derived);
+    if (/[勝負]$/.test(code)) return `<span class="ko-tbd">${refText(code)}</span>`;
+    const me = name === t.myTeam;
+    return `<span class="ko-team${me ? ' me' : ''}"><span class="ko-code">${code}</span>${name ? (me ? '矢作SC' : name) : '<span class="ko-tbd">未定</span>'}</span>`;
+  };
+  let next = '';
+  if (mine) {
+    const oppName = seedTeam(t, mine.opp, resAll, derived);
+    const ifWin = mine.day.games.find(g => g.a === mine.g.no + '勝' || g.b === mine.g.no + '勝');
+    const ifLose = mine.day.games.find(g => g.a === mine.g.no + '負' || g.b === mine.g.no + '負');
+    const other = g => { const c = g.a === mine.g.no + '勝' || g.a === mine.g.no + '負' ? g.b : g.a; const n = seedTeam(t, c, resAll, derived); return /[勝負]$/.test(c) ? refText(c) : `${n || '未定'}（${c}）`; };
+    next = `<div class="ko-next">
+      <div class="ko-next-tag">矢作SC の次の試合</div>
+      <div class="ko-next-title">${mine.br.name}　${mine.day.label} 第${mine.g.no}試合</div>
+      <div class="ko-next-vs"><span class="me">矢作SC<small>${mine.code}</small></span><b>VS</b><span>${oppName || '未定'}<small>${mine.opp}</small></span></div>
+      <div class="ko-next-row">⏰ ${mine.g.time}${mine.g.pk ? '　同点ならPK戦' : ''}</div>
+      ${ifWin ? `<div class="ko-next-row">🏆 勝てば → 第${ifWin.no}試合で ${other(ifWin)} と対戦</div>` : ''}
+      ${ifLose ? `<div class="ko-next-row">💪 負けても → 第${ifLose.no}試合で ${other(ifLose)} と対戦</div>` : ''}
+      <div class="ko-next-note">予選は ${t.myBlock}ブロック ${mine.rank}位。${ko.note}</div>
+    </div>`;
+  }
+  const brs = ko.brackets.slice().sort((x, y) => (mine && y === mine.br) - (mine && x === mine.br));
+  return `<div class="sec-title">予選のあと（トーナメント）</div>${next}
+    ${brs.map(br => `<div class="ko-card${mine && br === mine.br ? ' mine' : ''}">
+      <div class="ko-head"><b>${br.name}</b><span>${br.who}</span></div>
+      ${br.days.map(d => `<div class="ko-day">${d.label}</div>
+        ${d.games.map(g => `<div class="ko-game${mine && br === mine.br && d === mine.day && g === mine.g ? ' me' : ''}">
+          <div class="ko-no">${g.no}<small>${g.time.split('〜')[0]}</small></div>
+          <div class="ko-match">${g.final ? '<span class="ko-badge">決勝</span>' : g.third ? '<span class="ko-badge">3位決定戦</span>' : ''}${tm(g.a)}<span class="ko-vs">vs</span>${tm(g.b)}</div>
+          ${g.pk ? '<span class="ko-pk">PK</span>' : ''}
+        </div>`).join('')}`).join('')}
+    </div>`).join('')}
+    <div class="star-note">「PK」は同点のときPK戦で勝者を決める試合です。チーム名は予選の結果から自動で入ります（Bブロックは試合が残っているため未定）。</div>`;
+}
+
 function scheduleHtml(t) {
   const blocks = Object.keys(t.blocks);
   return `<div class="sec-title">予選日程（予備日含む）＆会場</div>
@@ -2294,9 +2442,9 @@ function scheduleHtml(t) {
       <div class="sch-block${b === t.myBlock ? ' mine' : ''}">
         <span class="sch-bname">${b}ブロック${b === t.myBlock ? '　矢作SC' : ''}</span>
         ${(t.schedule[b] || []).map(s => `
-          <div class="sch-row">
+          <div class="sch-row${s.off ? ' off' : ''}">
             <span class="sch-kind${s.kind === '予備日' ? ' spare' : ''}">${s.kind}</span>
-            <div><b>${s.label}</b>　配車 ${s.cars}${s.note ? `<div class="sch-note">${s.note}</div>` : ''}<div class="sch-venue">${s.venue}</div></div>
+            <div><b>${s.label}</b>　配車 ${s.cars}${s.done ? '<span class="sch-st done">終了</span>' : s.off ? '<span class="sch-st">使わず</span>' : ''}${s.note ? `<div class="sch-note">${s.note}</div>` : ''}<div class="sch-venue">${s.venue}</div></div>
           </div>`).join('')}
       </div>`).join('')}
     </div>`;
@@ -2310,7 +2458,8 @@ function scheduledBlocksHtml(t) {
     : '';
   return `${attendanceCardHtml(t)}${formationCardHtml(t)}<div class="sec-title">予選の星取り表</div>${hint}
     ${Object.keys(t.blocks).map(b => blockStarHtml(t, b, resAll, derived)).join('')}
-    <div class="star-note">順位は 勝点 → 得失点差 → 総得点 の順で並べています。主催の表と違う場合は、主催の表を優先してください。</div>
+    <div class="star-note">順位は 勝点 → 得失点差 → 総得点 の順で並べています。${t.official ? `ほかのブロックは主催の途中経過（${t.official.asOf}時点）から入れています。` : ''}主催の表と違う場合は、主催の表を優先してください。</div>
+    ${knockoutHtml(t, resAll, derived)}
     ${scheduleHtml(t)}`;
 }
 
@@ -2329,7 +2478,17 @@ function scheduledSummaryHtml(t, ms) {
       </div>
       <div class="st-foot">得点 <b>${gf}</b> ／ 失点 <b>${ga}</b> ／ 得失点差 <b>${gf - ga >= 0 ? '+' : ''}${gf - ga}</b></div>`;
   } else {
-    rec = `<div class="st-foot">試合はまだありません。結果が入ると、ここに成績が出ます。</div>`;
+    const st = calcBlock(t.blocks[t.myBlock], blockResults(t, t.myBlock, tourResults[t.id] || {}, deriveMyResults(t)), t.myBlock);
+    const me = st.order.find(r => r.name === t.myTeam);
+    if (me && me.p) {
+      rec = `<div class="st-grid">
+          <div><div class="st-num">${me.w}</div><div class="st-cap">勝</div></div>
+          <div><div class="st-num">${me.d}</div><div class="st-cap">分</div></div>
+          <div><div class="st-num">${me.l}</div><div class="st-cap">敗</div></div>
+          <div><div class="st-num">${me.pts}</div><div class="st-cap">勝点</div></div>
+        </div>
+        <div class="st-foot">得点 <b>${me.gf}</b> ／ 失点 <b>${me.ga}</b> ／ 得失点差 <b>${me.gd >= 0 ? '+' : ''}${me.gd}</b>${st.done >= st.total && me.rank ? `　予選 <b>${t.myBlock}ブロック ${me.rank}位</b>` : ''}</div>`;
+    } else rec = `<div class="st-foot">試合はまだありません。結果が入ると、ここに成績が出ます。</div>`;
   }
   return `<div class="summary-ticket">
       <div class="st-label">矢作SC の大会</div>
