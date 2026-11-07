@@ -2444,7 +2444,7 @@ function scheduleHtml(t) {
         ${(t.schedule[b] || []).map(s => `
           <div class="sch-row${s.off ? ' off' : ''}">
             <span class="sch-kind${s.kind === '予備日' ? ' spare' : ''}">${s.kind}</span>
-            <div><b>${s.label}</b>　配車 ${s.cars}${s.done ? '<span class="sch-st done">終了</span>' : s.off ? '<span class="sch-st">使わず</span>' : ''}${s.note ? `<div class="sch-note">${s.note}</div>` : ''}<div class="sch-venue">${s.venue}</div></div>
+            <div><b>${s.label}</b>${s.done ? '<span class="sch-st done">終了</span>' : s.off ? '<span class="sch-st">使わず</span>' : ''}${s.note ? `<div class="sch-note">${s.note}</div>` : ''}<div class="sch-venue">${s.venue}</div></div>
           </div>`).join('')}
       </div>`).join('')}
     </div>`;
@@ -2495,7 +2495,7 @@ function scheduledSummaryHtml(t, ms) {
       <div class="st-title">${t.full}</div>
       <div class="st-meta">予選：${t.myBlock}ブロック（${opp}）</div>
       ${main ? `<div class="st-meta">日程：${main.label}${spare ? `（予備日 ${spare.label}）` : ''}</div>
-      <div class="st-meta">会場：${main.venue}　<span style="white-space:nowrap">配車 ${main.cars}</span></div>` : ''}
+      <div class="st-meta">会場：${main.venue}</div>` : ''}
       ${rec}
     </div>`;
 }
@@ -2585,7 +2585,6 @@ function renderNextTournament(quiet) {
       <div class="nc-rows">
         <div class="nc-row"><i>📅</i><span><b>${isSpare ? '予備日　' : ''}${s.target.label}</b>${s.spare ? `<small>　予備日 ${s.spare.label}</small>` : ''}</span></div>
         <div class="nc-row"><i>📍</i><span>${s.target.venue}</span></div>
-        <div class="nc-row"><i>🚗</i><span>配車　${s.target.cars}</span></div>
         <div class="nc-row"><i>👥</i><span>${t.myBlock}ブロック：<b>${opp}</b> と対戦</span></div>
       </div>
       ${attBlockHtml(t)}
