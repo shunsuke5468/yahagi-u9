@@ -784,6 +784,96 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
 }
 
 
+/* ===== お知らせ・ライブ速報・がんばった子・誕生日・宿題・バッジ ===== */
+.fun-card { margin: 0 4px 18px; padding: 14px 16px; background: #fff; border: 3px solid var(--ink); border-radius: 22px; box-shadow: var(--shadow); }
+.fn-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.fn-tag { padding: 2px 11px; border: 2px solid var(--ink); border-radius: 999px; background: var(--gold); font-size: 0.7rem; font-weight: 900; }
+.fn-tag.pink { background: #FFD3E2; } .fn-tag.green { background: var(--lime-light); }
+.fn-when { font-size: 0.78rem; font-weight: 900; color: var(--red); }
+.fn-title { font-size: 1.02rem; font-weight: 900; margin-bottom: 6px; line-height: 1.4; }
+.fn-row { display: flex; gap: 8px; font-size: 0.86rem; font-weight: 800; line-height: 1.55; margin: 3px 0; }
+.fn-row i { font-style: normal; width: 20px; text-align: center; flex: none; }
+.fn-row small { display: block; font-size: 0.74rem; color: var(--red-dark); }
+.fn-memo { margin: 8px 0 4px; padding: 8px 11px; border-radius: 12px; background: var(--bg); font-size: 0.82rem; font-weight: 700; line-height: 1.6; white-space: pre-wrap; }
+.fn-sub { margin: 12px 0 6px; font-size: 0.8rem; font-weight: 900; color: var(--green); }
+.fn-sub b { color: var(--ink); }
+.fn-items { display: flex; flex-direction: column; gap: 6px; }
+.fn-item { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border: 2px solid var(--border); border-radius: 12px; background: #fff; text-align: left; cursor: pointer; font-family: inherit; font-size: 0.86rem; font-weight: 800; color: var(--ink); }
+.fn-item .bx { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; flex: none; border: 2.5px solid var(--ink); border-radius: 7px; font-weight: 900; }
+.fn-item.on { background: var(--lime-light); border-color: #7FB04A; color: var(--muted); text-decoration: line-through; }
+.fn-item.on .bx { background: #4C9A2A; border-color: #4C9A2A; color: #fff; }
+.fn-hint { margin: 6px 2px 0; font-size: 0.72rem; font-weight: 700; color: var(--muted); line-height: 1.5; }
+.fn-btns { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.fn-btn { flex: 1; min-height: 40px; padding: 6px 10px; border: 2.5px solid var(--ink); border-radius: 12px; background: #fff; cursor: pointer; font-family: inherit; font-size: 0.8rem; font-weight: 900; color: var(--ink); }
+.fn-btn.red { background: var(--red); color: #fff; }
+.fn-tools { display: flex; gap: 8px; margin: 0 4px 18px; }
+.fn-tools button { flex: 1; min-height: 42px; border: 2.5px dashed var(--ink); border-radius: 14px; background: transparent; cursor: pointer; font-family: inherit; font-size: 0.78rem; font-weight: 900; color: var(--ink); }
+.fn-live { position: relative; overflow: hidden; background: var(--ink); color: #fff; box-shadow: 3px 4px 0 var(--red-dark); }
+.lv-head { display: flex; align-items: center; gap: 8px; font-size: 0.76rem; font-weight: 800; }
+.lv-head span:nth-child(2) { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; opacity: .85; }
+.lv-dot { padding: 2px 9px; border-radius: 999px; background: var(--red); font-family: 'Bungee', sans-serif; font-size: 0.66rem; animation: lvBlink 1.4s infinite; }
+.lv-dot.end { animation: none; background: #5E6585; font-family: inherit; font-weight: 900; }
+@keyframes lvBlink { 50% { opacity: .45; } }
+.lv-ph { color: #FFE066; font-weight: 900; }
+.lv-score { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 12px 0; text-align: center; }
+.lv-score div { flex: 1; }
+.lv-score span { display: block; font-size: 0.82rem; font-weight: 900; }
+.lv-score b { display: block; font-family: 'Bungee', sans-serif; font-size: 3rem; font-weight: 400; line-height: 1.1; }
+.lv-score i { font-style: normal; font-size: 1.6rem; opacity: .6; }
+.lv-evs { padding: 8px 0 2px; border-top: 2px dashed rgba(255,255,255,.25); }
+.lv-ev { font-size: 0.8rem; font-weight: 800; line-height: 1.8; }
+.lv-ev.op { opacity: .6; }
+.lv-t { display: inline-block; min-width: 82px; color: #FFE066; font-size: 0.72rem; }
+.lv-cheer { display: flex; gap: 8px; margin-top: 10px; }
+.lv-cheer button { flex: 1; min-height: 44px; border: 2.5px solid #fff; border-radius: 14px; background: #2E3768; color: #fff; cursor: pointer; font-family: inherit; font-size: 0.86rem; font-weight: 900; }
+.lv-cheer button:active { transform: scale(.96); background: var(--red); }
+.lv-cheer b { margin-left: 6px; font-family: 'Bungee', sans-serif; font-weight: 400; color: #FFE066; }
+.lv-ctl { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 12px; padding-top: 12px; border-top: 2px dashed rgba(255,255,255,.25); }
+.lv-ctl button { min-height: 42px; border: 2px solid #fff; border-radius: 12px; background: transparent; color: #fff; cursor: pointer; font-family: inherit; font-size: 0.78rem; font-weight: 900; }
+.lv-ctl button.red { background: var(--red); }
+.lv-pop { position: absolute; left: 50%; bottom: 70px; font-size: 2.2rem; pointer-events: none; animation: lvPop .9s ease-out forwards; }
+@keyframes lvPop { from { transform: translate(-50%, 0) scale(.6); opacity: 1; } to { transform: translate(-50%, -90px) scale(1.4); opacity: 0; } }
+.fn-mvp { background: #FFF2F6; border-color: #D4537E; box-shadow: 3px 4px 0 #D4537E; }
+.fn-mvp-main { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
+.fn-mvp-no { display: flex; align-items: center; justify-content: center; width: 54px; height: 54px; flex: none; border: 3px solid #fff; border-radius: 50%; background: #D4537E; color: #fff; font-family: 'Bungee', sans-serif; font-size: 1.2rem; box-shadow: 0 0 0 2.5px #D4537E; }
+.fn-mvp-name { font-size: 1.1rem; font-weight: 900; }
+.fn-mvp-cm { margin-top: 2px; font-size: 0.84rem; font-weight: 800; color: #993556; }
+.fn-mvp-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 8px 0 2px; font-size: 0.82rem; font-weight: 800; }
+.fn-mvp-tag { padding: 1px 8px; border-radius: 999px; background: #FFD3E2; font-size: 0.7rem; font-weight: 900; }
+.fn-mvp-c { color: #993556; }
+.fn-bday { display: flex; align-items: center; gap: 12px; background: var(--gold-light); }
+.fn-bday-cake { font-size: 2.4rem; animation: lvBlink 2s infinite; }
+.fn-bday-t { font-size: 0.95rem; font-weight: 900; line-height: 1.45; }
+.fn-bday-s { font-size: 0.8rem; font-weight: 800; color: var(--muted); }
+.fn-pick { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 10px; }
+.fn-pick button { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border: 2px solid var(--ink); border-radius: 999px; background: #fff; cursor: pointer; font-family: inherit; font-size: 0.84rem; font-weight: 800; color: var(--ink); }
+.fn-pick button b { font-family: 'Baloo 2', sans-serif; color: var(--red); }
+.fn-pick button.on { background: #FFD3E2; box-shadow: 2px 2px 0 var(--ink); }
+.fn-pbs { display: inline-flex; align-items: center; gap: 1px; margin-left: auto; font-size: 1rem; }
+.fn-pbs i { font-style: normal; }
+.fn-pbs small { margin-left: 3px; font-size: 0.7rem; font-weight: 900; color: var(--muted); }
+.fn-pb { margin-left: 6px; font-size: 1.1rem; }
+.fn-ph { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.fn-ph-no { display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; flex: none; border: 3px solid var(--ink); border-radius: 50%; background: var(--red); color: #fff; font-family: 'Bungee', sans-serif; font-size: 1.3rem; }
+.fn-ph-nm { font-size: 1.15rem; font-weight: 900; }
+.fn-ph-sub { font-size: 0.76rem; font-weight: 800; color: var(--muted); }
+.fn-st { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.fn-st div { padding: 8px 2px; border-radius: 12px; background: var(--bg); text-align: center; }
+.fn-st b { display: block; font-family: 'Bungee', sans-serif; font-size: 1.25rem; font-weight: 400; color: var(--red); }
+.fn-st span { font-size: 0.62rem; font-weight: 900; }
+.fn-badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+.fn-badge { padding: 9px 4px; border: 2px dashed var(--border); border-radius: 14px; text-align: center; opacity: .6; }
+.fn-badge i { display: block; font-style: normal; font-size: 1.6rem; filter: grayscale(1); }
+.fn-badge b { display: block; font-size: 0.72rem; font-weight: 900; line-height: 1.3; }
+.fn-badge small { display: block; font-size: 0.62rem; font-weight: 800; color: var(--muted); }
+.fn-badge.got { opacity: 1; border: 2.5px solid var(--ink); background: var(--gold-light); }
+.fn-badge.got.team { background: var(--lime-light); }
+.fn-badge.got i { filter: none; }
+.fn-bd { display: flex; gap: 8px; }
+.fn-bd select { flex: 1; }
+.fn-bd .fn-btn { flex: none; }
+.tb-list .hw { padding: 6px 10px; border: 2px solid #4C9A2A; border-radius: 10px; background: var(--lime-light); color: var(--green); font-family: inherit; font-size: 0.74rem; font-weight: 900; cursor: pointer; }
+
 /* ===== 戦術ボード（3D） ===== */
 #screen-tactics [hidden] { display: none !important; }
 .tb-card { padding: 0; overflow: hidden; }
@@ -945,6 +1035,7 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
     <p id="greetingSub">今シーズンの活躍を記録していきましょう</p>
   </div>
 
+  <div id="funHome"></div>
   <div id="nextTournament"></div>
   <div class="stats-grid" id="statsGrid"></div>
 
@@ -1076,6 +1167,7 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
 <!-- ===== 選手 ===== -->
 <div id="screen-players" class="screen">
   <div class="sec-title">選手一覧</div>
+  <p class="fn-hint" style="margin:0 6px 10px">選手をタップすると、バッジとふりかえりカードが見られます。</p>
   <div id="playerList"></div>
 </div>
 
@@ -1251,6 +1343,11 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
     <div class="tb-head"><button class="tb-btn red" type="button" id="tbNewPlan">＋ 指導案を作る</button></div>
     <div id="tbPlanList"></div>
   </div>
+</div>
+
+<!-- お知らせ・ライブ速報・選手などのシート -->
+<div class="modal-overlay" id="funModal" onclick="if(event.target===this)FUN.closeSheet()">
+  <div class="modal"><div class="modal-handle"></div><div id="funModalBody"></div></div>
 </div>
 
 <!-- 戦術ボードのシート -->
@@ -1973,6 +2070,7 @@ function recoverMatchesManually() {
 function initFirebaseYearListener() {
   const key = getDbKey(currentYear);
   if (window.TB && TB.onYear) TB.onYear();   // 戦術ボードも年度ごとの保存先に切り替える
+  if (window.FUN) FUN.onYear();
   if (!db) {
     if (currentYear === '2026 U-9') {
       matches = [...INIT_MATCHES]; players = [...INIT_PLAYERS];
@@ -2119,6 +2217,7 @@ function applyEditMode() {
   if (locked)   locked.style.display   = isEditor ? 'none' : '';
   if (unlocked) unlocked.style.display = isEditor ? '' : 'none';
   if (window.TB && TB.onEditMode) TB.onEditMode();
+  if (window.FUN && document.querySelector('#screen-home.active')) FUN.renderHome();
 }
 
 function unlockEdit() {
@@ -3254,6 +3353,7 @@ function updateNavPill() {
 }
 
 function renderHome() {
+  if (window.FUN) FUN.renderHome();
   renderNextTournament();
   const total = matches.length;
   // 内容が変わっていなければ描き直さない（動きが途中で途切れないように）
@@ -3606,6 +3706,7 @@ function renderRecords() {
           </div>
         ` : ''}
         ${m.memo ? `<div class="match-memo">${m.memo}</div>` : ''}
+        ${window.FUN ? FUN.mvpHtml(m) : ''}
         <div class="match-actions">
           <button class="action-btn" onclick="event.stopPropagation();shareMatch(${m.id})">LINE用</button>
           ${isEditor ? `<button class="action-btn danger" onclick="event.stopPropagation();delMatch(${m.id})">削除</button>` : ''}
@@ -3942,12 +4043,13 @@ function renderPlayerRanking() {
     const noText = no === undefined ? (i + 1) : (no === null ? '–' : no);
     const yomi = p.match(/（(.+?)）/)?.[1] || '';
     const badge = name === CAPTAIN ? '<span class="role-badge cap">キャプテン</span>' : name === VICE_CAPTAIN ? '<span class="role-badge vice">副キャプテン</span>' : '';
-    return `<div class="player-row${name === CAPTAIN ? ' is-cap' : name === VICE_CAPTAIN ? ' is-vice' : ''}">
+    return `<div class="player-row${name === CAPTAIN ? ' is-cap' : name === VICE_CAPTAIN ? ' is-vice' : ''}" onclick='if(window.FUN)FUN.openPlayer(${JSON.stringify(name)})' style="cursor:pointer">
       <div class="player-no">${noText}</div>
       <div class="player-meta">
         <div class="player-nm">${name}${badge}</div>
         ${yomi ? `<div class="player-yomi">${yomi}</div>` : ''}
       </div>
+      ${window.FUN ? FUN.playerRowExtra(name) : ''}
     </div>`;
   }).join('');
 }
@@ -5353,7 +5455,7 @@ function fileSheet(){
   const def = today() + ' のプレー';
   const editor = appEditor(), database = appDb(), yk = yearKey(), path = yk && yk + '/tactics';
   const local = load(KEY_LOCAL) || [];
-  const row = (p, key, where) => `<div class="row"><button class="open" type="button" data-open="${where}:${esc(key)}">${esc(p.name)}<small>${p.data && p.data.format}人制・${esc(p.date || '')}${p.year ? '・' + esc(p.year) : ''}</small></button>${(where === 'l' || editor) ? `<button class="del" type="button" data-del="${where}:${esc(key)}">消す</button>` : ''}</div>`;
+  const row = (p, key, where) => `<div class="row"><button class="open" type="button" data-open="${where}:${esc(key)}">${esc(p.name)}<small>${p.data && p.data.format}人制・${esc(p.date || '')}${p.year ? '・' + esc(p.year) : ''}</small></button>${where === 's' && editor ? `<button class="hw" type="button" data-hw="${esc(key)}">宿題</button>` : ''}${(where === 'l' || editor) ? `<button class="del" type="button" data-del="${where}:${esc(key)}">消す</button>` : ''}</div>`;
   const render = shared => {
     const sharedHtml = !database ? '<p class="tb-empty">いまはネットにつながっていないため、共有のプレーを読み込めません。</p>'
       : shared === null ? '<p class="tb-empty">共有のプレーを読み込んでいます…</p>'
@@ -5387,6 +5489,10 @@ function fileSheet(){
         if (!ok) { say('このプレーは読み込めませんでした'); return; }
         if (!replaceOk()) return;
         closeSheet(); setState(ok, '「' + p.name + '」を開きました');
+      });
+      qa('#tbModalBody [data-hw]').forEach(b => b.onclick = () => {
+        const key = b.dataset.hw, p = ((shared || []).find(x => x[0] === key) || [])[1];
+        if (p && window.FUN) { FUN.setHomework(key, p.name); closeSheet(); }
       });
       qa('#tbModalBody [data-del]').forEach(b => b.onclick = () => {
         const [where, key] = b.dataset.del.split(':');
@@ -5491,6 +5597,19 @@ const planList = () => Object.entries(PR.plans).filter(([, p]) => p && p.theme).
 function menuPlay(m){ return m && m.play ? normalize(m.play) : null; }
 function menuThumb(id, m, w){ const p = menuPlay(m); return p ? diagram(p, w || 320, 'm' + id + ':' + (m.t || 0)) : ''; }
 
+// 共有のプレーを1つ開く（ホームの「戦術ボードの宿題」から）
+function openShared(key, name){
+  const database = appDb(), yk = yearKey();
+  if (!database || !yk) { say('ネットにつながっていないため、宿題のプレーを開けません'); return; }
+  database.ref(yk + '/tactics/' + key).once('value').then(sn => {
+    const p = sn.val(), ok = p && normalize(p.data);
+    if (!ok) { say('宿題のプレーが見つかりませんでした'); return; }
+    if (appEditor() && !replaceOk()) return;
+    if (typeof goTab === 'function') goTab('tactics');
+    setPane('board');
+    setState(ok, '「' + (name || p.name) + '」を開きました。▶ 再生で動きを見よう');
+  }).catch(() => say('宿題のプレーを開けませんでした'));
+}
 function setPane(p){
   pane = p;
   qa('[data-tbpane]').forEach(b => b.classList.toggle('active', b.dataset.tbpane === p));
@@ -5812,9 +5931,492 @@ bindButtons();
 bindShare();
 refresh();
 
-return {show, fromLineup, setPane, onEditMode, onYear: bindShare, get state(){ return state; }, get cur(){ return cur; }, get ready(){ return ready; }, get pane(){ return pane; }, disp, PR,
+return {show, fromLineup, setPane, openShared, onEditMode, onYear: bindShare, get state(){ return state; }, get cur(){ return cur; }, get ready(){ return ready; }, get pane(){ return pane; }, disp, PR,
   at: id => { const p = id === 'ball' ? disp.ball : disp.p[id]; return screenOf(p.x, view === 'top' ? .5 : 1.2, p.z); },
   handleAt: id => { const h = handles.find(x => x.id === id); return h ? screenOf(h.x, .45, h.z) : null; }};
+})();
+</script>
+<script>
+// ===== みんなが楽しめる機能：当日のお知らせ・ライブ速報・がんばった子・バッジ・誕生日・ふりかえりカード・戦術ボードの宿題 =====
+// 共有の保存先（Firebase）: {年度}/notice … お知らせ、{年度}/live … ライブ速報、{年度}/mvp/{試合id} … がんばった子、
+//                          {年度}/birthdays/{選手名} … 誕生日（月日だけ）、{年度}/homework … 戦術ボードの宿題
+window.FUN = (function(){
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nm = p => String(p || '').split('（')[0].trim();
+const editor = () => { try { return !!isEditor; } catch(e) { return false; } };
+const yearKey = () => getDbKey(currentYear);
+const pad = n => String(n).padStart(2, '0');
+const isoOf = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const todayIso = () => isoOf(new Date());
+const WD = ['日','月','火','水','木','金','土'];
+const dateLabel = iso => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); if (!m) return iso || ''; const d = new Date(+m[1], m[2] - 1, +m[3]); return `${+m[2]}/${+m[3]}(${WD[d.getDay()]})`; };
+function store(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} }
+function load(k){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch(e) { return null; } }
+// Firebase に undefined・NaN を送らない
+function clean(v){
+  if (Array.isArray(v)) return v.map(clean).filter(x => x !== undefined && x !== null);
+  if (v && typeof v === 'object') { const o = {}; for (const k in v) { const c = clean(v[k]); if (c !== undefined && c !== null) o[k] = c; } return o; }
+  if (typeof v === 'number') return Number.isFinite(v) ? v : undefined;
+  return v;
+}
+const arr = v => Array.isArray(v) ? v.filter(Boolean) : (v && typeof v === 'object' ? Object.keys(v).sort((a, b) => a - b).map(k => v[k]).filter(Boolean) : []);
+
+/* ---------- データ ---------- */
+let D = {notice:null, live:null, mvp:{}, birthdays:{}, homework:null};
+let refs = [], boundYear = null;
+const localKey = () => 'yhg9_fun_' + currentYear;
+function bind(){
+  if (boundYear === currentYear) return;
+  refs.forEach(r => r.off()); refs = [];
+  boundYear = currentYear;
+  D = {notice:null, live:null, mvp:{}, birthdays:{}, homework:null};
+  if (!db) { Object.assign(D, load(localKey()) || {}); render(); return; }
+  const k = yearKey();
+  ['notice','live','mvp','birthdays','homework'].forEach(path => {
+    const r = db.ref(k + '/' + path);
+    r.on('value', s => { const v = s.val(); D[path] = (path === 'mvp' || path === 'birthdays') ? (v || {}) : v; render(); });
+    refs.push(r);
+  });
+}
+function write(path, val){
+  const v = val == null ? null : clean(val);
+  const parts = path.split('/');
+  if (!db) {
+    let o = D; for (let i = 0; i < parts.length - 1; i++) o = o[parts[i]] = o[parts[i]] || {};
+    if (v == null) delete o[parts[parts.length - 1]]; else o[parts[parts.length - 1]] = v;
+    store(localKey(), D); render(); return Promise.resolve();
+  }
+  const ref = db.ref(yearKey() + '/' + path);
+  return (v == null ? ref.remove() : ref.set(v)).catch(err => { console.warn(err); toast('保存に失敗しました'); });
+}
+function render(){
+  if ($('#screen-home.active')) renderHome();
+  if ($('#screen-records.active') && typeof renderRecords === 'function') renderRecords();
+  if ($('#screen-players.active') && typeof renderPlayerRanking === 'function') renderPlayerRanking();
+  if ($('#funModal.show') && sheetRefresh) sheetRefresh();
+}
+
+/* ---------- シート ---------- */
+let sheetRefresh = null;
+function openSheet(html, setup, refresh){
+  $('#funModalBody').innerHTML = html; $('#funModal').classList.add('show');
+  sheetRefresh = refresh || null; if (setup) setup();
+}
+function closeSheet(){ $('#funModal').classList.remove('show'); $('#funModalBody').innerHTML = ''; sheetRefresh = null; }
+const on = (sel, fn) => { const el = $('#funModalBody ' + sel); if (el) el.onclick = fn; };
+const playerList = () => { try { return attPlayers(); } catch(e) { return players.map(nm); } };
+const fullName = short => players.find(p => nm(p) === short) || short;
+const numOf = name => { try { const n = playerNumber(nm(name)); return n == null ? '' : n; } catch(e) { return ''; } };
+
+/* ---------- 天気（小田原周辺の予報。7日先まで） ---------- */
+const WX = {};
+function wxText(c){ return c <= 1 ? '晴れ' : c <= 3 ? 'くもり' : c <= 48 ? 'きり' : c <= 67 || (c >= 80 && c <= 82) ? '雨' : c <= 77 || c === 85 || c === 86 ? '雪' : '雷雨'; }
+function wxIcon(c){ return c <= 1 ? '☀️' : c <= 3 ? '☁️' : c <= 48 ? '🌫️' : c <= 67 || (c >= 80 && c <= 82) ? '☔' : c <= 77 || c === 85 || c === 86 ? '⛄' : '⛈️'; }
+function weather(iso){
+  if (WX[iso] !== undefined) return WX[iso];
+  const diff = Math.round((new Date(iso + 'T00:00:00') - new Date(todayIso() + 'T00:00:00')) / 86400000);
+  if (diff < 0 || diff > 7) { WX[iso] = null; return null; }
+  WX[iso] = 'loading';
+  fetch(`https://api.open-meteo.com/v1/forecast?latitude=35.26&longitude=139.15&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo&start_date=${iso}&end_date=${iso}`)
+    .then(r => r.json()).then(j => {
+      const d = j && j.daily; if (!d || !d.time || !d.time.length) { WX[iso] = null; return; }
+      WX[iso] = {code:d.weather_code[0], max:Math.round(d.temperature_2m_max[0]), min:Math.round(d.temperature_2m_min[0]), rain:d.precipitation_probability_max[0]};
+      if ($('#screen-home.active')) renderHome();
+    }).catch(() => { WX[iso] = null; });
+  return 'loading';
+}
+function wxAdvice(w){
+  const a = [];
+  if (w.rain >= 50) a.push('雨具と着替え');
+  if (w.max <= 12) a.push('防寒着（ベンチコート・手袋）');
+  if (w.max >= 28) a.push('水分を多めに・帽子');
+  return a.length ? a.join('、') + 'があると安心' : '';
+}
+
+/* ---------- 当日のお知らせ＋持ち物チェック ---------- */
+const DEFAULT_ITEMS = ['ユニフォーム（上下・ソックス）', 'すね当て', 'スパイク', '水筒', 'お弁当・おやつ', 'タオル', '着替え'];
+const checksKey = n => 'yhg9_notice_chk_' + (n.t || '');
+function noticeHtml(){
+  const n = D.notice;
+  if (!n || !n.date || n.date < todayIso()) return '';
+  const diff = Math.round((new Date(n.date + 'T00:00:00') - new Date(todayIso() + 'T00:00:00')) / 86400000);
+  const when = diff === 0 ? '今日' : diff === 1 ? '明日' : `あと${diff}日`;
+  const items = arr(n.items), chk = load(checksKey(n)) || {};
+  const done = items.filter((_, i) => chk[i]).length;
+  const w = weather(n.date);
+  const wxRow = w && w !== 'loading' ? `<div class="fn-row"><i>${wxIcon(w.code)}</i><span>${wxText(w.code)}　${w.max}℃ / ${w.min}℃　降水 ${w.rain}%${wxAdvice(w) ? `<small>${wxAdvice(w)}</small>` : ''}</span></div>` : '';
+  return `<div class="fun-card fn-notice">
+    <div class="fn-head"><span class="fn-tag">お知らせ</span><span class="fn-when">${when}</span></div>
+    <div class="fn-title">${esc(dateLabel(n.date))} ${esc(n.title || '')}</div>
+    ${n.gather ? `<div class="fn-row"><i>⏰</i><span>集合 <b>${esc(n.gather)}</b>${n.kickoff ? `　キックオフ ${esc(n.kickoff)}` : ''}</span></div>` : ''}
+    ${n.place ? `<div class="fn-row"><i>📍</i><span>${esc(n.place)}</span></div>` : ''}
+    ${wxRow}
+    ${n.memo ? `<div class="fn-memo">${esc(n.memo)}</div>` : ''}
+    ${items.length ? `<div class="fn-sub">持ち物チェック <b>${done}/${items.length}</b>${done === items.length ? ' 準備OK！' : ''}</div>
+      <div class="fn-items">${items.map((it, i) => `<button type="button" class="fn-item${chk[i] ? ' on' : ''}" onclick="FUN.check(${i})"><span class="bx">${chk[i] ? '✓' : ''}</span>${esc(it)}</button>`).join('')}</div>
+      <div class="fn-hint">チェックはこのスマホだけに残ります。</div>` : ''}
+    <div class="fn-btns"><button type="button" class="fn-btn" onclick="FUN.shareNotice()">LINE用テキスト</button>${editor() ? '<button type="button" class="fn-btn" onclick="FUN.editNotice()">直す</button>' : ''}</div>
+  </div>`;
+}
+function check(i){
+  const n = D.notice; if (!n) return;
+  const k = checksKey(n), c = load(k) || {};
+  if (c[i]) delete c[i]; else c[i] = 1;
+  store(k, c); renderHome();
+}
+function editNotice(){
+  if (!editor()) return;
+  let n = D.notice;
+  if (!n) {   // 次の大会があれば、日付と会場を入れておく
+    n = {date:'', title:'', gather:'', kickoff:'', place:'', memo:'', items:DEFAULT_ITEMS.slice()};
+    try { const t = scheduledList()[0], m = t && scheduleMain(t); if (m && m.date && m.date >= todayIso()) { n.date = m.date; n.title = t.name; n.place = m.venue || ''; } } catch(e) {}
+  }
+  openSheet(`<div class="modal-title">当日のお知らせ</div>
+    <label for="fnDate">日付</label><input id="fnDate" type="date" value="${esc(n.date)}">
+    <label for="fnTitle">タイトル</label><input id="fnTitle" type="text" maxlength="40" value="${esc(n.title)}" placeholder="例：敢闘トーナメント 第1日">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><label for="fnGather">集合時間</label><input id="fnGather" type="time" value="${esc(n.gather)}"></div>
+      <div><label for="fnKick">キックオフ</label><input id="fnKick" type="time" value="${esc(n.kickoff)}"></div>
+    </div>
+    <label for="fnPlace">場所</label><input id="fnPlace" type="text" maxlength="60" value="${esc(n.place)}" placeholder="例：南足柄市運動公園">
+    <label for="fnItems">持ち物（1行に1つ）</label><textarea id="fnItems" rows="6" style="resize:vertical">${esc(arr(n.items).join('\n'))}</textarea>
+    <label for="fnMemo">連絡（任意）</label><textarea id="fnMemo" rows="2" style="resize:vertical" placeholder="例：ユニフォームは赤。雨天時は前日20時に連絡します">${esc(n.memo)}</textarea>
+    <p class="fn-hint" style="margin:6px 0 10px">天気は、日付が7日以内になると自動で出ます（小田原周辺の予報）。</p>
+    <button class="btn btn-red" type="button" id="fnSave">保存してホームに出す</button>
+    ${D.notice ? '<button class="btn btn-outline" type="button" id="fnDel" style="color:var(--red)">お知らせを消す</button>' : ''}
+    <button class="btn btn-outline" type="button" id="fnCancel">やめる</button>`, () => {
+    on('#fnCancel', closeSheet);
+    on('#fnDel', () => { if (!confirm('お知らせを消しますか？')) return; write('notice', null); closeSheet(); toast('お知らせを消しました'); });
+    on('#fnSave', () => {
+      const rec = {date:$('#fnDate').value, title:$('#fnTitle').value.trim(), gather:$('#fnGather').value, kickoff:$('#fnKick').value,
+        place:$('#fnPlace').value.trim(), memo:$('#fnMemo').value.trim(),
+        items:$('#fnItems').value.split('\n').map(s => s.trim()).filter(Boolean).slice(0, 30), t:Date.now()};
+      if (!rec.date) { toast('日付を入れてください'); return; }
+      write('notice', rec); closeSheet(); toast('お知らせをホームに出しました');
+    });
+  });
+}
+function shareNotice(){
+  const n = D.notice; if (!n) return;
+  let t = `【お知らせ】${dateLabel(n.date)} ${n.title || ''}\n`;
+  if (n.gather) t += `集合：${n.gather}${n.kickoff ? '　キックオフ：' + n.kickoff : ''}\n`;
+  if (n.place) t += `場所：${n.place}\n`;
+  const w = WX[n.date];
+  if (w && w !== 'loading') t += `天気：${wxText(w.code)} ${w.max}℃/${w.min}℃ 降水${w.rain}%\n`;
+  if (n.memo) t += `\n${n.memo}\n`;
+  const items = arr(n.items);
+  if (items.length) t += `\n＜持ち物＞\n${items.map(x => '・' + x).join('\n')}\n`;
+  showShare(t.trim());
+}
+function showShare(text){
+  const st = document.getElementById('shareText'), sm = document.getElementById('shareModal');
+  if (st && sm) { st.textContent = text; sm.classList.add('show'); }
+  else if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => toast('コピーしました'));
+}
+
+/* ---------- 試合のライブ速報＋応援スタンプ ---------- */
+const PHASE = {pre:'試合前', h1:'前半', ht:'ハーフタイム', h2:'後半', end:'試合終了'};
+const NEXT = {pre:['h1','前半開始'], h1:['ht','ハーフタイム'], ht:['h2','後半開始'], h2:['end','試合終了']};
+let tick = null, cheerAt = 0;
+function liveMin(L){ return (L.phase === 'h1' || L.phase === 'h2') && L.since ? Math.max(1, Math.floor((Date.now() - L.since) / 60000) + 1) : null; }
+function liveHtml(){
+  const L = D.live;
+  if (!L || !L.on) return '';
+  const ev = arr(L.events), m = liveMin(L), ed = editor();
+  const evHtml = ev.slice().reverse().slice(0, 8).map(e => `<div class="lv-ev${e.side === 'op' ? ' op' : ''}"><span class="lv-t">${esc(PHASE[e.phase] || '')}${e.min ? ' ' + e.min + '分' : ''}</span>${e.side === 'op' ? `失点（${esc(L.opponent)}）` : `⚽ ゴール！ ${e.player ? esc(nm(e.player)) + (numOf(e.player) !== '' ? `（${numOf(e.player)}番）` : '') : ''}`}</div>`).join('');
+  const nx = NEXT[L.phase];
+  return `<div class="fun-card fn-live">
+    <div class="lv-head"><span class="lv-dot${L.phase === 'end' ? ' end' : ''}">${L.phase === 'end' ? '試合終了' : 'LIVE'}</span><span>${esc(L.tournament || '')}</span><span class="lv-ph">${esc(PHASE[L.phase] || '')}${m ? ` ${m}分` : ''}</span></div>
+    <div class="lv-score"><div><span>矢作SC</span><b>${L.my | 0}</b></div><i>-</i><div><span>${esc(L.opponent)}</span><b>${L.op | 0}</b></div></div>
+    ${evHtml ? `<div class="lv-evs">${evHtml}</div>` : '<div class="lv-evs"><div class="lv-ev">まだ得点はありません</div></div>'}
+    <div class="lv-cheer">
+      <button type="button" onclick="FUN.cheer('nice')">👏 ナイス！<b>${(L.cheers && L.cheers.nice) | 0}</b></button>
+      <button type="button" onclick="FUN.cheer('go')">📣 がんばれ！<b>${(L.cheers && L.cheers.go) | 0}</b></button>
+    </div>
+    ${ed ? `<div class="lv-ctl">
+      ${L.phase !== 'end' ? `<button type="button" class="red" onclick="FUN.liveGoal()">⚽ 矢作の得点</button><button type="button" onclick="FUN.liveOpp()">相手の得点</button>` : ''}
+      ${nx ? `<button type="button" onclick="FUN.livePhase()">▶ ${nx[1]}</button>` : ''}
+      <button type="button" onclick="FUN.liveUndo()">↶ 1つ戻す</button>
+      ${L.phase === 'end' ? `<button type="button" class="red" onclick="FUN.liveSave()">試合記録に残す</button>` : ''}
+      <button type="button" onclick="FUN.liveClose()">速報を閉じる</button>
+    </div>` : ''}
+  </div>`;
+}
+function liveStart(){
+  if (!editor()) return;
+  const opps = (() => { try { const t = scheduledList()[0]; return t ? Object.values(t.blocks).flat().filter(x => x !== t.myTeam) : []; } catch(e) { return []; } })();
+  let tour = ''; try { const t = scheduledList()[0]; if (t) tour = t.name; } catch(e) {}
+  openSheet(`<div class="modal-title">ライブ速報を始める</div>
+    <p class="fn-hint" style="margin:0 0 10px">得点を入れると、みんなのスマホにすぐ出ます。終わったら、そのまま試合記録に残せます。</p>
+    <label for="lvTour">大会名</label><input id="lvTour" type="text" maxlength="40" value="${esc(tour)}" list="lvTours">
+    <datalist id="lvTours">${[...new Set(matches.map(m => m.tournament).filter(Boolean))].map(t => `<option value="${esc(t)}">`).join('')}</datalist>
+    <label for="lvOpp">相手チーム</label><input id="lvOpp" type="text" maxlength="30" list="lvOpps" placeholder="例：岩原">
+    <datalist id="lvOpps">${[...new Set([...opps, ...matches.map(m => m.opponent)].filter(Boolean))].map(t => `<option value="${esc(t)}">`).join('')}</datalist>
+    <label for="lvType">試合の種類</label><select id="lvType"><option value="public">公式戦・カップ戦</option><option value="friendly">練習試合</option><option value="tournament">トーナメント</option><option value="league">リーグ戦</option></select>
+    <button class="btn btn-red" type="button" id="lvGo">始める</button>
+    <button class="btn btn-outline" type="button" id="fnCancel">やめる</button>`, () => {
+    on('#fnCancel', closeSheet);
+    on('#lvGo', () => {
+      const opp = $('#lvOpp').value.trim();
+      if (!opp) { toast('相手チームを入れてください'); return; }
+      write('live', {on:1, tournament:$('#lvTour').value.trim(), opponent:opp, matchType:$('#lvType').value, my:0, op:0, phase:'pre', events:[], cheers:{nice:0, go:0}, date:todayIso(), t:Date.now()});
+      closeSheet(); toast('ライブ速報を始めました');
+    });
+  });
+}
+// 応援の数は保護者が同時に増やすので、それ以外の項目だけを書き換える
+function liveUpdate(fn){
+  const L = JSON.parse(JSON.stringify(D.live || {})); if (!L.on) return;
+  L.events = arr(L.events); fn(L); L.t = Date.now();
+  if (!db) { write('live', L); return; }
+  const {cheers, ...rest} = L; void cheers;
+  const up = clean(rest); if (!rest.events.length) up.events = null;
+  db.ref(yearKey() + '/live').update(up).catch(err => { console.warn(err); toast('保存に失敗しました'); });
+}
+function liveGoal(){
+  if (!editor() || !D.live) return;
+  const list = playerList();
+  openSheet(`<div class="modal-title">だれの得点？</div>
+    <div class="fn-pick">${list.map((p, i) => `<button type="button" data-i="${i}">${numOf(p) !== '' ? `<b>${numOf(p)}</b>` : ''}${esc(p)}</button>`).join('')}</div>
+    <button class="btn btn-outline" type="button" id="fnUnknown">わからない・あとで入れる</button>
+    <button class="btn btn-outline" type="button" id="fnCancel">やめる</button>`, () => {
+    on('#fnCancel', closeSheet);
+    const add = player => { const L0 = D.live, min = liveMin(L0); liveUpdate(L => { L.my = (L.my | 0) + 1; L.events.push(clean({side:'my', player:player || undefined, phase:L.phase, min:min || undefined})); }); closeSheet(); toast('ゴール！'); };
+    on('#fnUnknown', () => add(''));
+    document.querySelectorAll('#funModalBody .fn-pick button').forEach(b => b.onclick = () => add(fullName(list[+b.dataset.i])));
+  });
+}
+function liveOpp(){ if (!editor()) return; const min = liveMin(D.live); liveUpdate(L => { L.op = (L.op | 0) + 1; L.events.push(clean({side:'op', phase:L.phase, min:min || undefined})); }); }
+function livePhase(){ if (!editor()) return; liveUpdate(L => { const nx = NEXT[L.phase]; if (!nx) return; L.phase = nx[0]; if (L.phase === 'h1' || L.phase === 'h2') L.since = Date.now(); }); }
+function liveUndo(){
+  if (!editor()) return;
+  liveUpdate(L => {
+    const e = L.events.pop();
+    if (e) { if (e.side === 'op') L.op = Math.max(0, (L.op | 0) - 1); else L.my = Math.max(0, (L.my | 0) - 1); }
+    else { const back = Object.keys(NEXT).find(k => NEXT[k][0] === L.phase); if (back) L.phase = back; }
+  });
+}
+function liveSave(){
+  const L = D.live; if (!editor() || !L) return;
+  const goals = {};
+  arr(L.events).forEach(e => { if (e.side === 'my' && e.player) goals[e.player] = (goals[e.player] || 0) + 1; });
+  const ms = L.my | 0, os = L.op | 0;
+  if (!confirm(`${L.tournament || '試合'} vs ${L.opponent}　${ms}-${os} を試合記録に残しますか？\n（PK戦や得点者は、記録したあと検索タブで確認できます）`)) return;
+  matches.unshift({
+    id: Date.now(), date: L.date || todayIso(), tournament: L.tournament || '', opponent: L.opponent,
+    myScore: ms, oppScore: os, matchType: L.matchType || 'public', homeAway: 'home',
+    scorers: Object.keys(goals).map(p => ({player:p, goals:goals[p]})), pkScorers: [], memo: '',
+    result: ms > os ? 'win' : ms < os ? 'lose' : 'draw', pk: null
+  });
+  Object.keys(goals).forEach(p => { if (!players.includes(p)) players.push(p); });
+  persist();
+  write('live', null);
+  toast('試合記録に残しました');
+  if (typeof renderHome === 'function') renderHome();
+}
+function liveClose(){ if (!editor() || !confirm('ライブ速報を閉じますか？（試合記録には残りません）')) return; write('live', null); }
+function cheer(kind){
+  if (!D.live || !D.live.on) return;
+  const now = Date.now(); if (now - cheerAt < 1200) return; cheerAt = now;
+  if (db) db.ref(yearKey() + '/live/cheers/' + kind).transaction(v => (v | 0) + 1).catch(() => {});
+  else { D.live.cheers = D.live.cheers || {}; D.live.cheers[kind] = (D.live.cheers[kind] | 0) + 1; store(localKey(), D); render(); }
+  const pop = document.createElement('div'); pop.className = 'lv-pop'; pop.textContent = kind === 'nice' ? '👏' : '📣';
+  const box = $('.fn-live'); if (box) { box.appendChild(pop); setTimeout(() => pop.remove(), 900); }
+}
+
+/* ---------- 今日のがんばった子 ---------- */
+function mvpOf(m){ const v = D.mvp[m.id]; return v && v.player ? v : null; }
+function mvpHtml(m){   // 検索タブの試合カードの中
+  const v = mvpOf(m);
+  return `<div class="fn-mvp-row">${v ? `<span class="fn-mvp-tag">💖 がんばった子</span><b>${esc(nm(v.player))}</b>${v.comment ? `<span class="fn-mvp-c">「${esc(v.comment)}」</span>` : ''}` : ''}
+    ${editor() ? `<button type="button" class="action-btn" onclick="event.stopPropagation();FUN.pickMvp(${+m.id})">${v ? 'がんばった子を変える' : 'がんばった子を選ぶ'}</button>` : ''}</div>`;
+}
+function pickMvp(id){
+  if (!editor()) return;
+  const m = matches.find(x => +x.id === +id); if (!m) return;
+  const cur = D.mvp[id] || {}, list = playerList();
+  let sel = cur.player ? nm(cur.player) : '';
+  openSheet(`<div class="modal-title">がんばった子を選ぶ</div>
+    <p class="fn-hint" style="margin:0 0 8px">vs ${esc(m.opponent)}（${esc(dateLabel(m.date))}）。得点だけでなく、守備や声かけ、あきらめない姿勢も見てあげてください。</p>
+    <div class="fn-pick">${list.map((p, i) => `<button type="button" data-i="${i}" class="${p === sel ? 'on' : ''}">${numOf(p) !== '' ? `<b>${numOf(p)}</b>` : ''}${esc(p)}</button>`).join('')}</div>
+    <label for="fnMvpC">コーチから一言（任意・30文字まで）</label><input id="fnMvpC" type="text" maxlength="30" value="${esc(cur.comment || '')}" placeholder="例：最後まで走り切った！">
+    <button class="btn btn-red" type="button" id="fnMvpSave">保存する</button>
+    ${cur.player ? '<button class="btn btn-outline" type="button" id="fnMvpDel">選ばないにする</button>' : ''}
+    <button class="btn btn-outline" type="button" id="fnCancel">やめる</button>`, () => {
+    on('#fnCancel', closeSheet);
+    document.querySelectorAll('#funModalBody .fn-pick button').forEach(b => b.onclick = () => {
+      sel = list[+b.dataset.i]; document.querySelectorAll('#funModalBody .fn-pick button').forEach(x => x.classList.toggle('on', x === b));
+    });
+    on('#fnMvpDel', () => { write('mvp/' + id, null); closeSheet(); });
+    on('#fnMvpSave', () => {
+      if (!sel) { toast('選手を選んでください'); return; }
+      write('mvp/' + id, {player:fullName(sel), comment:$('#fnMvpC').value.trim(), t:Date.now()}); closeSheet(); toast(nm(sel) + 'を選びました');
+    });
+  });
+}
+function latestMvpHtml(){
+  const list = matches.filter(m => mvpOf(m)).sort((a, b) => (b.date || '').localeCompare(a.date || '') || b.id - a.id);
+  if (!list.length) return '';
+  const m = list[0], v = mvpOf(m);
+  return `<div class="fun-card fn-mvp">
+    <div class="fn-head"><span class="fn-tag pink">がんばった子</span><span class="fn-when">${esc(dateLabel(m.date))} vs ${esc(m.opponent)}</span></div>
+    <div class="fn-mvp-main"><div class="fn-mvp-no">${numOf(v.player) !== '' ? numOf(v.player) : '💖'}</div>
+      <div><div class="fn-mvp-name">${esc(nm(v.player))}</div>${v.comment ? `<div class="fn-mvp-cm">「${esc(v.comment)}」</div>` : ''}</div></div>
+  </div>`;
+}
+
+/* ---------- 誕生日 ---------- */
+const mdToday = () => { const d = new Date(); return pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+const isBirthday = short => D.birthdays[short] === mdToday();
+function birthdayHtml(){
+  const list = playerList().filter(isBirthday);
+  if (!list.length) return '';
+  return `<div class="fun-card fn-bday"><div class="fn-bday-cake">🎂</div><div><div class="fn-bday-t">今日は ${list.map(n => `<b>${esc(n)}</b>`).join('・')} の誕生日！</div><div class="fn-bday-s">おめでとう！ みんなでお祝いしよう 🎉</div></div></div>`;
+}
+
+/* ---------- 戦術ボードの宿題 ---------- */
+function homeworkHtml(){
+  const h = D.homework; if (!h || !h.key) return '';
+  return `<div class="fun-card fn-hw">
+    <div class="fn-head"><span class="fn-tag green">戦術ボードの宿題</span>${h.date ? `<span class="fn-when">${esc(dateLabel(h.date))}</span>` : ''}</div>
+    <div class="fn-title">${esc(h.name || '')}</div>
+    ${h.note ? `<div class="fn-memo">${esc(h.note)}</div>` : ''}
+    <div class="fn-btns"><button type="button" class="fn-btn red" onclick="FUN.openHomework()">▶ ボードで動きを見る</button>${editor() ? '<button type="button" class="fn-btn" onclick="FUN.clearHomework()">宿題を外す</button>' : ''}</div>
+  </div>`;
+}
+function setHomework(key, name){
+  if (!editor()) return;
+  const note = prompt('子どもたちへの一言（任意）\n例：ボールを持っていない人の動きを見てこよう', '');
+  if (note === null) return;
+  write('homework', {key, name, note:note.trim().slice(0, 60), date:todayIso(), t:Date.now()});
+  toast('「' + name + '」を宿題にしました。ホームに出ます');
+}
+function clearHomework(){ if (editor() && confirm('宿題を外しますか？')) write('homework', null); }
+function openHomework(){ const h = D.homework; if (h && window.TB && TB.openShared) TB.openShared(h.key, h.name); }
+
+/* ---------- 選手のバッジ ---------- */
+const BADGES = [
+  {id:'first',  ic:'⭐', name:'初ゴール',         ok:s => s.goals >= 1,   hint:s => '1点決めたらもらえる'},
+  {id:'g5',     ic:'🎯', name:'5ゴール',          ok:s => s.goals >= 5,   hint:s => `あと${5 - s.goals}点`},
+  {id:'g10',    ic:'🏅', name:'10ゴール',         ok:s => s.goals >= 10,  hint:s => `あと${10 - s.goals}点`},
+  {id:'hat',    ic:'👑', name:'ハットトリック',   ok:s => s.best >= 3,    hint:s => '1試合で3点'},
+  {id:'streak', ic:'🔥', name:'2試合連続ゴール',  ok:s => s.streak >= 2,  hint:s => '続けて点を取ろう'},
+  {id:'pk',     ic:'🥅', name:'PK成功',           ok:s => s.pk >= 1,      hint:s => 'PK戦で決める'},
+  {id:'mvp',    ic:'💖', name:'がんばった子',     ok:s => s.mvp >= 1,     hint:s => 'コーチが選ぶよ'},
+  {id:'mvp3',   ic:'🌟', name:'がんばった子3回',  ok:s => s.mvp >= 3,     hint:s => `あと${3 - s.mvp}回`},
+  {id:'att',    ic:'📅', name:'大会に参加',       ok:s => s.att >= 1,     hint:s => '出欠で「参加」'},
+  {id:'team10', ic:'🤝', name:'チーム10勝',       ok:s => s.teamWins >= 10, hint:s => `チームであと${10 - s.teamWins}勝`, team:true},
+  {id:'champ',  ic:'🏆', name:'優勝メンバー',     ok:s => s.champ >= 1,   hint:s => 'チームで優勝', team:true}
+];
+function statsOf(short){
+  const sorted = [...matches].sort((a, b) => (a.date || '').localeCompare(b.date || '') || a.id - b.id);
+  let goals = 0, best = 0, streak = 0, run = 0, pk = 0, games = 0;
+  sorted.forEach(m => {
+    const g = (m.scorers || []).filter(x => nm(x.player) === short).reduce((a, x) => a + (+x.goals || 0), 0);
+    goals += g; best = Math.max(best, g); if (g) games++;
+    run = g ? run + 1 : 0; streak = Math.max(streak, run);
+    pk += (m.pkScorers || []).filter(p => nm(p) === short).length;
+  });
+  const mvp = matches.filter(m => { const v = mvpOf(m); return v && nm(v.player) === short; }).length;
+  let att = 0; try { for (const tid in attendance) if (((attendance[tid] || {})[short] || {}).s === 'y') att++; } catch(e) {}
+  const teamWins = matches.filter(m => m.result === 'win').length;
+  let champ = 0; try { if (currentYear === '2026 U-9') champ = Object.values(STANDINGS_DATA).filter(d => d.myPlace === 1).length; } catch(e) {}
+  return {goals, best, streak, pk, games, mvp, att, teamWins, champ};
+}
+function badgesOf(short){ const s = statsOf(short); return {s, list:BADGES.map(b => ({...b, got:!!b.ok(s)}))}; }
+function playerRowExtra(short){   // 選手タブの行に出す小さなバッジ
+  const {list} = badgesOf(short), got = list.filter(b => b.got && !b.team);
+  return `${isBirthday(short) ? '<span class="fn-pb">🎂</span>' : ''}<span class="fn-pbs">${got.slice(0, 4).map(b => `<i title="${esc(b.name)}">${b.ic}</i>`).join('')}${got.length > 4 ? `<small>+${got.length - 4}</small>` : ''}</span>`;
+}
+function openPlayer(short){
+  const {s, list} = badgesOf(short), no = numOf(short), got = list.filter(b => b.got).length;
+  const bd = D.birthdays[short] || '';
+  const [bm, bdd] = bd ? bd.split('-').map(Number) : [0, 0];
+  openSheet(`<div class="fn-ph"><div class="fn-ph-no">${no !== '' ? no : '–'}</div><div><div class="fn-ph-nm">${esc(short)}${isBirthday(short) ? ' 🎂' : ''}</div><div class="fn-ph-sub">${esc(currentYear)}　バッジ ${got}/${list.length}</div></div></div>
+    <div class="fn-st">
+      <div><b>${s.goals}</b><span>ゴール</span></div><div><b>${s.games}</b><span>点を取った試合</span></div><div><b>${s.mvp}</b><span>がんばった子</span></div><div><b>${s.pk}</b><span>PK成功</span></div>
+    </div>
+    <div class="fn-sub">バッジ</div>
+    <div class="fn-badges">${list.map(b => `<div class="fn-badge${b.got ? ' got' : ''}${b.team ? ' team' : ''}"><i>${b.ic}</i><b>${esc(b.name)}</b><small>${b.got ? (b.team ? 'チームのみんなで' : 'ゲット！') : esc(b.hint(s))}</small></div>`).join('')}</div>
+    <p class="fn-hint" style="margin:4px 0 12px">バッジは試合記録・がんばった子・出欠から自動でもらえます。</p>
+    <button class="btn btn-red" type="button" id="fnCard">1年のふりかえりカードを作る</button>
+    ${editor() ? `<div class="fn-sub" style="margin-top:14px">誕生日（月日だけ・ホームでお祝いします）</div>
+      <div class="fn-bd"><select id="fnBm"><option value="">月</option>${Array.from({length:12}, (_, i) => `<option value="${i + 1}"${bm === i + 1 ? ' selected' : ''}>${i + 1}月</option>`).join('')}</select>
+      <select id="fnBd"><option value="">日</option>${Array.from({length:31}, (_, i) => `<option value="${i + 1}"${bdd === i + 1 ? ' selected' : ''}>${i + 1}日</option>`).join('')}</select>
+      <button type="button" class="fn-btn" id="fnBdSave">保存</button></div>` : ''}
+    <button class="btn btn-outline" type="button" id="fnCancel">閉じる</button>`, () => {
+    on('#fnCancel', closeSheet);
+    on('#fnCard', () => reviewCard(short));
+    on('#fnBdSave', () => {
+      const m = +$('#fnBm').value, d = +$('#fnBd').value;
+      if (!m !== !d) { toast('月と日の両方を選んでください'); return; }
+      write('birthdays/' + short, m ? pad(m) + '-' + pad(d) : null); toast(m ? '誕生日を保存しました' : '誕生日を消しました');
+    });
+  }, () => openPlayer(short));
+}
+
+/* ---------- 1年のふりかえりカード（画像） ---------- */
+const FONT = "'M PLUS Rounded 1c','Hiragino Sans','Noto Sans JP',sans-serif";
+function reviewCard(short){
+  const {s, list} = badgesOf(short), no = numOf(short), W = 1080, H = 1350;
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+  const rr = (x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); };
+  g.fillStyle = '#1B2142'; g.fillRect(0, 0, W, H);
+  g.fillStyle = '#2f7d3a'; g.fillRect(0, 0, W, 470);
+  for (let i = 0; i < 9; i += 2) { g.fillStyle = '#38893f'; g.fillRect(i * W / 9, 0, W / 9, 470); }
+  g.strokeStyle = 'rgba(255,255,255,.5)'; g.lineWidth = 6; g.beginPath(); g.arc(W / 2, 470, 150, Math.PI, 0); g.stroke();
+  [['#D6402F', 0], ['#F2C230', 1], ['#ffffff', 2]].forEach(([col, i]) => { g.fillStyle = col; g.fillRect(i * W / 3, 470, W / 3, 14); });
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillStyle = '#fff'; g.font = '900 44px ' + FONT; g.fillText('矢作SC  ' + currentYear + '  ふりかえり', W / 2, 80);
+  g.beginPath(); g.arc(W / 2, 270, 130, 0, Math.PI * 2); g.fillStyle = '#D6402F'; g.fill(); g.lineWidth = 14; g.strokeStyle = '#fff'; g.stroke();
+  g.fillStyle = '#fff'; g.font = '900 ' + (String(no).length > 1 ? 130 : 150) + 'px ' + FONT; g.fillText(no !== '' ? String(no) : '⚽', W / 2, 280);
+  g.font = '900 78px ' + FONT; g.fillStyle = '#fff'; g.fillText(short, W / 2, 570);
+  const team = matches.reduce((a, m) => { a[m.result] = (a[m.result] || 0) + 1; return a; }, {});
+  g.font = '800 34px ' + FONT; g.fillStyle = '#F2C230';
+  g.fillText(`チーム ${matches.length}試合  ${team.win || 0}勝 ${team.draw || 0}分 ${team.lose || 0}敗`, W / 2, 640);
+  const boxes = [[s.goals, 'ゴール'], [s.mvp, 'がんばった子'], [list.filter(b => b.got).length, 'バッジ']];
+  boxes.forEach(([v, l], i) => {
+    const bx = 90 + i * 310, by = 700;
+    rr(bx, by, 280, 200, 28); g.fillStyle = '#fff'; g.fill();
+    g.fillStyle = '#D6402F'; g.font = '900 96px ' + FONT; g.fillText(String(v), bx + 140, by + 88);
+    g.fillStyle = '#1B2142'; g.font = '800 32px ' + FONT; g.fillText(l, bx + 140, by + 165);
+  });
+  const got = list.filter(b => b.got);
+  g.font = '800 30px ' + FONT; g.fillStyle = 'rgba(255,255,255,.75)'; g.fillText('ゲットしたバッジ', W / 2, 960);
+  const per = 6, size = 120;
+  got.slice(0, 12).forEach((b, i) => {
+    const row = Math.floor(i / per), n = Math.min(per, got.length - row * per), x = W / 2 - (n * size + (n - 1) * 20) / 2 + (i % per) * (size + 20) + size / 2, y = 1040 + row * 150;
+    g.beginPath(); g.arc(x, y, 56, 0, Math.PI * 2); g.fillStyle = '#F2C230'; g.fill();
+    g.font = '60px sans-serif'; g.fillText(b.ic, x, y + 4);
+    g.fillStyle = '#fff'; let fs = 22; g.font = '800 ' + fs + 'px ' + FONT;
+    while (fs > 14 && g.measureText(b.name).width > size + 16) { fs--; g.font = '800 ' + fs + 'px ' + FONT; }
+    g.fillText(b.name, x, y + 78);
+  });
+  if (!got.length) { g.font = '800 34px ' + FONT; g.fillStyle = '#fff'; g.fillText('来年はバッジをたくさん集めよう！', W / 2, 1060); }
+  g.font = '900 36px ' + FONT; g.fillStyle = '#fff'; g.fillText('1年間、よくがんばりました！', W / 2, 1290);
+  const url = c.toDataURL('image/png');
+  openSheet(`<div class="modal-title">ふりかえりカード</div>
+    <img src="${url}" alt="${esc(short)}のふりかえりカード" style="width:100%;border:3px solid var(--ink);border-radius:14px;display:block">
+    <p class="fn-hint" style="margin:8px 0">画像を長押しすると、保存やLINEで送れます。</p>
+    <a class="btn btn-red" style="display:block;text-align:center;text-decoration:none" href="${url}" download="furikaeri_${esc(short).replace(/\s/g, '')}.png">画像をダウンロード</a>
+    <button class="btn btn-outline" type="button" id="fnBack">もどる</button>`, () => on('#fnBack', () => openPlayer(short)));
+}
+
+/* ---------- ホーム ---------- */
+function renderHome(){
+  bind();
+  const el = $('#funHome'); if (!el) return;
+  const ed = editor();
+  const tools = ed ? `<div class="fn-tools">${!D.live || !D.live.on ? '<button type="button" onclick="FUN.liveStart()">▶ ライブ速報を始める</button>' : ''}<button type="button" onclick="FUN.editNotice()">${D.notice ? '✎ お知らせを直す' : '＋ 当日のお知らせを作る'}</button></div>` : '';
+  el.innerHTML = liveHtml() + birthdayHtml() + noticeHtml() + homeworkHtml() + latestMvpHtml() + tools;
+  clearInterval(tick);
+  if (D.live && D.live.on && (D.live.phase === 'h1' || D.live.phase === 'h2')) tick = setInterval(() => { if ($('#screen-home.active')) renderHome(); else clearInterval(tick); }, 30000);
+}
+
+return {bind, renderHome, check, editNotice, shareNotice, liveStart, liveGoal, liveOpp, livePhase, liveUndo, liveSave, liveClose, cheer,
+  mvpHtml, pickMvp, openPlayer, playerRowExtra, setHomework, clearHomework, openHomework, closeSheet, onYear: () => { boundYear = null; bind(); }, get data(){ return D; }};
 })();
 </script>
 </body>
