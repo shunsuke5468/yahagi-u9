@@ -784,6 +784,56 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
 }
 
 
+/* ===== お誘い ===== */
+.inv-count { margin-left: 8px; padding: 2px 10px; border: 2px solid var(--ink); border-radius: 999px; background: var(--red); color: #fff; font-size: 0.7rem; font-weight: 900; vertical-align: 2px; }
+.inv-card { margin: 0 4px 14px; padding: 13px 15px; background: #fff; border: 3px solid var(--ink); border-radius: 20px; box-shadow: var(--shadow); cursor: pointer; }
+.inv-card:active { transform: translate(2px,3px); box-shadow: 1px 1px 0 var(--ink); }
+.inv-card.s-wait { border-color: var(--red); box-shadow: 3px 4px 0 var(--red-dark); }
+.inv-card.s-no { opacity: .5; box-shadow: none; }
+.inv-top { display: flex; align-items: center; gap: 6px; }
+.inv-badge { padding: 2px 10px; border: 2px solid var(--ink); border-radius: 999px; font-size: 0.7rem; font-weight: 900; background: #fff; }
+.inv-badge.wait { background: var(--red); color: #fff; }
+.inv-badge.yes { background: #4C9A2A; color: #fff; }
+.inv-badge.no { background: #E3E8DD; color: var(--muted); }
+.inv-badge.hold { background: var(--gold); }
+.inv-kind { padding: 2px 8px; border-radius: 8px; background: var(--bg); font-size: 0.68rem; font-weight: 900; }
+.inv-days { margin-left: auto; font-size: 0.8rem; font-weight: 900; color: var(--muted); white-space: nowrap; }
+.inv-days.soon { color: var(--red); }
+.inv-name { margin-top: 7px; font-size: 1.04rem; font-weight: 900; line-height: 1.35; }
+.inv-title { font-size: 0.8rem; font-weight: 800; color: var(--muted); line-height: 1.4; }
+.inv-rows { margin-top: 6px; }
+.inv-rows div { display: flex; gap: 8px; padding: 4px 0; font-size: 0.82rem; font-weight: 800; line-height: 1.5; }
+.inv-rows i { flex: none; width: 20px; text-align: center; font-style: normal; }
+.inv-rows span { min-width: 0; overflow-wrap: anywhere; }
+.inv-rows small { display: block; font-size: 0.74rem; color: var(--muted); }
+.inv-warn { margin-top: 8px; padding: 8px 11px; border: 2px solid var(--red); border-radius: 12px; background: var(--red-light); color: var(--red-dark); font-size: 0.78rem; font-weight: 900; line-height: 1.55; }
+.inv-foot { display: flex; align-items: center; gap: 8px; margin-top: 9px; padding-top: 8px; border-top: 2.5px dotted var(--border); font-size: 0.74rem; font-weight: 800; color: var(--muted); }
+.inv-att b { color: var(--ink); }
+.inv-more { margin-left: auto; color: var(--red); font-weight: 900; white-space: nowrap; }
+.inv-empty { margin: 0 6px 14px; font-size: 0.8rem; font-weight: 800; color: var(--muted); }
+.inv-past-btn, .inv-add { display: block; width: calc(100% - 8px); margin: 0 4px 14px; min-height: 42px; border: 2.5px dashed var(--ink); border-radius: 14px; background: transparent; cursor: pointer; font-family: inherit; font-size: 0.8rem; font-weight: 900; color: var(--ink); }
+.inv-dl { display: grid; grid-template-columns: 6.2em 1fr; gap: 6px 10px; margin: 12px 0; font-size: 0.84rem; line-height: 1.55; }
+.inv-dl dt { font-weight: 900; color: var(--green); }
+.inv-dl dd { margin: 0; font-weight: 800; overflow-wrap: anywhere; white-space: pre-wrap; }
+.inv-map { display: block; text-align: center; text-decoration: none; }
+.inv-h { margin: 16px 0 8px; padding-top: 12px; border-top: 3px dotted var(--border); font-size: 0.86rem; font-weight: 900; }
+.inv-note { margin: 10px 0 0; padding: 9px 12px; border-radius: 12px; background: var(--lime-light); font-size: 0.8rem; font-weight: 800; line-height: 1.55; }
+.inv-seg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
+.inv-seg.small { grid-template-columns: repeat(3, 1fr); }
+.inv-seg button { min-height: 42px; padding: 4px 2px; border: 2.5px solid var(--ink); border-radius: 12px; background: #fff; cursor: pointer; font-family: inherit; font-size: 0.78rem; font-weight: 900; color: var(--ink); }
+.inv-seg button.on { box-shadow: 2px 3px 0 var(--ink); }
+.inv-seg button.on.wait { background: var(--red); color: #fff; }
+.inv-seg button.on.yes { background: #4C9A2A; color: #fff; }
+.inv-seg button.on.no { background: #9AA0B4; color: #fff; }
+.inv-seg button.on.hold { background: var(--gold); }
+.inv-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 8px; }
+.inv-ops { display: flex; gap: 8px; margin: 14px 0 6px; }
+.inv-ops button { flex: 1; min-height: 42px; border: 2.5px solid var(--ink); border-radius: 12px; background: #fff; cursor: pointer; font-family: inherit; font-size: 0.78rem; font-weight: 900; color: var(--ink); }
+.inv-ops .del { border-color: var(--red); color: var(--red-dark); background: var(--red-light); }
+.inv-raw { margin: 14px 0 10px; border: 2.5px solid var(--border); border-radius: 14px; }
+.inv-raw summary { padding: 10px 12px; cursor: pointer; font-size: 0.84rem; font-weight: 900; }
+.inv-raw pre { margin: 0; padding: 0 12px 12px; font-family: inherit; font-size: 0.8rem; font-weight: 700; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
+
 /* ===== お知らせ・ライブ速報・がんばった子・誕生日・宿題・バッジ ===== */
 .fun-card { margin: 0 4px 18px; padding: 14px 16px; background: #fff; border: 3px solid var(--ink); border-radius: 22px; box-shadow: var(--shadow); }
 .fn-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
@@ -1037,6 +1087,7 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
 
   <div id="funHome"></div>
   <div id="nextTournament"></div>
+  <div id="invHome"></div>
   <div class="stats-grid" id="statsGrid"></div>
 
   <div class="sec-title">大会成績</div>
@@ -1343,6 +1394,11 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
     <div class="tb-head"><button class="tb-btn red" type="button" id="tbNewPlan">＋ 指導案を作る</button></div>
     <div id="tbPlanList"></div>
   </div>
+</div>
+
+<!-- お誘いのシート -->
+<div class="modal-overlay" id="invModal" onclick="if(event.target===this)INV.close()">
+  <div class="modal"><div class="modal-handle"></div><div id="invModalBody"></div></div>
 </div>
 
 <!-- お知らせ・ライブ速報・選手などのシート -->
@@ -2071,6 +2127,7 @@ function initFirebaseYearListener() {
   const key = getDbKey(currentYear);
   if (window.TB && TB.onYear) TB.onYear();   // 戦術ボードも年度ごとの保存先に切り替える
   if (window.FUN) FUN.onYear();
+  if (window.INV) INV.onYear();
   if (!db) {
     if (currentYear === '2026 U-9') {
       matches = [...INIT_MATCHES]; players = [...INIT_PLAYERS];
@@ -2218,6 +2275,7 @@ function applyEditMode() {
   if (unlocked) unlocked.style.display = isEditor ? '' : 'none';
   if (window.TB && TB.onEditMode) TB.onEditMode();
   if (window.FUN && document.querySelector('#screen-home.active')) FUN.renderHome();
+  if (window.INV && document.querySelector('#screen-home.active')) INV.renderHome();
 }
 
 function unlockEdit() {
@@ -2345,7 +2403,11 @@ const SCHEDULED_TOURNAMENTS = {
   }]
 };
 
-function scheduledList() { return SCHEDULED_TOURNAMENTS[currentYear] || []; }
+// 予定の大会＝主催の大会（SCHEDULED_TOURNAMENTS）＋「参加する」にしたお誘い（INV）。お誘いはブロック分けがない（blocks が空）
+function scheduledList() { return [...(SCHEDULED_TOURNAMENTS[currentYear] || []), ...(window.INV ? INV.joined() : [])]; }
+// 出欠・配車は、参加を決める前のお誘いでも使う
+function findEvent(tid) { return scheduledList().find(x => x.id === tid) || (window.INV ? INV.event(tid) : null); }
+const hasBlocks = t => !!(t.blocks && t.blocks[t.myBlock]);
 function findScheduled(name) { return scheduledList().find(t => t.name === name) || null; }
 function scheduleMain(t) { const a = t.schedule[t.myBlock] || []; return a.find(s => s.kind === '開催日') || a[0] || null; }
 function scheduleSpare(t) { return (t.schedule[t.myBlock] || []).find(s => s.kind === '予備日') || null; }
@@ -2535,6 +2597,14 @@ function knockoutHtml(t, resAll, derived) {
 }
 
 function scheduleHtml(t) {
+  if (!hasBlocks(t)) {   // ブロック分けがない行事（お誘い）
+    const inv = t.invite || {};
+    return `<div class="sec-title">日程＆会場</div>
+      <div class="sch-card"><div class="sch-block mine">
+        ${(t.schedule[t.myBlock] || []).map(s => `<div class="sch-row"><span class="sch-kind${s.kind === '予備日' ? ' spare' : ''}">${s.kind}</span><div><b>${s.label}</b><div class="sch-venue">${s.venue}</div></div></div>`).join('')}
+      </div></div>
+      ${t.invite ? `<button class="btn btn-outline" style="margin:-8px 4px 22px;width:calc(100% - 8px)" onclick="INV.open('${inv.id}')">予定の詳細を見る</button>` : ''}`;
+  }
   const blocks = Object.keys(t.blocks);
   return `<div class="sec-title">予選日程（予備日含む）＆会場</div>
     <div class="sch-card">${blocks.map(b => `
@@ -2555,6 +2625,7 @@ function scheduledBlocksHtml(t) {
   const hint = isEditor
     ? `<div class="star-hint">編集モード：マスをタップして結果を入力できます（もう一度タップで修正）。矢作SCの試合は「入力」タブの記録から自動で入ります。</div>`
     : '';
+  if (!hasBlocks(t)) return `${attendanceCardHtml(t)}${formationCardHtml(t)}${scheduleHtml(t)}`;   // 星取り表がない行事
   return `${attendanceCardHtml(t)}${formationCardHtml(t)}<div class="sec-title">予選の星取り表</div>${hint}
     ${Object.keys(t.blocks).map(b => blockStarHtml(t, b, resAll, derived)).join('')}
     <div class="star-note">順位は 勝点 → 得失点差 → 総得点 の順で並べています。${t.official ? `ほかのブロックは主催の途中経過（${t.official.asOf}時点）から入れています。` : ''}主催の表と違う場合は、主催の表を優先してください。</div>
@@ -2576,6 +2647,8 @@ function scheduledSummaryHtml(t, ms) {
         <div><div class="st-num">${w * 3 + d}</div><div class="st-cap">勝点</div></div>
       </div>
       <div class="st-foot">得点 <b>${gf}</b> ／ 失点 <b>${ga}</b> ／ 得失点差 <b>${gf - ga >= 0 ? '+' : ''}${gf - ga}</b></div>`;
+  } else if (!hasBlocks(t)) {
+    rec = `<div class="st-foot">試合はまだありません。結果が入ると、ここに成績が出ます。</div>`;
   } else {
     const st = calcBlock(t.blocks[t.myBlock], blockResults(t, t.myBlock, tourResults[t.id] || {}, deriveMyResults(t)), t.myBlock);
     const me = st.order.find(r => r.name === t.myTeam);
@@ -2592,7 +2665,7 @@ function scheduledSummaryHtml(t, ms) {
   return `<div class="summary-ticket">
       <div class="st-label">矢作SC の大会</div>
       <div class="st-title">${t.full}</div>
-      <div class="st-meta">予選：${t.myBlock}ブロック（${opp}）</div>
+      ${hasBlocks(t) ? `<div class="st-meta">予選：${t.myBlock}ブロック（${opp}）</div>` : t.invite ? `<div class="st-meta">${t.invite.team}さん</div>` : ''}
       ${main ? `<div class="st-meta">日程：${main.label}${spare ? `（予備日 ${spare.label}）` : ''}</div>
       <div class="st-meta">会場：${main.venue}</div>` : ''}
       ${rec}
@@ -2672,23 +2745,23 @@ function renderNextTournament(quiet) {
   else count = `<div class="pre">予備日</div><div class="big txt">今日</div>`;
   const isSpare = s.kind === 'spare' || s.kind === 'spareToday';
   el.innerHTML = `
-    <div class="next-card" onclick='openTournament(${JSON.stringify(t.name)})'>
+    <div class="next-card" onclick='${t.invite ? `INV.open(${JSON.stringify(t.invite.id)})` : `openTournament(${JSON.stringify(t.name)})`}'>
       <div class="nc-head"><span class="nc-tag">NEXT</span><span>${isSpare ? '次の大会（雨天順延の場合）' : '次の大会'}</span></div>
       <div class="nc-body">
         <div>
           <div class="nc-title">${t.name}</div>
-          <div class="nc-sub">予選　${t.myBlock}ブロック</div>
+          <div class="nc-sub">${t.invite ? `${t.invite.team}さん` : `予選　${t.myBlock}ブロック`}</div>
         </div>
         <div class="nc-count${s.kind === 'before' && s.days > 1 || s.kind === 'spare' ? '' : ' today'}">${count}</div>
       </div>
       <div class="nc-rows">
         <div class="nc-row"><i>📅</i><span><b>${isSpare ? '予備日　' : ''}${s.target.label}</b>${s.spare ? `<small>　予備日 ${s.spare.label}</small>` : ''}</span></div>
         <div class="nc-row"><i>📍</i><span>${s.target.venue}</span></div>
-        <div class="nc-row"><i>👥</i><span>${t.myBlock}ブロック：<b>${opp}</b> と対戦</span></div>
+        ${hasBlocks(t) ? `<div class="nc-row"><i>👥</i><span>${t.myBlock}ブロック：<b>${opp}</b> と対戦</span></div>` : ''}
       </div>
       ${attBlockHtml(t)}
       <div class="nc-foot fm" onclick="event.stopPropagation();openFormation('${t.id}')">フォーメーション（先発メンバー） <span>▶</span></div>
-      <div class="nc-foot">星取り表を見る <span>▶</span></div>
+      <div class="nc-foot">${hasBlocks(t) ? '星取り表を見る' : 'くわしく見る'} <span>▶</span></div>
     </div>`;
   if (quiet && had) {   // 出欠の更新だけのときは、入場の動きとカウントアップをやり直さない
     const cd = el.querySelector('.next-card'); if (cd) cd.style.animation = 'none';
@@ -2751,6 +2824,7 @@ function saveAttendance(tid, name, rec) {
 function refreshAttendanceViews() {
   lastNextSig = null;
   renderNextTournament(true);
+  if (window.INV && document.querySelector('#screen-home.active')) INV.renderHome();
   if (document.querySelector('#screen-standings.active')) {
     const tour = document.getElementById('standingsTournamentSelect').value;
     if (tour && findScheduled(tour)) renderStandings();
@@ -2815,7 +2889,7 @@ function attRideText(s) {
 const attShort = s => s.riders > s.seats;
 
 function renderAttendance() {
-  const t = scheduledList().find(x => x.id === attCtx);
+  const t = findEvent(attCtx);
   if (!t) return;
   const sheet = document.querySelector('#attModal .modal');
   const keep = sheet.scrollTop;
@@ -2857,7 +2931,7 @@ function renderAttendance() {
   sheet.scrollTop = keep;
 }
 function openAttendance(tid) {
-  const t = scheduledList().find(x => x.id === tid);
+  const t = findEvent(tid);
   if (!t) return;
   attCtx = tid;
   document.getElementById('attTitle').textContent = `出欠・配車　${t.name}`;
@@ -2886,7 +2960,7 @@ function buildAttendanceText(t) {
   return x;
 }
 function shareAttendance() {
-  const t = scheduledList().find(x => x.id === attCtx);
+  const t = findEvent(attCtx);
   if (!t) return;
   const text = buildAttendanceText(t);
   closeAttendance();
@@ -2956,6 +3030,7 @@ function fmPreset(f) {   // 上が相手ゴール、下が自分のゴール。x
 function fmMatches(t) {
   const opp = (t.blocks[t.myBlock] || []).filter(x => x !== t.myTeam);
   const list = opp.map((o, i) => ({ key: `o${i}`, name: `vs ${o}` }));
+  if (!list.length) list.push({ key: 'o0', name: t.invite ? '試合' : '試合1' });   // ブロック分けがない行事
   Object.entries(lineups[t.id] || {}).forEach(([k, v]) => { if (k.startsWith('c_')) list.push({ key: k, name: (v && v.name) || 'その他の試合', custom: true }); });
   return list;
 }
@@ -3354,6 +3429,7 @@ function updateNavPill() {
 
 function renderHome() {
   if (window.FUN) FUN.renderHome();
+  if (window.INV) INV.renderHome();
   renderNextTournament();
   const total = matches.length;
   // 内容が変わっていなければ描き直さない（動きが途中で途切れないように）
@@ -6417,6 +6493,346 @@ function renderHome(){
 
 return {bind, renderHome, check, editNotice, shareNotice, liveStart, liveGoal, liveOpp, livePhase, liveUndo, liveSave, liveClose, cheer,
   mvpHtml, pickMvp, openPlayer, playerRowExtra, setHomework, clearHomework, openHomework, closeSheet, onYear: () => { boundYear = null; bind(); }, get data(){ return D; }};
+})();
+</script>
+<script>
+// ===== お誘い（他チームからの大会・トレーニングマッチ） =====
+// 保存先（Firebase）: {年度}/invites/{id}。最初の3件はこのコードの初期データで、Firebase に保存した内容があればそちらを優先する。
+// 「参加する」にしたお誘いは scheduledList() に加わり、次の大会カード・日程・出欠・配車・フォーメーションの対象になる。
+// 保護者の出欠は、決める前から {年度}/attendance/inv_{id} に入れられる（既存の出欠・配車と同じ仕組み）。
+window.INV = (function(){
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const editor = () => { try { return !!isEditor; } catch(e) { return false; } };
+const pad = n => String(n).padStart(2, '0');
+const todayIso = () => { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+const WD = ['日','月','火','水','木','金','土'];
+const ymd = iso => /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+function dateLabel(iso, withYear){
+  const m = ymd(iso); if (!m) return iso || '';
+  const d = new Date(+m[1], m[2] - 1, +m[3]);
+  return `${withYear ? m[1] + '/' : ''}${+m[2]}/${+m[3]}(${WD[d.getDay()]})`;
+}
+const daysTo = iso => { const m = ymd(iso); if (!m) return null; const t = new Date(); return Math.round((new Date(+m[1], m[2] - 1, +m[3]) - new Date(t.getFullYear(), t.getMonth(), t.getDate())) / 86400000); };
+const countdown = iso => { const d = daysTo(iso); return d == null ? '' : d > 1 ? `あと${d}日` : d === 1 ? '明日' : d === 0 ? '今日' : '終了'; };
+const showYear = iso => { const m = ymd(iso); return m && +m[1] !== new Date().getFullYear(); };
+function store(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} }
+function load(k){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch(e) { return null; } }
+// Firebase に undefined・NaN を送らない（空文字は残す）
+function clean(v){
+  if (Array.isArray(v)) return v.map(clean).filter(x => x !== undefined && x !== null);
+  if (v && typeof v === 'object') { const o = {}; for (const k in v) { const c = clean(v[k]); if (c !== undefined && c !== null) o[k] = c; } return o; }
+  if (typeof v === 'number') return Number.isFinite(v) ? v : undefined;
+  return v;
+}
+
+const KIND = {trm:'トレーニングマッチ', cup:'大会', invite:'招待試合'};
+const KIND_SHORT = {trm:'TrM', cup:'大会', invite:'招待試合'};
+const STATUS = {wait:'回答待ち', yes:'参加', no:'不参加', hold:'保留'};
+const STATUS_BTN = {wait:'回答待ち', yes:'参加する', no:'不参加', hold:'保留'};
+const SIGN = '矢作SC 3年生マネージャー 平城';
+const FIELDS = [   // 詳細に出す項目（空欄は出さない）
+  ['title','大会名'], ['date','日付'], ['spare','予備日'], ['time','時間'], ['venue','会場'], ['address','住所'],
+  ['target','対象'], ['format','形式'], ['teams','参加チーム数'], ['recruit','募集'], ['rules','大会形式']
+];
+
+// 初期データ（届いた連絡のとおり。書かれていない項目は空欄）
+const SEED = {
+  '2026 U-9': [
+    {id:'s1', team:'ロンドリーナ', kind:'trm', title:'', date:'2026-11-14', spare:'', time:'15:00〜18:00',
+     venue:'旭丘高校人工芝グランド（久野・荻窪キャンパス）', address:'', target:'U-8／U-9', format:'サッカー（8人制）',
+     teams:'', recruit:'U-8 2チーム、U-9 2チーム', rules:'',
+     raw:`おはようございます。
+ロンドリーナさんからTrMのお誘いをいただきました。
+お手数ですが、参加可否をご連絡願います。
+
+期日：11月14日（土）
+会場：旭丘高校人工芝グランド（久野・荻窪キャンパス）
+対象：U-8/U-9
+時間：15:00-18:00
+内容：サッカー（8人制）
+参加費：3,300円
+募集：U-8（2チーム募集）U-9（2チーム募集）`},
+    {id:'s2', team:'希望ヶ丘ライオンズ', kind:'cup', title:'2026年度 希望ヶ丘招待杯（U-9大会）', date:'2026-11-28', spare:'', time:'9:30試合開始、16:30頃終了予定',
+     venue:'横浜市立東希望が丘小学校', address:'〒241-0826 神奈川県横浜市旭区東希望が丘155', target:'U-9（小学3年生以下）', format:'8人制',
+     teams:'5チーム', recruit:'', rules:'5チームの総当たりリーグ戦、1コート、15分ハーフ（ハーフタイム5分）、各チーム4試合を予定',
+     raw:`お疲れ様です。
+希望ヶ丘ライオンズさんから大会へのお誘いがありました。
+お手数ですが、参加可否をご連絡願います。
+
+【大会概要】
+大会名 ：2026年度 希望ヶ丘招待杯（U-9大会）
+開催日 ：2026年11月28日（土）
+ 会場 ：横浜市立東希望が丘小学校
+〒241-0826 神奈川県横浜市旭区東希望が丘155
+時間 ：9:30試合開始 16:30頃終了予定
+対象 ：U-9（小学3年生以下）／8人制
+参加チーム数：5チーム
+ 参加費 ：7,000～8,000円（予定）
+
+【大会形式】
+■ 総当たりリーグ戦 5チームによる総当たり戦 1コートにて実施
+ 試合時間：15分ハーフ（ハーフタイム5分）
+ 各チーム4試合を予定`},
+    {id:'s3', team:'秋葉台', kind:'invite', title:'秋葉台フレンドリーカップ', date:'2027-02-23', spare:'2027-02-27', time:'終日開催',
+     venue:'', address:'', target:'現3年生以下のチーム', format:'8人制',
+     teams:'', recruit:'', rules:'',
+     raw:`お疲れ様です。
+まだ先ですが、秋葉台さんから招待試合へのお誘いをいただきました。
+お手数ですが、参加可否をご連絡願います。
+
+大会名 秋葉台フレンドリーカップ
+開催日 2027年2月23日(火・祝)
+予備日 2027年2月27日(土)
+終日開催
+対象 現3年生以下のチームでの8人制
+参加費 4000円`}
+  ]
+};
+
+/* ---------- データ ---------- */
+let saved = {}, ref = null, boundYear = null;
+const localKey = () => 'yhg9_invites_' + currentYear;
+function bind(){
+  if (boundYear === currentYear) return;
+  if (ref) ref.off();
+  ref = null; boundYear = currentYear; saved = load(localKey()) || {};   // 先に端末の控えで表示（通信なしでも出る）
+  if (typeof db === 'undefined' || !db) { setTimeout(changed, 0); return; }
+  ref = db.ref(getDbKey(currentYear) + '/invites');
+  ref.on('value', s => { saved = s.val() || {}; store(localKey(), saved); setTimeout(changed, 0); });   // 描画の途中で描き直さないよう、後回しにする
+}
+function items(){
+  bind();
+  const map = {};
+  (SEED[currentYear] || []).forEach(r => { map[r.id] = Object.assign({status:'wait'}, r); });
+  Object.keys(saved || {}).forEach(id => { const r = saved[id]; if (r && typeof r === 'object') map[id] = Object.assign({status:'wait'}, map[id] || {}, r, {id}); });
+  return Object.values(map).filter(r => !r.deleted && r.team && r.date);
+}
+const byId = id => items().find(r => r.id === id) || null;
+function write(id, rec){
+  const v = rec == null ? null : clean(Object.assign({}, rec, {id:undefined, t:Date.now()}));
+  if (v == null) delete saved[id]; else saved[id] = v;
+  store(localKey(), saved);
+  changed();
+  if (typeof db !== 'undefined' && db) {
+    const r = db.ref(getDbKey(currentYear) + '/invites/' + id);
+    (v == null ? r.remove() : r.set(v)).catch(err => { console.warn(err); toast('保存に失敗しました'); });
+  }
+}
+function changed(){
+  try { lastNextSig = null; renderNextTournament(); } catch(e) {}
+  if ($('#screen-home.active')) renderHome();
+  if ($('#screen-standings.active') && typeof initStandings === 'function') initStandings();
+  if ($('#invModal.show') && openId) open(openId, true);
+}
+
+/* ---------- 次の大会・日程とのつながり ---------- */
+const evName = r => r.title || `${r.team}さん ${KIND[r.kind] || ''}`.trim();
+function asEvent(r){
+  const venue = r.venue || '会場は未定';
+  const sch = [{kind:'開催日', date:r.date, label:dateLabel(r.date, showYear(r.date)) + (r.time ? ' ' + r.time : ''), venue}];
+  if (r.spare) sch.push({kind:'予備日', date:r.spare, label:dateLabel(r.spare, showYear(r.spare)), venue});
+  return {id:'inv_' + r.id, invite:r, name:evName(r), full:evName(r), myTeam:'矢作', myBlock:'', blocks:{}, schedule:{'':sch}};
+}
+const joined = () => items().filter(r => r.status === 'yes').map(asEvent);
+function event(tid){ const r = /^inv_/.test(tid || '') ? byId(tid.slice(4)) : null; return r ? asEvent(r) : null; }
+
+/* ---------- 日程の重複チェック ---------- */
+// 比べるのは、矢作SCが出る予定（予定の大会の自分のブロックの日程・参加にしたお誘い）と、ほかのお誘い（不参加を除く）だけ
+function busyDates(exceptId){
+  const out = [];
+  try {
+    (SCHEDULED_TOURNAMENTS[currentYear] || []).forEach(t => (t.schedule[t.myBlock] || []).forEach(s => {
+      if (s.date) out.push({date:s.date, label:t.name + (s.kind === '予備日' ? '（予備日）' : '')});
+    }));
+  } catch(e) {}
+  items().forEach(r => {
+    if (r.id === exceptId || r.status === 'no') return;
+    const who = `${r.team}さんの${KIND_SHORT[r.kind] || '予定'}（${STATUS[r.status]}）`;
+    out.push({date:r.date, label:who});
+    if (r.spare) out.push({date:r.spare, label:who.replace('（', '・予備日（')});
+  });
+  return out;
+}
+function conflicts(r){
+  if (r.status === 'no') return [];
+  const mine = [[r.date, ''], [r.spare, '予備日の']].filter(x => x[0]);
+  const busy = busyDates(r.id), out = [];
+  mine.forEach(([d, pre]) => busy.filter(b => b.date === d).forEach(b => out.push(`${pre}${dateLabel(d)}は「${b.label}」と同じ日です`)));
+  return out;
+}
+
+/* ---------- ホームの一覧 ---------- */
+let showPast = false;
+function attSum(r){ try { return attSummary('inv_' + r.id); } catch(e) { return null; } }
+function attMini(r){
+  const s = attSum(r); if (!s) return '';
+  return s.y + s.n + s.u ? `<span class="inv-att">参加 <b>${s.y}</b>・欠席 <b>${s.n}</b>・未定 <b>${s.u}</b></span>` : '<span class="inv-att">保護者の出欠はまだです</span>';
+}
+function cardHtml(r){
+  const cf = conflicts(r), d = daysTo(r.date);
+  return `<div class="inv-card s-${r.status}" onclick="INV.open('${esc(r.id)}')">
+    <div class="inv-top"><span class="inv-badge ${r.status}">${STATUS[r.status]}</span><span class="inv-kind">${esc(KIND_SHORT[r.kind] || '')}</span><span class="inv-days${d != null && d <= 7 && d >= 0 ? ' soon' : ''}">${countdown(r.date)}</span></div>
+    <div class="inv-name">${esc(r.title || `${r.team}さん　${KIND[r.kind] || ''}`)}</div>
+    ${r.title ? `<div class="inv-title">${esc(r.team)}さん</div>` : ''}
+    <div class="inv-rows">
+      <div><i>📅</i><span><b>${esc(dateLabel(r.date, showYear(r.date)))}</b>${r.time ? '　' + esc(r.time) : ''}${r.spare ? `<small>予備日 ${esc(dateLabel(r.spare, showYear(r.spare)))}</small>` : ''}</span></div>
+      ${r.venue ? `<div><i>📍</i><span>${esc(r.venue)}</span></div>` : ''}
+      ${r.due && r.status !== 'yes' && r.status !== 'no' ? `<div><i>⏳</i><span>回答期限 <b>${esc(dateLabel(r.due))}</b>（${countdown(r.due)}）</span></div>` : ''}
+    </div>
+    ${cf.length ? `<div class="inv-warn">⚠️ ${cf.map(esc).join('<br>⚠️ ')}</div>` : ''}
+    <div class="inv-foot">${attMini(r)}<span class="inv-more">詳しく ▶</span></div>
+  </div>`;
+}
+function renderHome(){
+  bind();
+  const el = $('#invHome'); if (!el) return;
+  const today = todayIso(), all = items();
+  const live = all.filter(r => (r.spare || r.date) >= today), past = all.filter(r => (r.spare || r.date) < today);
+  const rank = r => r.status === 'wait' ? 0 : r.status === 'no' ? 2 : 1;
+  live.sort((a, b) => rank(a) - rank(b) || a.date.localeCompare(b.date));
+  past.sort((a, b) => b.date.localeCompare(a.date));
+  const waiting = live.filter(r => r.status === 'wait').length;
+  if (!live.length && !past.length && !editor()) { el.innerHTML = ''; return; }
+  el.innerHTML = `<div class="sec-title">今後の予定${waiting ? `<span class="inv-count">回答待ち ${waiting}件</span>` : ''}</div>
+    ${live.length ? live.map(cardHtml).join('') : '<div class="inv-empty">これからの予定はありません。</div>'}
+    ${past.length ? `<button type="button" class="inv-past-btn" onclick="INV.togglePast()">${showPast ? '▲ 終わった予定を閉じる' : `▼ 終わった予定（${past.length}件）`}</button>${showPast ? past.map(cardHtml).join('') : ''}` : ''}
+    ${editor() ? '<button type="button" class="inv-add" onclick="INV.edit()">＋ 予定を追加する</button>' : ''}`;
+}
+function togglePast(){ showPast = !showPast; renderHome(); }
+
+/* ---------- 詳細シート ---------- */
+let openId = null, replyKind = null;
+const mapUrl = r => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(r.address || r.venue);
+function replyText(r, kind){
+  const when = dateLabel(r.date) + (r.title ? ' ' + r.title : ` の${KIND[r.kind] || 'お誘い'}`);
+  let t = `お疲れ様です。\n${r.team}さんからのお誘い（${when}）の件、ご連絡ありがとうございます。\n`;
+  if (kind === 'yes') t += `矢作SC 3年生は、ぜひ参加させていただきます。\n詳細が決まりましたら、ご連絡いただけますと助かります。\nどうぞよろしくお願いいたします。`;
+  else if (kind === 'no') t += `ありがたいお話ですが、矢作SC 3年生は今回都合がつかず、不参加とさせていただきます。\nまたの機会にぜひよろしくお願いいたします。`;
+  else t += `矢作SC 3年生は、ただいま参加できる人数を確認しております。\n${r.due ? dateLabel(r.due) + 'までに' : '確認でき次第'}改めてお返事いたしますので、少しお待ちいただけますでしょうか。\nよろしくお願いいたします。`;
+  return t + `\n\n${SIGN}`;
+}
+function open(id, keepScroll){
+  const r = byId(id); if (!r) { closeSheet(); return; }
+  openId = id;
+  const ed = editor(), cf = conflicts(r), s = attSum(r);
+  if (!replyKind || !keepScroll) replyKind = r.status === 'no' ? 'no' : r.status === 'hold' ? 'hold' : 'yes';
+  const val = k => {
+    if (k === 'date') return `${dateLabel(r.date, true)}（${countdown(r.date)}）`;
+    if (k === 'spare') return dateLabel(r.spare, true);
+    return r[k];
+  };
+  const box = $('#invModal .modal'), keep = box.scrollTop;
+  $('#invModalBody').innerHTML = `
+    <div class="inv-top"><span class="inv-badge ${r.status}">${STATUS[r.status]}</span><span class="inv-kind">${esc(KIND[r.kind] || '')}</span><span class="inv-days">${countdown(r.date)}</span></div>
+    <div class="modal-title" style="margin:8px 0 2px">${esc(r.title || `${r.team}さん　${KIND[r.kind] || ''}`)}</div>
+    ${r.title ? `<div class="inv-title" style="margin-bottom:4px">${esc(r.team)}さん</div>` : ''}
+    ${cf.length ? `<div class="inv-warn">⚠️ ${cf.map(esc).join('<br>⚠️ ')}</div>` : ''}
+    <dl class="inv-dl">${FIELDS.filter(([k]) => r[k]).map(([k, l]) => `<dt>${l}</dt><dd>${esc(val(k))}</dd>`).join('')}
+      ${r.due ? `<dt>回答期限</dt><dd>${esc(dateLabel(r.due, true))}（${countdown(r.due)}）</dd>` : ''}
+      ${r.answered && r.status !== 'wait' ? `<dt>回答した日</dt><dd>${esc(dateLabel(r.answered, true))}</dd>` : ''}
+    </dl>
+    ${r.venue || r.address ? `<a class="btn btn-outline inv-map" href="${mapUrl(r)}" target="_blank" rel="noopener">📍 Googleマップで会場を見る</a>` : ''}
+    <div class="inv-h">保護者の出欠（判断の材料）</div>
+    <div class="att-chips">${s && s.y + s.n + s.u ? attChipsHtml(s) : '<span class="att-empty">まだ誰も回答していません</span>'}</div>
+    <button class="btn btn-red" type="button" onclick="INV.attend('${esc(r.id)}')">子どもの参加・欠席を入力する</button>
+    ${r.status === 'yes' ? `<div class="inv-note">参加に決まりました。ホームの「次の大会」カードと順位表の日程にも出ます。</div>
+      <button class="btn btn-outline" type="button" onclick="INV.formation('${esc(r.id)}')">フォーメーションを見る${ed ? '・決める' : ''}</button>` : ''}
+    ${ed ? `<div class="inv-h">回答状況（編集モード）</div>
+      <div class="inv-seg">${Object.keys(STATUS).map(k => `<button type="button" class="${r.status === k ? 'on ' + k : ''}" onclick="INV.setStatus('${esc(r.id)}','${k}')">${STATUS_BTN[k]}</button>`).join('')}</div>
+      <div class="inv-grid">
+        <div><label for="invDue">回答期限（任意）</label><input id="invDue" type="date" value="${esc(r.due || '')}"></div>
+        <div><label for="invAns">回答した日</label><input id="invAns" type="date" value="${esc(r.answered || '')}"></div>
+      </div>
+      <label for="invMemo">メモ（マネージャー用）</label><textarea id="invMemo" rows="2" style="resize:vertical" placeholder="例：U-9は1チームで参加の予定">${esc(r.memo || '')}</textarea>
+      <button class="btn btn-outline" type="button" onclick="INV.saveMemo('${esc(r.id)}')">期限・回答した日・メモを保存</button>
+      <div class="inv-h">返信用のLINE文</div>
+      <div class="inv-seg small">${['yes','no','hold'].map(k => `<button type="button" class="${replyKind === k ? 'on ' + k : ''}" onclick="INV.reply('${k}')">${k === 'yes' ? '参加' : k === 'no' ? '不参加' : '保留'}</button>`).join('')}</div>
+      <textarea id="invReply" rows="8" style="resize:vertical">${esc(replyText(r, replyKind))}</textarea>
+      <button class="copy-btn" type="button" onclick="INV.copyReply()">コピーする</button>
+      <div class="inv-ops"><button type="button" onclick="INV.edit('${esc(r.id)}')">✎ 内容を直す</button><button type="button" class="del" onclick="INV.remove('${esc(r.id)}')">この予定を消す</button></div>`
+    : (r.memo ? '' : '')}
+    ${r.raw ? `<details class="inv-raw"><summary>届いた連絡（原文）</summary><pre>${esc(r.raw)}</pre></details>` : ''}
+    <button class="btn btn-outline" type="button" onclick="INV.close()">閉じる</button>`;
+  $('#invModal').classList.add('show');
+  box.scrollTop = keepScroll ? keep : 0;
+}
+function closeSheet(){ $('#invModal').classList.remove('show'); openId = null; }
+function attend(id){ closeSheet(); openAttendance('inv_' + id); }
+function formation(id){ closeSheet(); openFormation('inv_' + id); }
+function setStatus(id, st){
+  if (!editor()) return;
+  const r = byId(id); if (!r || !STATUS[st]) return;
+  const rec = Object.assign({}, r, {status:st});
+  if (st === 'wait') rec.answered = '';
+  else if (!r.answered || r.status === 'wait') rec.answered = todayIso();   // 回答した日は自動で入る（あとで直せる）
+  replyKind = st === 'wait' ? 'yes' : st;
+  write(id, rec);
+  toast(`「${STATUS[st]}」にしました` + (st === 'yes' ? '。次の大会カードと日程に出ます' : ''));
+}
+function saveMemo(id){
+  if (!editor()) return;
+  const r = byId(id); if (!r) return;
+  write(id, Object.assign({}, r, {due:$('#invDue').value, answered:$('#invAns').value, memo:$('#invMemo').value.trim()}));
+  toast('保存しました');
+}
+function reply(k){ replyKind = k; const r = byId(openId); if (r) $('#invReply').value = replyText(r, k); document.querySelectorAll('#invModalBody .inv-seg.small button').forEach((b, i) => b.className = ['yes','no','hold'][i] === k ? 'on ' + k : ''); }
+function copyReply(){
+  const ta = $('#invReply'), text = ta.value;
+  const done = () => toast('コピーしました。LINEに貼り付けて送ってください');
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done).catch(() => { ta.select(); document.execCommand('copy'); done(); });
+  else { ta.focus(); ta.select(); try { document.execCommand('copy'); done(); } catch(e) { toast('文を長押ししてコピーしてください'); } }
+}
+
+/* ---------- 追加・編集・削除 ---------- */
+function edit(id){
+  if (!editor()) return;
+  const r = id ? byId(id) : {team:'', kind:'trm', title:'', date:'', spare:'', time:'', venue:'', address:'', target:'', format:'8人制', teams:'', recruit:'', rules:'', raw:''};
+  if (!r) return;
+  openId = null;
+  const f = (k, label, ph, type) => `<label for="ie_${k}">${label}</label><input id="ie_${k}" type="${type || 'text'}" value="${esc(r[k] || '')}" placeholder="${esc(ph || '')}">`;
+  $('#invModalBody').innerHTML = `<div class="modal-title">${id ? '予定を直す' : '予定を追加する'}</div>
+    ${f('team', '相手チーム（必須）', '例：ロンドリーナ')}
+    <label for="ie_kind">種別</label><select id="ie_kind">${Object.keys(KIND).map(k => `<option value="${k}"${r.kind === k ? ' selected' : ''}>${KIND[k]}</option>`).join('')}</select>
+    ${f('title', '大会名（あれば）', '例：希望ヶ丘招待杯')}
+    <div class="inv-grid"><div>${f('date', '日付（必須）', '', 'date')}</div><div>${f('spare', '予備日', '', 'date')}</div></div>
+    ${f('time', '時間', '例：15:00〜18:00')}
+    ${f('venue', '会場', '例：旭丘高校人工芝グランド')}
+    ${f('address', '住所', '地図の検索に使います')}
+    <div class="inv-grid"><div>${f('target', '対象', '例：U-9')}</div><div>${f('format', '形式', '例：8人制')}</div></div>
+    <div class="inv-grid"><div>${f('teams', '参加チーム数', '例：5チーム')}</div><div>${f('recruit', '募集', '例：U-9 2チーム')}</div></div>
+    <label for="ie_rules">大会形式</label><textarea id="ie_rules" rows="2" style="resize:vertical">${esc(r.rules || '')}</textarea>
+    <label for="ie_raw">届いた連絡（原文・任意）</label><textarea id="ie_raw" rows="5" style="resize:vertical" placeholder="LINEで届いた文をそのまま貼り付け">${esc(r.raw || '')}</textarea>
+    <button class="btn btn-red" type="button" id="ieSave">保存する</button>
+    <button class="btn btn-outline" type="button" onclick="${id ? `INV.open('${esc(id)}')` : 'INV.close()'}">やめる</button>`;
+  $('#invModal').classList.add('show'); $('#invModal .modal').scrollTop = 0;
+  $('#ieSave').onclick = () => {
+    const v = k => ($('#ie_' + k).value || '').trim();
+    const rec = Object.assign({}, id ? r : {status:'wait'}, {team:v('team').replace(/さん$/, ''), kind:v('kind'), title:v('title'), date:v('date'), spare:v('spare'), time:v('time'),
+      venue:v('venue'), address:v('address'), target:v('target'), format:v('format'), teams:v('teams'), recruit:v('recruit'), rules:v('rules'), raw:$('#ie_raw').value.trim()});
+    if (!rec.team) { toast('相手チームを入れてください'); return; }
+    if (!rec.date) { toast('日付を入れてください'); return; }
+    if (rec.spare && rec.spare <= rec.date) { toast('予備日は日付より後にしてください'); return; }
+    const nid = id || 'i' + Date.now().toString(36);
+    write(nid, rec);
+    toast(id ? '直しました' : '予定を追加しました');
+    open(nid);
+  };
+}
+function remove(id){
+  if (!editor()) return;
+  const r = byId(id); if (!r) return;
+  if (!confirm(`「${r.team}さん（${dateLabel(r.date)}）」の予定を消しますか？`)) return;
+  const isSeed = (SEED[currentYear] || []).some(x => x.id === id);
+  write(id, isSeed ? {deleted:1} : null);   // 初期データは「消した」印を残す
+  closeSheet(); toast('消しました');
+}
+
+setTimeout(() => { bind(); changed(); }, 0);   // 読み込んだら一度描く（データが先に届いていた場合も）
+
+return {bind, renderHome, togglePast, open, close:closeSheet, attend, formation, setStatus, saveMemo, reply, copyReply, edit, remove,
+  joined, event, items, conflicts, onYear:() => { boundYear = null; bind(); }};
 })();
 </script>
 </body>
