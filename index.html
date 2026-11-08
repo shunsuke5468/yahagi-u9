@@ -834,7 +834,7 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
 .inv-raw summary { padding: 10px 12px; cursor: pointer; font-size: 0.84rem; font-weight: 900; }
 .inv-raw pre { margin: 0; padding: 0 12px 12px; font-family: inherit; font-size: 0.8rem; font-weight: 700; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
 
-/* ===== お知らせ・ライブ速報・がんばった子・誕生日・宿題・バッジ ===== */
+/* ===== お知らせ・ライブ速報・がんばった子・誕生日・宿題・選手シート ===== */
 .fun-card { margin: 0 4px 18px; padding: 14px 16px; background: #fff; border: 3px solid var(--ink); border-radius: 22px; box-shadow: var(--shadow); }
 .fn-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
 .fn-tag { padding: 2px 11px; border: 2px solid var(--ink); border-radius: 999px; background: var(--gold); font-size: 0.7rem; font-weight: 900; }
@@ -899,9 +899,6 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
 .fn-pick button { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border: 2px solid var(--ink); border-radius: 999px; background: #fff; cursor: pointer; font-family: inherit; font-size: 0.84rem; font-weight: 800; color: var(--ink); }
 .fn-pick button b { font-family: 'Baloo 2', sans-serif; color: var(--red); }
 .fn-pick button.on { background: #FFD3E2; box-shadow: 2px 2px 0 var(--ink); }
-.fn-pbs { display: inline-flex; align-items: center; gap: 1px; margin-left: auto; font-size: 1rem; }
-.fn-pbs i { font-style: normal; }
-.fn-pbs small { margin-left: 3px; font-size: 0.7rem; font-weight: 900; color: var(--muted); }
 .fn-pb { margin-left: 6px; font-size: 1.1rem; }
 .fn-ph { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .fn-ph-no { display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; flex: none; border: 3px solid var(--ink); border-radius: 50%; background: var(--red); color: #fff; font-family: 'Bungee', sans-serif; font-size: 1.3rem; }
@@ -911,14 +908,9 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
 .fn-st div { padding: 8px 2px; border-radius: 12px; background: var(--bg); text-align: center; }
 .fn-st b { display: block; font-family: 'Bungee', sans-serif; font-size: 1.25rem; font-weight: 400; color: var(--red); }
 .fn-st span { font-size: 0.62rem; font-weight: 900; }
-.fn-badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
-.fn-badge { padding: 9px 4px; border: 2px dashed var(--border); border-radius: 14px; text-align: center; opacity: .6; }
-.fn-badge i { display: block; font-style: normal; font-size: 1.6rem; filter: grayscale(1); }
-.fn-badge b { display: block; font-size: 0.72rem; font-weight: 900; line-height: 1.3; }
-.fn-badge small { display: block; font-size: 0.62rem; font-weight: 800; color: var(--muted); }
-.fn-badge.got { opacity: 1; border: 2.5px solid var(--ink); background: var(--gold-light); }
-.fn-badge.got.team { background: var(--lime-light); }
-.fn-badge.got i { filter: none; }
+.fn-mvps { display: flex; flex-direction: column; gap: 6px; }
+.fn-mvps div { padding: 8px 11px; border-radius: 12px; background: #FFF2F6; font-size: 0.8rem; font-weight: 800; line-height: 1.5; }
+.fn-mvps span { display: block; color: #993556; }
 .fn-bd { display: flex; gap: 8px; }
 .fn-bd select { flex: 1; }
 .fn-bd .fn-btn { flex: none; }
@@ -1218,7 +1210,7 @@ input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0
 <!-- ===== 選手 ===== -->
 <div id="screen-players" class="screen">
   <div class="sec-title">選手一覧</div>
-  <p class="fn-hint" style="margin:0 6px 10px">選手をタップすると、バッジとふりかえりカードが見られます。</p>
+  <p class="fn-hint" style="margin:0 6px 10px">選手をタップすると、ゴール数やふりかえりカードが見られます。</p>
   <div id="playerList"></div>
 </div>
 
@@ -6013,7 +6005,7 @@ return {show, fromLineup, setPane, openShared, onEditMode, onYear: bindShare, ge
 })();
 </script>
 <script>
-// ===== みんなが楽しめる機能：当日のお知らせ・ライブ速報・がんばった子・バッジ・誕生日・ふりかえりカード・戦術ボードの宿題 =====
+// ===== みんなが楽しめる機能：当日のお知らせ・ライブ速報・がんばった子・誕生日・ふりかえりカード・戦術ボードの宿題 =====
 // 共有の保存先（Firebase）: {年度}/notice … お知らせ、{年度}/live … ライブ速報、{年度}/mvp/{試合id} … がんばった子、
 //                          {年度}/birthdays/{選手名} … 誕生日（月日だけ）、{年度}/homework … 戦術ボードの宿題
 window.FUN = (function(){
@@ -6372,51 +6364,30 @@ function setHomework(key, name){
 function clearHomework(){ if (editor() && confirm('宿題を外しますか？')) write('homework', null); }
 function openHomework(){ const h = D.homework; if (h && window.TB && TB.openShared) TB.openShared(h.key, h.name); }
 
-/* ---------- 選手のバッジ ---------- */
-const BADGES = [
-  {id:'first',  ic:'⭐', name:'初ゴール',         ok:s => s.goals >= 1,   hint:s => '1点決めたらもらえる'},
-  {id:'g5',     ic:'🎯', name:'5ゴール',          ok:s => s.goals >= 5,   hint:s => `あと${5 - s.goals}点`},
-  {id:'g10',    ic:'🏅', name:'10ゴール',         ok:s => s.goals >= 10,  hint:s => `あと${10 - s.goals}点`},
-  {id:'hat',    ic:'👑', name:'ハットトリック',   ok:s => s.best >= 3,    hint:s => '1試合で3点'},
-  {id:'streak', ic:'🔥', name:'2試合連続ゴール',  ok:s => s.streak >= 2,  hint:s => '続けて点を取ろう'},
-  {id:'pk',     ic:'🥅', name:'PK成功',           ok:s => s.pk >= 1,      hint:s => 'PK戦で決める'},
-  {id:'mvp',    ic:'💖', name:'がんばった子',     ok:s => s.mvp >= 1,     hint:s => 'コーチが選ぶよ'},
-  {id:'mvp3',   ic:'🌟', name:'がんばった子3回',  ok:s => s.mvp >= 3,     hint:s => `あと${3 - s.mvp}回`},
-  {id:'att',    ic:'📅', name:'大会に参加',       ok:s => s.att >= 1,     hint:s => '出欠で「参加」'},
-  {id:'team10', ic:'🤝', name:'チーム10勝',       ok:s => s.teamWins >= 10, hint:s => `チームであと${10 - s.teamWins}勝`, team:true},
-  {id:'champ',  ic:'🏆', name:'優勝メンバー',     ok:s => s.champ >= 1,   hint:s => 'チームで優勝', team:true}
-];
+/* ---------- 選手の記録 ---------- */
 function statsOf(short){
-  const sorted = [...matches].sort((a, b) => (a.date || '').localeCompare(b.date || '') || a.id - b.id);
-  let goals = 0, best = 0, streak = 0, run = 0, pk = 0, games = 0;
-  sorted.forEach(m => {
+  let goals = 0, pk = 0, games = 0;
+  matches.forEach(m => {
     const g = (m.scorers || []).filter(x => nm(x.player) === short).reduce((a, x) => a + (+x.goals || 0), 0);
-    goals += g; best = Math.max(best, g); if (g) games++;
-    run = g ? run + 1 : 0; streak = Math.max(streak, run);
+    goals += g; if (g) games++;
     pk += (m.pkScorers || []).filter(p => nm(p) === short).length;
   });
-  const mvp = matches.filter(m => { const v = mvpOf(m); return v && nm(v.player) === short; }).length;
-  let att = 0; try { for (const tid in attendance) if (((attendance[tid] || {})[short] || {}).s === 'y') att++; } catch(e) {}
-  const teamWins = matches.filter(m => m.result === 'win').length;
-  let champ = 0; try { if (currentYear === '2026 U-9') champ = Object.values(STANDINGS_DATA).filter(d => d.myPlace === 1).length; } catch(e) {}
-  return {goals, best, streak, pk, games, mvp, att, teamWins, champ};
+  const mvps = matches.filter(m => { const v = mvpOf(m); return v && nm(v.player) === short; })
+    .sort((a, b) => (b.date || '').localeCompare(a.date || '') || b.id - a.id);
+  return {goals, pk, games, mvp:mvps.length, mvps};
 }
-function badgesOf(short){ const s = statsOf(short); return {s, list:BADGES.map(b => ({...b, got:!!b.ok(s)}))}; }
-function playerRowExtra(short){   // 選手タブの行に出す小さなバッジ
-  const {list} = badgesOf(short), got = list.filter(b => b.got && !b.team);
-  return `${isBirthday(short) ? '<span class="fn-pb">🎂</span>' : ''}<span class="fn-pbs">${got.slice(0, 4).map(b => `<i title="${esc(b.name)}">${b.ic}</i>`).join('')}${got.length > 4 ? `<small>+${got.length - 4}</small>` : ''}</span>`;
-}
+function playerRowExtra(short){ return isBirthday(short) ? '<span class="fn-pb">🎂</span>' : ''; }   // 選手タブの行：誕生日の日だけ
 function openPlayer(short){
-  const {s, list} = badgesOf(short), no = numOf(short), got = list.filter(b => b.got).length;
+  const s = statsOf(short), no = numOf(short);
   const bd = D.birthdays[short] || '';
   const [bm, bdd] = bd ? bd.split('-').map(Number) : [0, 0];
-  openSheet(`<div class="fn-ph"><div class="fn-ph-no">${no !== '' ? no : '–'}</div><div><div class="fn-ph-nm">${esc(short)}${isBirthday(short) ? ' 🎂' : ''}</div><div class="fn-ph-sub">${esc(currentYear)}　バッジ ${got}/${list.length}</div></div></div>
+  openSheet(`<div class="fn-ph"><div class="fn-ph-no">${no !== '' ? no : '–'}</div><div><div class="fn-ph-nm">${esc(short)}${isBirthday(short) ? ' 🎂' : ''}</div><div class="fn-ph-sub">${esc(currentYear)}</div></div></div>
     <div class="fn-st">
       <div><b>${s.goals}</b><span>ゴール</span></div><div><b>${s.games}</b><span>点を取った試合</span></div><div><b>${s.mvp}</b><span>がんばった子</span></div><div><b>${s.pk}</b><span>PK成功</span></div>
     </div>
-    <div class="fn-sub">バッジ</div>
-    <div class="fn-badges">${list.map(b => `<div class="fn-badge${b.got ? ' got' : ''}${b.team ? ' team' : ''}"><i>${b.ic}</i><b>${esc(b.name)}</b><small>${b.got ? (b.team ? 'チームのみんなで' : 'ゲット！') : esc(b.hint(s))}</small></div>`).join('')}</div>
-    <p class="fn-hint" style="margin:4px 0 12px">バッジは試合記録・がんばった子・出欠から自動でもらえます。</p>
+    ${s.mvps.length ? `<div class="fn-sub">がんばった子に選ばれた試合</div>
+      <div class="fn-mvps">${s.mvps.map(m => { const v = mvpOf(m); return `<div><b>${esc(m.date ? +m.date.slice(5, 7) + '/' + +m.date.slice(8, 10) : '')} vs ${esc(m.opponent)}</b>${v.comment ? `<span>「${esc(v.comment)}」</span>` : ''}</div>`; }).join('')}</div>` : ''}
+    <div style="height:12px"></div>
     <button class="btn btn-red" type="button" id="fnCard">1年のふりかえりカードを作る</button>
     ${editor() ? `<div class="fn-sub" style="margin-top:14px">誕生日（月日だけ・ホームでお祝いします）</div>
       <div class="fn-bd"><select id="fnBm"><option value="">月</option>${Array.from({length:12}, (_, i) => `<option value="${i + 1}"${bm === i + 1 ? ' selected' : ''}>${i + 1}月</option>`).join('')}</select>
@@ -6436,7 +6407,7 @@ function openPlayer(short){
 /* ---------- 1年のふりかえりカード（画像） ---------- */
 const FONT = "'M PLUS Rounded 1c','Hiragino Sans','Noto Sans JP',sans-serif";
 function reviewCard(short){
-  const {s, list} = badgesOf(short), no = numOf(short), W = 1080, H = 1350;
+  const s = statsOf(short), no = numOf(short), W = 1080, H = 1350;
   const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
   const rr = (x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); };
   g.fillStyle = '#1B2142'; g.fillRect(0, 0, W, H);
@@ -6452,25 +6423,19 @@ function reviewCard(short){
   const team = matches.reduce((a, m) => { a[m.result] = (a[m.result] || 0) + 1; return a; }, {});
   g.font = '800 34px ' + FONT; g.fillStyle = '#F2C230';
   g.fillText(`チーム ${matches.length}試合  ${team.win || 0}勝 ${team.draw || 0}分 ${team.lose || 0}敗`, W / 2, 640);
-  const boxes = [[s.goals, 'ゴール'], [s.mvp, 'がんばった子'], [list.filter(b => b.got).length, 'バッジ']];
+  const boxes = [[s.goals, 'ゴール'], [s.games, '点を取った試合'], [s.mvp, 'がんばった子']];
   boxes.forEach(([v, l], i) => {
     const bx = 90 + i * 310, by = 700;
     rr(bx, by, 280, 200, 28); g.fillStyle = '#fff'; g.fill();
     g.fillStyle = '#D6402F'; g.font = '900 96px ' + FONT; g.fillText(String(v), bx + 140, by + 88);
     g.fillStyle = '#1B2142'; g.font = '800 32px ' + FONT; g.fillText(l, bx + 140, by + 165);
   });
-  const got = list.filter(b => b.got);
-  g.font = '800 30px ' + FONT; g.fillStyle = 'rgba(255,255,255,.75)'; g.fillText('ゲットしたバッジ', W / 2, 960);
-  const per = 6, size = 120;
-  got.slice(0, 12).forEach((b, i) => {
-    const row = Math.floor(i / per), n = Math.min(per, got.length - row * per), x = W / 2 - (n * size + (n - 1) * 20) / 2 + (i % per) * (size + 20) + size / 2, y = 1040 + row * 150;
-    g.beginPath(); g.arc(x, y, 56, 0, Math.PI * 2); g.fillStyle = '#F2C230'; g.fill();
-    g.font = '60px sans-serif'; g.fillText(b.ic, x, y + 4);
-    g.fillStyle = '#fff'; let fs = 22; g.font = '800 ' + fs + 'px ' + FONT;
-    while (fs > 14 && g.measureText(b.name).width > size + 16) { fs--; g.font = '800 ' + fs + 'px ' + FONT; }
-    g.fillText(b.name, x, y + 78);
-  });
-  if (!got.length) { g.font = '800 34px ' + FONT; g.fillStyle = '#fff'; g.fillText('来年はバッジをたくさん集めよう！', W / 2, 1060); }
+  // コーチからの一言（がんばった子に選ばれたとき）を2つまで
+  const words = s.mvps.map(m => mvpOf(m).comment).filter(Boolean).slice(0, 2);
+  if (words.length) {
+    g.font = '800 30px ' + FONT; g.fillStyle = 'rgba(255,255,255,.75)'; g.fillText('コーチから', W / 2, 970);
+    words.forEach((w, i) => { g.font = '900 42px ' + FONT; g.fillStyle = '#F2C230'; g.fillText('「' + w + '」', W / 2, 1045 + i * 80); });
+  } else { g.font = '800 40px ' + FONT; g.fillStyle = '#F2C230'; g.fillText('来年も、みんなでがんばろう！', W / 2, 1060); }
   g.font = '900 36px ' + FONT; g.fillStyle = '#fff'; g.fillText('1年間、よくがんばりました！', W / 2, 1290);
   const url = c.toDataURL('image/png');
   openSheet(`<div class="modal-title">ふりかえりカード</div>
@@ -6490,6 +6455,8 @@ function renderHome(){
   clearInterval(tick);
   if (D.live && D.live.on && (D.live.phase === 'h1' || D.live.phase === 'h2')) tick = setInterval(() => { if ($('#screen-home.active')) renderHome(); else clearInterval(tick); }, 30000);
 }
+
+setTimeout(() => { bind(); render(); }, 0);   // 読み込んだらすぐ共有のデータを読む（ホームを開く前に他のタブを見ても出るように）
 
 return {bind, renderHome, check, editNotice, shareNotice, liveStart, liveGoal, liveOpp, livePhase, liveUndo, liveSave, liveClose, cheer,
   mvpHtml, pickMvp, openPlayer, playerRowExtra, setHomework, clearHomework, openHomework, closeSheet, onYear: () => { boundYear = null; bind(); }, get data(){ return D; }};
