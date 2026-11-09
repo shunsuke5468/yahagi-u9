@@ -307,6 +307,12 @@ input[type=text], input[type=date], input[type=number], input[type=password], se
   font-size: 0.95rem; font-family: 'M PLUS Rounded 1c', sans-serif; color: var(--ink); transition: box-shadow 0.15s;
 }
 input:focus, select:focus, textarea:focus { outline: none; box-shadow: 3px 3px 0 var(--gold); }
+/* iPhone の Safari は、16px より小さい文字の入力欄を押すと画面を拡大し、そのまま戻らない。指で操作する端末では入力欄を16pxにする */
+@media (hover: none) and (pointer: coarse) {
+  input, select, textarea { font-size: 16px !important; }
+  .score-input-row input { font-size: 1.8rem !important; }   /* もともと大きい欄はそのまま */
+}
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .score-input-row { display: grid; grid-template-columns: 1fr 26px 1fr; gap: 8px; align-items: center; margin: 10px 0; }
 .score-input-row input { text-align: center; font-family: 'Bungee', 'Baloo 2', sans-serif; font-size: 1.8rem; padding: 12px 6px; }
 .vs-x { text-align: center; font-weight: 900; font-size: 1.2rem; color: var(--muted); }
