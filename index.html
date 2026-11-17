@@ -126,7 +126,7 @@ header::after { /* 赤・黄・白のラインが流れる */
 .nav-btn.active .ico { transform: translateY(-2px) scale(1.14); animation: icoPop 0.55s var(--ease-pop); }
 
 /* ===== 画面と切り替え ===== */
-.screen { display: none; padding: 22px 16px 120px; }
+.screen { display: none; padding: 22px 16px 120px; overflow-x: hidden; overflow-x: clip; }  /* 切り替えアニメで横にはみ出さない */
 .screen.active { display: block; }
 .screen[data-dir="fwd"]  { --dx: 30px; }
 .screen[data-dir="back"] { --dx: -30px; }
@@ -2136,6 +2136,20 @@ function mergeMatches2026(currentMatches, legacySources) {
   return Array.from(map.values()).sort((a,b) => new Date(b.date) - new Date(a.date));
 }
 
+// 手入力の大会名が、予定の大会（主催の大会）と表記ゆれだけ違うときは同じ大会にまとめる
+// 例：「協会長杯 4 部　予選」→「第58回 協会長杯 4部」。星取り表・順位表・次の大会カードが同じ大会として扱える
+const tourKey = s => (s || '').replace(/\d{4}\s*年度?/g, '').replace(/第\s*\d+\s*回/g, '')
+  .replace(/予選|本戦|決勝(トーナメント|T)?|敢闘(トーナメント|T)?/g, '').replace(/[\s\u3000・·]/g, '').toLowerCase();
+function linkTourNames(list) {
+  const sch = SCHEDULED_TOURNAMENTS[currentYear] || [];
+  if (!sch.length) return list;
+  return list.map(m => {
+    if (!m || !m.tournament) return m;
+    const t = sch.find(x => x.name !== m.tournament && tourKey(x.name) && tourKey(x.name) === tourKey(m.tournament));
+    return t ? { ...m, tournament: t.name } : m;
+  });
+}
+
 // 旧保存先の検索は初回だけ（統合済みの印を保存）。以後は、アプリで削除した試合が復活しない
 function syncLegacy2026(currentMatches, force) {
   const key = getDbKey('2026 U-9');
@@ -2210,16 +2224,16 @@ function initFirebaseYearListener() {
 
     if (currentYear === '2026 U-9') {
       syncLegacy2026(currentMatches, false).then(r => {
-        matches = r.merged;
+        matches = linkTourNames(r.merged);
         if (r.recovered > 0) toast(`他の保存先から${r.recovered}件の試合を復元しました`);
         renderActiveScreen();
       }).catch(err => {
         console.warn('旧保存先の統合に失敗', err);
-        matches = mergeMatches2026(currentMatches, []);
+        matches = linkTourNames(mergeMatches2026(currentMatches, []));
         renderActiveScreen();
       });
     } else {
-      matches = currentMatches.sort((a,b) => new Date(b.date) - new Date(a.date));
+      matches = linkTourNames(currentMatches).sort((a,b) => new Date(b.date) - new Date(a.date));
       renderActiveScreen();
     }
   });
@@ -3547,13 +3561,13 @@ function renderHome() {
 
   renderAwards();
 
-  const recent = [...matches].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
+  const recent = [...matches].sort((a,b) => new Date(b.date) - new Date(a.date) || (b.id || 0) - (a.id || 0)).slice(0, 3);
   if (recent.length === 0) {
     document.getElementById('recentMatches').innerHTML = '<div class="empty-state"><p>まだ試合がありません</p></div>';
   } else {
     const bMap = { win:['bg-win','勝'], lose:['bg-lose','負'], draw:['bg-draw','分'] };
     document.getElementById('recentMatches').innerHTML = recent.map(m => {
-      const [cls,lbl] = bMap[m.result];
+      const [cls,lbl] = bMap[m.result] || ['bg-draw', '－'];
       const d = m.date ? new Date(m.date+'T00:00:00').toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'}) : '';
       return `<div class="recent-match" onclick="goTab('records')">
         <div class="rm-result ${cls}">${lbl}</div>
@@ -3788,13 +3802,15 @@ function renderRecords() {
     return;
   }
 
+  // 新しい順（同じ日は、あとに行った試合が上）
+  filtered = [...filtered].sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.id || 0) - (a.id || 0));
   const bMap = { win:['bg-win','勝'], lose:['bg-lose','負'], draw:['bg-draw','分'] };
   const stubColors = ['#E8392B','#3EA9DE','#8FCB3A','#F5B301','#7B5EA7','#E07A5F'];
   const tourNames = [...new Set(matches.map(m => m.tournament || '練習試合'))];
   const stubOf = t => stubColors[tourNames.indexOf(t) % stubColors.length];
 
   list.innerHTML = filtered.map((m, i) => {
-    let [cls, lbl] = bMap[m.result];
+    let [cls, lbl] = bMap[m.result] || ['bg-draw', '－'];
     if (m.pk) { lbl = m.pk.result === 'win' ? 'PK勝' : 'PK負'; }
     const d = m.date ? new Date(m.date+'T00:00:00').toLocaleDateString('ja-JP',{year:'2-digit',month:'numeric',day:'numeric',weekday:'short'}) : '';
     const scorers = (m.scorers || []).filter(s => s.player);
@@ -3806,8 +3822,8 @@ function renderRecords() {
       <div class="match-head" onclick="toggleCard(${m.id})">
         <div class="match-result-badge ${cls}">${lbl}</div>
         <div class="match-body">
-          <div class="match-tournament">${tname}</div>
-          <div class="match-detail">${d} · vs ${m.opponent}</div>
+          <div class="match-tournament">vs ${m.opponent}</div>
+          <div class="match-detail">${d} · ${tname}</div>
         </div>
         <div class="match-score-wrap">
           <div class="match-score-big">${m.myScore}-${m.oppScore}</div>
@@ -3923,7 +3939,7 @@ function renderStandings() {
         </thead>
         <tbody>
           ${ms.map((m) => {
-            let [cls, lbl] = bMap[m.result];
+            let [cls, lbl] = bMap[m.result] || ['bg-draw', '－'];
             if (m.pk) lbl = m.pk.result === 'win' ? 'PK勝' : 'PK負';
             const scorers = (m.scorers||[]).filter(s=>s.player);
             const nw = t => `<span style="white-space:nowrap">${t}</span>`;
