@@ -2,16 +2,22 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#36793C">
 <title>矢作SC チーム記録</title>
 
 <!-- アイコン設定 -->
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="icon" type="image/png" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="矢作SC記録">
+<script>
+  // ホーム画面から開いたとき（アプリとして起動）の印。起動画面の表示に使う
+  try { if (navigator.standalone || matchMedia('(display-mode: standalone)').matches) document.documentElement.classList.add('standalone'); } catch (e) {}
+</script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bungee&family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&family=Baloo+2:wght@600;700;800&display=swap');
@@ -57,9 +63,34 @@ body {
   color: var(--ink); min-height: 100vh; padding-bottom: 112px;
 }
 
+/* ===== 起動画面（ホーム画面アプリとして開いたときだけ） ===== */
+#splash { display: none; }
+.standalone #splash {
+  position: fixed; inset: 0; z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+  background-color: var(--pitch);
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0 48px, rgba(255,255,255,0) 48px 96px);
+  color: #fff; transition: opacity 0.45s ease, visibility 0.45s;
+}
+#splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+#splash .sp-ring {
+  position: absolute; width: 230px; height: 230px; border: 4px solid rgba(255,255,255,0.35); border-radius: 50%;
+}
+#splash .sp-line { position: absolute; left: 0; right: 0; top: 50%; height: 4px; margin-top: -2px; background: rgba(255,255,255,0.35); }
+#splash .sp-ball {
+  position: relative; display: grid; place-items: center; width: 96px; height: 96px; border: 5px solid var(--ink); border-radius: 50%;
+  background: var(--red); box-shadow: 5px 6px 0 var(--ink); font-size: 3.2rem; animation: spBounce 0.9s var(--ease-pop) infinite alternate;
+}
+#splash .sp-title {
+  position: relative; padding: 8px 22px; border: 4px solid var(--ink); border-radius: 18px; background: #fff; box-shadow: 5px 6px 0 var(--ink);
+  color: var(--ink); font-size: 1.5rem; font-weight: 900; letter-spacing: 0.06em;
+}
+#splash .sp-sub { position: relative; font-size: 0.85rem; font-weight: 800; opacity: 0.9; }
+@keyframes spBounce { from { transform: translateY(0) rotate(0); } to { transform: translateY(-16px) rotate(25deg); } }
+
 /* ===== ヘッダー ===== */
 header {
   position: sticky; top: 0; z-index: 200; color: #fff; overflow: hidden;
+  padding-top: env(safe-area-inset-top, 0px);   /* アプリとして開いたとき、時計・電池の下まで緑にする */
   background-color: var(--green-hd);
   border-bottom: 3px solid #265A2B;
 }
@@ -1057,6 +1088,24 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 </style>
 </head>
 <body>
+<!-- 起動画面（ホーム画面アプリのときだけ表示。データが届くか2.5秒で消える） -->
+<div id="splash" aria-hidden="true">
+  <div class="sp-line"></div><div class="sp-ring"></div>
+  <div class="sp-ball">⚽</div>
+  <div class="sp-title">矢作SC 記録</div>
+  <div class="sp-sub">データを読み込んでいます…</div>
+</div>
+<script>
+  (function () {
+    const t0 = Date.now(); let gone = false;
+    window.hideSplash = function () {
+      if (gone) return; gone = true;
+      const el = document.getElementById('splash'); if (!el) return;
+      setTimeout(() => { el.classList.add('hide'); setTimeout(() => el.remove(), 600); }, Math.max(0, 700 - (Date.now() - t0)));
+    };
+    setTimeout(window.hideSplash, 2500);
+  })();
+</script>
 
 <header>
   <div class="header-top">
@@ -2049,6 +2098,36 @@ function addNewYear() {
   changeYear(yr);
 }
 
+// 接続の表示。つながっていないときに、端末に残した前回のデータを出していればそう書く
+let netConnected = false;
+function updateBadge() {
+  const badge = document.getElementById('connectionBadge');
+  if (!badge || badge.dataset.st === 'local') return;
+  badge.textContent = netConnected ? ' 同期中' : (window.__fromCache ? ' オフライン・前回のデータ' : ' オフライン');
+  badge.style.color = netConnected ? '#27ae60' : '#e74c3c';
+  badge.dataset.st = netConnected ? 'on' : 'off';
+}
+
+// 最後に受け取ったデータを端末に残す（電波が弱い・圏外でも、開いてすぐ前回の内容を出す）
+function saveDataCache() {
+  const yr = currentYear;
+  clearTimeout(saveDataCache.t);
+  saveDataCache.t = setTimeout(() => {
+    if (yr !== currentYear) return;
+    try { localStorage.setItem(`yhg9_cache_${yr}`, JSON.stringify({ t: Date.now(), matches, players, tourResults, attendance, lineups })); } catch (e) {}
+  }, 500);
+}
+function loadDataCache() {
+  try {
+    const c = JSON.parse(localStorage.getItem(`yhg9_cache_${currentYear}`));
+    if (!c || !Array.isArray(c.matches)) return false;
+    matches = c.matches; players = Array.isArray(c.players) ? c.players : [];
+    tourResults = c.tourResults || {}; attendance = c.attendance || {}; lineups = c.lineups || {};
+    window.__fromCache = c.t || 1;
+    return true;
+  } catch (e) { return false; }
+}
+
 function initFirebase() {
   if (typeof db === 'undefined' || !db) {
     console.warn('Firebase未接続。ローカルモードで動作します');
@@ -2059,15 +2138,7 @@ function initFirebase() {
     return;
   }
 
-  db.ref('.info/connected').on('value', snap => {
-    const connected = snap.val();
-    const badge = document.getElementById('connectionBadge');
-    if (badge) {
-      badge.textContent = connected ? ' 同期中' : ' オフライン';
-      badge.style.color = connected ? '#27ae60' : '#e74c3c';
-      badge.dataset.st = connected ? 'on' : 'off';
-    }
-  });
+  db.ref('.info/connected').on('value', snap => { netConnected = !!snap.val(); updateBadge(); });
 
   db.ref('availableYears').on('value', snap => {
     const data = snap.val();
@@ -2210,6 +2281,8 @@ function initFirebaseYearListener() {
   if (lineupsRef) lineupsRef.off();
   lineups = {};
   tourResults = {};
+  window.__fromCache = 0;
+  if (loadDataCache()) { renderActiveScreen(); updateBadge(); }   // 届くまでのあいだ、前回のデータを先に出す
 
   matchesRef = db.ref(`${key}/matches`);
   playersRef = db.ref(`${key}/players`);
@@ -2224,16 +2297,16 @@ function initFirebaseYearListener() {
 
     if (currentYear === '2026 U-9') {
       syncLegacy2026(currentMatches, false).then(r => {
-        matches = linkTourNames(r.merged);
+        matches = linkTourNames(r.merged); freshData();
         if (r.recovered > 0) toast(`他の保存先から${r.recovered}件の試合を復元しました`);
         renderActiveScreen();
       }).catch(err => {
         console.warn('旧保存先の統合に失敗', err);
-        matches = linkTourNames(mergeMatches2026(currentMatches, []));
+        matches = linkTourNames(mergeMatches2026(currentMatches, [])); freshData();
         renderActiveScreen();
       });
     } else {
-      matches = linkTourNames(currentMatches).sort((a,b) => new Date(b.date) - new Date(a.date));
+      matches = linkTourNames(currentMatches).sort((a,b) => new Date(b.date) - new Date(a.date)); freshData();
       renderActiveScreen();
     }
   });
@@ -2251,6 +2324,7 @@ function initFirebaseYearListener() {
     } else {
       players = currentPlayers;
     }
+    saveDataCache();
     if (document.querySelector('#screen-players.active')) renderPlayerRanking();
     if (document.querySelector('#screen-settings.active')) renderSettings();
   });
@@ -2265,7 +2339,7 @@ function initFirebaseYearListener() {
   });
 
   tourResultsRef.on('value', snap => {
-    tourResults = snap.val() || {};
+    tourResults = snap.val() || {}; saveDataCache();
     if (document.querySelector('#screen-standings.active')) {
       const tour = document.getElementById('standingsTournamentSelect').value;
       if (tour && findScheduled(tour)) renderStandings();
@@ -2273,14 +2347,14 @@ function initFirebaseYearListener() {
   });
 
   attendanceRef.on('value', snap => {
-    attendance = snap.val() || {};
+    attendance = snap.val() || {}; saveDataCache();
     refreshAttendanceViews();
     if (attCtx) renderAttendance();
     if (fmCtx) renderFormation();
   });
 
   lineupsRef.on('value', snap => {
-    lineups = snap.val() || {};
+    lineups = snap.val() || {}; saveDataCache();
     if (fmCtx) renderFormation();
     if (document.querySelector('#screen-standings.active')) {
       const tour = document.getElementById('standingsTournamentSelect').value;
@@ -2289,8 +2363,15 @@ function initFirebaseYearListener() {
   });
 }
 
+function freshData() { window.__fromCache = 0; saveDataCache(); updateBadge(); }
+
+// ホーム画面アプリ：電波が弱くても開けるように、ページとライブラリを端末に保存する（sw.js）
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW', err)); });
+}
+
 function renderActiveScreen(fromNav) {
-  if (!fromNav) window.__dataReady = true;
+  if (!fromNav) { window.__dataReady = true; if (window.hideSplash) hideSplash(); }
   const activeScreen = document.querySelector('.screen.active');
   if (activeScreen) {
     const id = activeScreen.id.replace('screen-', '');
