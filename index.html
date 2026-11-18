@@ -6321,6 +6321,19 @@ function clean(v){
 }
 const arr = v => Array.isArray(v) ? v.filter(Boolean) : (v && typeof v === 'object' ? Object.keys(v).sort((a, b) => a - b).map(k => v[k]).filter(Boolean) : []);
 
+/* ---------- 届いた連絡から作った「当日のお知らせ」 ----------
+   保存したお知らせがないときだけ出す（直して保存すれば、そちらが優先。消すと「消した」印を保存して出なくなる） */
+const NOTICE_SEED = {
+  '2026 U-9': {date:'2026-11-22', title:'ザウルスさん トレーニングマッチ', gather:'13:05', kickoff:'13:30', place:'現地集合',
+    memo:'13:00開門・13:30開始。スケジュールは当日決めます。\n16:00頃からフットサルポイントが使えます。\n駐車は7台まで（コーチ車1台お願いします）。\n栄養補助食品を食べるときは、そのつどコーチに確認してください。\nコーチが用意：救急箱・作戦ボード・ビブス',
+    items:['ユニフォーム', 'すね当て', 'サッカーボール', '水筒', 'ウィダーなどの栄養補助食品'], t:'seed-1122'}
+};
+const noticeSeed = () => { const n = NOTICE_SEED[currentYear]; return n && n.date >= todayIso() ? n : null; };
+function noticeOrSeed(v){
+  if (v && v.off) return (v.off === (noticeSeed() || {}).t) ? null : noticeSeed();   // 消した印は、そのとき出ていた初期お知らせにだけ効く
+  return v || noticeSeed();
+}
+
 /* ---------- データ ---------- */
 let D = {notice:null, live:null, mvp:{}, birthdays:{}, homework:null};
 let refs = [], boundYear = null;
@@ -6330,11 +6343,11 @@ function bind(){
   refs.forEach(r => r.off()); refs = [];
   boundYear = currentYear;
   D = {notice:null, live:null, mvp:{}, birthdays:{}, homework:null};
-  if (!db) { Object.assign(D, load(localKey()) || {}); render(); return; }
+  if (!db) { Object.assign(D, load(localKey()) || {}); D.notice = noticeOrSeed(D.notice); render(); return; }
   const k = yearKey();
   ['notice','live','mvp','birthdays','homework'].forEach(path => {
     const r = db.ref(k + '/' + path);
-    r.on('value', s => { const v = s.val(); D[path] = (path === 'mvp' || path === 'birthdays') ? (v || {}) : v; render(); });
+    r.on('value', s => { const v = s.val(); D[path] = (path === 'mvp' || path === 'birthdays') ? (v || {}) : path === 'notice' ? noticeOrSeed(v) : v; render(); });
     refs.push(r);
   });
 }
@@ -6446,7 +6459,7 @@ function editNotice(){
     ${D.notice ? '<button class="btn btn-outline" type="button" id="fnDel" style="color:var(--red)">お知らせを消す</button>' : ''}
     <button class="btn btn-outline" type="button" id="fnCancel">やめる</button>`, () => {
     on('#fnCancel', closeSheet);
-    on('#fnDel', () => { if (!confirm('お知らせを消しますか？')) return; write('notice', null); closeSheet(); toast('お知らせを消しました'); });
+    on('#fnDel', () => { if (!confirm('お知らせを消しますか？')) return; const sd = noticeSeed(); write('notice', sd ? {off:sd.t, t:Date.now()} : null); closeSheet(); toast('お知らせを消しました'); });
     on('#fnSave', () => {
       const rec = {date:$('#fnDate').value, title:$('#fnTitle').value.trim(), gather:$('#fnGather').value, kickoff:$('#fnKick').value,
         place:$('#fnPlace').value.trim(), memo:$('#fnMemo').value.trim(),
@@ -6811,6 +6824,36 @@ const SEED = {
 内容：サッカー（8人制）
 参加費：3,300円
 募集：U-8（2チーム募集）U-9（2チーム募集）`},
+    {id:'s4', status:'yes', answered:'2026-11-19', team:'ザウルス', kind:'trm', title:'', date:'2026-11-22', spare:'', time:'13:05現地集合、13:30開始（13:00開門）',
+     venue:'', address:'', target:'', format:'',
+     teams:'', recruit:'', rules:'',
+     raw:`おはようございます。
+11/22(日)ザウルスさんTrMのご連絡です。
+よろしくお願いいたします。
+
+■集合関連
+・13:05現地集合
+
+13:00開門
+13:30開始
+16:00頃フットサルポイント使用可能
+駐車台数は7台
+※コーチ車1台お願いいたします。
+
+■選手持ち物
+・サッカーボール
+・ウィダー等の栄養補助食品
+※摂取する際は団員からコーチへ都度ご確認願います。
+・水筒
+・すね当て
+・ユニフォーム
+
+■その他用具
+・救急箱
+・作戦ボード
+・ビブス
+
+※スケジュールは当日決めるとの事です。`},
     {id:'s2', team:'希望ヶ丘ライオンズ', kind:'cup', title:'2026年度 希望ヶ丘招待杯（U-9大会）', date:'2026-11-28', spare:'', time:'9:30試合開始、16:30頃終了予定',
      venue:'横浜市立東希望が丘小学校', address:'〒241-0826 神奈川県横浜市旭区東希望が丘155', target:'U-9（小学3年生以下）', format:'8人制',
      teams:'5チーム', recruit:'', rules:'5チームの総当たりリーグ戦、1コート、15分ハーフ（ハーフタイム5分）、各チーム4試合を予定',
