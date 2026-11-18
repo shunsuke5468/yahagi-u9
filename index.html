@@ -130,6 +130,20 @@ header::after { /* 赤・黄・白のラインが流れる */
 #connectionBadge[data-st="on"]::before { background: #7CFF8A; animation: dotPulse 1.8s ease-out infinite; }
 #connectionBadge[data-st="off"]::before { background: #FF7A6B; }
 
+/* 下にスクロールしたら、ヘッダーを1行の細い形にする（画面を広く使う）。
+   ヘッダーの高さが変わっても中身がずれないよう、減った分は下の余白（JSで設定）で埋める */
+header.mini .header-top { padding: 7px 14px 6px; gap: 10px; animation: fadeIn 0.25s ease; }
+header.mini .club-emblem {
+  width: 32px; height: 32px; margin: 2px; font-size: 1rem; animation: none;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--gold);
+}
+header.mini .header-title { display: flex; align-items: center; gap: 10px; }
+header.mini .header-title h1 { font-size: 0.98rem; white-space: nowrap; }
+header.mini .header-title .sub { margin-top: 0; flex: 1; min-width: 0; flex-wrap: nowrap; gap: 6px; }
+header.mini .year-select-header { flex: 1 1 auto; padding: 3px 12px; border-width: 2px; font-size: 0.78rem; box-shadow: none; }
+header.mini #connectionBadge { padding: 0; gap: 0; background: none; font-size: 0 !important; }   /* 点だけ残す */
+header.mini::after { height: 6px; }
+
 /* ===== ボトムナビ ===== */
 .bottom-nav {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 200;
@@ -1618,6 +1632,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
 <script>
 // ===== Firebase初期化 =====
@@ -1634,6 +1649,7 @@ try {
   };
   firebase.initializeApp(firebaseConfig);
   db = firebase.database();
+  try { firebase.auth(); } catch (e) {}   // 前に編集モードに入った端末のログイン（匿名）を、開いたときに戻す
 } catch(e) {
   console.warn('Firebase初期化に失敗しました', e);
 }
@@ -2045,10 +2061,12 @@ let viewingVideoId = null;
 function persist() {
   const key = getDbKey(currentYear);
   if (db) {
-    try { db.ref(`${key}/matches`).set(matches); } catch(e) { console.warn(e); }
-    try { db.ref(`${key}/players`).set(players); } catch(e) { console.warn(e); }
-    try { db.ref(`${key}/videos`).set(videos); } catch(e) { console.warn(e); }
-    try { db.ref(`availableYears`).set(availableYears); } catch(e) { console.warn(e); }
+    const fail = e => { console.warn(e); toast(String(e && e.code || e).includes('PERMISSION') ? '保存できませんでした。編集モードに入りなおしてください' : '保存に失敗しました'); };
+    let failed = false; const once = e => { if (!failed) { failed = true; fail(e); } };
+    try { db.ref(`${key}/matches`).set(matches).catch(once); } catch(e) { console.warn(e); }
+    try { db.ref(`${key}/players`).set(players).catch(once); } catch(e) { console.warn(e); }
+    try { db.ref(`${key}/videos`).set(videos).catch(once); } catch(e) { console.warn(e); }
+    try { db.ref(`availableYears`).set(availableYears).catch(once); } catch(e) { console.warn(e); }
   }
   try { localStorage.setItem(`yhg9_photos_${currentYear}`, JSON.stringify(photos)); } catch(e) { console.warn(e); }
 }
@@ -2143,7 +2161,8 @@ function initFirebase() {
   db.ref('availableYears').on('value', snap => {
     const data = snap.val();
     availableYears = sanitizeYears(data);
-    db.ref('availableYears').set(availableYears); // 綺麗にクリーンアップした配列をDBに保存
+    // 整えた結果が保存済みと違うときだけ、編集モードの人が保存しなおす（閲覧だけの人は書きこまない）
+    if (isEditor && JSON.stringify(availableYears) !== JSON.stringify(data)) db.ref('availableYears').set(availableYears).catch(err => console.warn(err));
     updateYearUI();
   });
 
@@ -2233,9 +2252,11 @@ function syncLegacy2026(currentMatches, force) {
       const initIds = new Set(INIT_MATCHES.map(m => m.id));
       const recovered = merged.filter(m => !curIds.has(m.id) && !initIds.has(m.id)).length;
       const updates = {};
-      updates[`${key}/matches`] = merged;
+      if (JSON.stringify(merged) !== JSON.stringify(currentMatches)) updates[`${key}/matches`] = merged;
       if (root) updates[`${key}/legacyMergedV2`] = true;
-      return db.ref().update(updates).then(() => ({ merged, recovered, sources }));
+      // 初期データとのまとめ直しを保存するのは編集モードの人だけ（閲覧だけの人は画面に出すだけ）
+      if (!isEditor || !Object.keys(updates).length) return { merged, recovered, sources };
+      return db.ref().update(updates).then(() => ({ merged, recovered, sources }), err => { console.warn(err); return { merged, recovered, sources }; });
     });
 }
 
@@ -2317,7 +2338,7 @@ function initFirebaseYearListener() {
     if (currentYear === '2026 U-9') {
       if (currentPlayers.length === 0) {
         players = [...INIT_PLAYERS];
-        playersRef.set(players);
+        if (isEditor) playersRef.set(players).catch(err => console.warn(err));
       } else {
         players = currentPlayers;
       }
@@ -2392,8 +2413,42 @@ function toast(msg) {
 }
 
 // ===== 編集モード =====
-const EDIT_PASSWORD = 'yahagi2026';
+// 合言葉は、サイトの中に文字のまま置かない。
+// ・保存先の「書きこみの決まり（ルール）」が設定済みなら、合言葉はサーバー側（editKey）で確かめる。
+//   合っていれば、この端末（匿名ログインのID）が editors に登録され、編集の書きこみが通るようになる
+// ・まだ設定前なら、元の合言葉の「ハッシュ（元に戻せない変換）」と比べる（移行のあいだだけ）
+const OLD_KEY_HASH = 'e97c591763a3b396a750c8cc3913f4bd06e6a3ece05b8f77c5d278034addd538';
 let isEditor = sessionStorage.getItem('yhg9_editor') === '1';
+
+async function sha256(t) {
+  const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t));
+  return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2, '0')).join('');
+}
+function authUser() {
+  try { return firebase.auth().currentUser || null; } catch (e) { return null; }
+}
+async function ensureAuth() {
+  if (!db || typeof firebase === 'undefined' || !firebase.auth) return null;
+  const a = firebase.auth();
+  if (a.currentUser) return a.currentUser;
+  try { return (await a.signInAnonymously()).user; } catch (e) { console.warn('匿名ログインできません', e && e.code); return null; }
+}
+// 合言葉を確かめる（true / false）
+async function checkEditKey(v) {
+  v = (v || '').trim();
+  if (!v) return false;
+  if (db) {
+    let rulesOn = false;
+    try { await db.ref('editKey').once('value'); } catch (e) { rulesOn = true; }   // 読めない＝ルール設定済み
+    if (rulesOn) {
+      const u = await ensureAuth();
+      if (!u) { toast('ログインできません。通信を確かめてください'); return false; }
+      try { await db.ref('editors/' + u.uid).set(v); return true; } catch (e) { return false; }
+    }
+  }
+  try { return (await sha256(v)) === OLD_KEY_HASH; } catch (e) { return false; }
+}
+window.checkEditKey = checkEditKey;
 
 function applyEditMode() {
   document.querySelectorAll('.editor-only').forEach(el => { el.style.display = isEditor ? '' : 'none'; });
@@ -2419,9 +2474,9 @@ function applyEditMode() {
   if (window.INV && document.querySelector('#screen-home.active')) INV.renderHome();
 }
 
-function unlockEdit() {
+async function unlockEdit() {
   const input = document.getElementById('editPassInput');
-  if (input.value.trim() !== EDIT_PASSWORD) {
+  if (!(await checkEditKey(input.value))) {
     toast('合言葉が違います'); input.value = ''; return;
   }
   isEditor = true;
@@ -2438,6 +2493,33 @@ function lockEdit() {
   goTab('home');
   toast('閲覧モードに戻りました');
 }
+
+// ヘッダーを、スクロールしたら細くする（上に戻ったら元に戻す）
+(function () {
+  const hd = document.querySelector('header');
+  if (!hd) return;
+  let mini = false, full = 0, small = 0;
+  function set(on) {
+    if (on === mini) return;
+    mini = on;
+    if (on) {
+      full = hd.offsetHeight;
+      hd.classList.add('mini');
+      small = hd.offsetHeight;
+      hd.style.marginBottom = Math.max(0, full - small) + 'px';   // 中身の位置を変えない
+    } else {
+      hd.classList.remove('mini');
+      hd.style.marginBottom = '';
+    }
+  }
+  function onScroll() {
+    const y = window.scrollY || 0;
+    if (!mini && y > hd.offsetHeight) set(true);
+    else if (mini && y <= Math.max(0, full - small)) set(false);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', () => { if (mini) { set(false); onScroll(); } });
+})();
 
 const tabOrder = ['home','input','records','standings','players','tactics','settings'];
 function goTab(name) {
@@ -3352,10 +3434,10 @@ function renderFormation() {
   const np = document.getElementById('fmPass');
   if (np && keepPass) { np.value = keepPass.v; if (keepPass.f) np.focus(); }   // 入力途中の合言葉を、画面の更新で消さない
 }
-function fmUnlock() {   // シートの中で、そのまま編集モードにする（設定タブと同じ合言葉）
+async function fmUnlock() {   // シートの中で、そのまま編集モードにする（設定タブと同じ合言葉）
   const el = document.getElementById('fmPass');
   const v = ((el && el.value) || '').trim();
-  if (v !== EDIT_PASSWORD) { toast('合言葉が違います'); if (el) el.value = ''; return; }
+  if (!(await checkEditKey(v))) { toast('合言葉が違います'); if (el) el.value = ''; return; }
   isEditor = true; sessionStorage.setItem('yhg9_editor', '1');
   applyEditMode(); renderFormation(); toast('編集モードになりました');
 }
@@ -6187,10 +6269,10 @@ function bindButtons(){
   q('#tbCtxSave').addEventListener('click', () => endCtx(true));
   q('#tbCtxCancel').addEventListener('click', () => endCtx(false));
 }
-function unlock(){   // 戦術ボードの中で、そのまま編集モードにする（設定タブと同じ合言葉）
+async function unlock(){   // 戦術ボードの中で、そのまま編集モードにする（設定タブと同じ合言葉）
   const el = q('#tbPass'), v = (el.value || '').trim();
-  let pw = null; try { pw = EDIT_PASSWORD; } catch(e) {}
-  if (!pw || v !== pw) { say('合言葉が違います'); el.value = ''; return; }
+  const ok = typeof checkEditKey === 'function' ? await checkEditKey(v) : false;
+  if (!ok) { say('合言葉が違います'); el.value = ''; return; }
   isEditor = true; sessionStorage.setItem('yhg9_editor', '1'); el.value = '';
   if (typeof applyEditMode === 'function') applyEditMode(); else refresh();
   say('編集モードになりました');
