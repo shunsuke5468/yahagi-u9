@@ -2438,8 +2438,15 @@ async function checkEditKey(v) {
   v = (v || '').trim();
   if (!v) return false;
   if (db) {
-    let rulesOn = false;
-    try { await db.ref('editKey').once('value'); } catch (e) { rulesOn = true; }   // 読めない＝ルール設定済み
+    let rulesOn = false, known = null;
+    try { known = (await db.ref('editKey').once('value')).val(); } catch (e) { rulesOn = true; }   // 読めない＝ルール設定済み
+    // すでに編集者として登録ずみの端末は合言葉を読めるので、その場で照らし合わせる
+    if (!rulesOn && known != null) {
+      if (String(known) !== v) return false;
+      const u = await ensureAuth();
+      if (u) { try { await db.ref('editors/' + u.uid).set(v); } catch (e) {} }
+      return true;
+    }
     if (rulesOn) {
       const u = await ensureAuth();
       if (!u) { toast('ログインできません。通信を確かめてください'); return false; }

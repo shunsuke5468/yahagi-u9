@@ -1,5 +1,6 @@
 {
   "rules": {
+    ".read": "auth != null && root.child('editors').child(auth.uid).exists()",
     "editKey": {
       ".read": false,
       ".write": false
@@ -7,24 +8,28 @@
     "editors": {
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
-        ".write": "auth != null && auth.uid === $uid && newData.val() === root.child('editKey').val()"
+        ".write": "auth != null && auth.uid === $uid && newData.isString() && newData.val() === root.child('editKey').val()"
       }
     },
-    "$top": {
+    "availableYears": {
       ".read": true,
+      ".write": "auth != null && root.child('editors').child(auth.uid).exists()"
+    },
+    "$top": {
+      ".read": "$top.beginsWith('year_')",
       ".write": "auth != null && root.child('editors').child(auth.uid).exists()",
       "attendance": {
         "$tid": {
           "$name": {
-            ".write": true,
-            ".validate": "!newData.exists() || newData.hasChildren()"
+            ".write": "$top.beginsWith('year_') && root.child($top).child('players').exists() && $tid.length <= 80 && $name.length <= 40",
+            ".validate": "!newData.exists() || (newData.hasChildren(['t']) && newData.child('t').isNumber())"
           }
         }
       },
       "live": {
         "cheers": {
           "$kind": {
-            ".write": "data.parent().parent().exists()",
+            ".write": "$top.beginsWith('year_') && data.parent().parent().exists() && $kind.length <= 20",
             ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 99999"
           }
         }
