@@ -726,6 +726,29 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .att-car .chip { padding: 8px 13px; border: 2.5px solid var(--ink); border-radius: 999px; background: #fff; cursor: pointer; font-family: inherit; font-size: 0.82rem; font-weight: 900; color: var(--ink); }
 .att-car .chip.car.on { background: var(--sky); }
 .att-car .chip.ride.on { background: var(--gold); }
+.att-car .chip.direct.on { background: #C9E8A8; }
+.cp-jump { display: inline-block; margin-top: 6px; padding: 4px 11px; border: 2px solid var(--ink); border-radius: 999px; background: #fff; font-family: inherit; font-size: 0.76rem; font-weight: 900; color: var(--ink); cursor: pointer; }
+.cp { margin: 18px 0 6px; padding: 14px 12px 12px; border: 3px solid var(--ink); border-radius: 18px; background: #fff; box-shadow: 4px 4px 0 var(--ink); }
+.cp-head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 1rem; font-weight: 900; }
+.cp-tag { padding: 2px 9px; border: 2px solid var(--ink); border-radius: 999px; background: var(--gold); font-size: 0.7rem; }
+.cp-tag.draft { background: var(--red-light); color: var(--red-dark); border-color: var(--red); }
+.cp-sub { margin: 6px 0 10px; font-size: 0.74rem; font-weight: 800; line-height: 1.6; color: var(--muted); }
+.cp-n { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; font-size: 0.8rem; font-weight: 900; }
+.cp-n button { min-width: 50px; padding: 7px 10px; border: 2.5px solid var(--ink); border-radius: 12px; background: #fff; font-family: inherit; font-size: 0.86rem; font-weight: 900; color: var(--ink); cursor: pointer; }
+.cp-n button.on { background: var(--ink); color: #fff; }
+.cp-car { margin-bottom: 9px; padding: 9px 10px; border: 2.5px solid var(--ink); border-radius: 14px; background: #EEF6FC; }
+.cp-drv { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 0.88rem; font-weight: 900; }
+.cp-no { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--sky); color: #fff; font-size: 0.78rem; flex-shrink: 0; }
+.cp-g { padding: 1px 7px; border-radius: 999px; background: var(--ink); color: #fff; font-size: 0.68rem; }
+.cp-cnt { margin-left: auto; font-size: 0.74rem; color: var(--muted); }
+.cp-cnt.full { color: var(--red-dark); }
+.cp-kids { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+.cp-kid { padding: 5px 10px; border: 2px solid var(--ink); border-radius: 999px; background: #fff; font-size: 0.8rem; font-weight: 900; }
+select.cp-kid { width: auto; max-width: 100%; margin: 0; min-height: 0; line-height: 1.3;  font-family: inherit; color: var(--ink); -webkit-appearance: none; appearance: none; padding-right: 22px; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%231B2142'/%3E%3C/svg%3E") no-repeat right 8px center; }
+.cp-none { font-size: 0.76rem; font-weight: 800; color: var(--muted); }
+.cp-other { margin-top: 8px; font-size: 0.78rem; font-weight: 900; line-height: 1.7; }
+.cp-warn { margin: 8px 0; padding: 8px 10px; border: 2.5px dashed var(--red); border-radius: 12px; background: var(--red-light); color: var(--red-dark); font-size: 0.8rem; font-weight: 900; }
+.cp .btn { margin-top: 8px; }
 .att-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 10px; }
 .att-load { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 900; }
 .att-load button { min-width: 38px; height: 32px; padding: 0 10px; border: 2.5px solid var(--ink); border-radius: 10px; background: #fff; cursor: pointer; font-family: inherit; font-size: 0.86rem; font-weight: 900; color: var(--ink); }
@@ -2132,7 +2155,7 @@ function saveDataCache() {
   clearTimeout(saveDataCache.t);
   saveDataCache.t = setTimeout(() => {
     if (yr !== currentYear) return;
-    try { localStorage.setItem(`yhg9_cache_${yr}`, JSON.stringify({ t: Date.now(), matches, players, tourResults, attendance, lineups })); } catch (e) {}
+    try { localStorage.setItem(`yhg9_cache_${yr}`, JSON.stringify({ t: Date.now(), matches, players, tourResults, attendance, lineups, carpool })); } catch (e) {}
   }, 500);
 }
 function loadDataCache() {
@@ -2140,7 +2163,7 @@ function loadDataCache() {
     const c = JSON.parse(localStorage.getItem(`yhg9_cache_${currentYear}`));
     if (!c || !Array.isArray(c.matches)) return false;
     matches = c.matches; players = Array.isArray(c.players) ? c.players : [];
-    tourResults = c.tourResults || {}; attendance = c.attendance || {}; lineups = c.lineups || {};
+    tourResults = c.tourResults || {}; attendance = c.attendance || {}; lineups = c.lineups || {}; carpool = c.carpool || {};
     window.__fromCache = c.t || 1;
     return true;
   } catch (e) { return false; }
@@ -2289,6 +2312,7 @@ function initFirebaseYearListener() {
     loadLocalTourResults();
     loadLocalAttendance();
     loadLocalLineups();
+    loadLocalCarpool();
     renderActiveScreen();
     return;
   }
@@ -2301,6 +2325,8 @@ function initFirebaseYearListener() {
   attendance = {};
   if (lineupsRef) lineupsRef.off();
   lineups = {};
+  if (carpoolRef) carpoolRef.off();
+  carpool = {};
   tourResults = {};
   window.__fromCache = 0;
   if (loadDataCache()) { renderActiveScreen(); updateBadge(); }   // 届くまでのあいだ、前回のデータを先に出す
@@ -2311,6 +2337,7 @@ function initFirebaseYearListener() {
   tourResultsRef = db.ref(`${key}/tournamentResults`);
   attendanceRef = db.ref(`${key}/attendance`);
   lineupsRef = db.ref(`${key}/lineups`);
+  carpoolRef = db.ref(`${key}/carpool`);
 
   matchesRef.on('value', snap => {
     const data = snap.val();
@@ -2372,6 +2399,12 @@ function initFirebaseYearListener() {
     refreshAttendanceViews();
     if (attCtx) renderAttendance();
     if (fmCtx) renderFormation();
+  });
+
+  carpoolRef.on('value', snap => {
+    carpool = snap.val() || {}; saveDataCache();
+    if (attCtx && !cpDraft) renderAttendance();
+    refreshAttendanceViews();
   });
 
   lineupsRef.on('value', snap => {
@@ -2463,6 +2496,7 @@ function applyEditMode() {
   const inputNav = document.querySelectorAll('.nav-btn')[1];
   if (inputNav) inputNav.style.display = isEditor ? '' : 'none';
   updateNavPill();
+  if (typeof attCtx !== 'undefined' && attCtx) { cpDraft = null; renderAttendance(); }
 
   const badge = document.getElementById('editModeBadge');
   const text  = document.getElementById('editModeText');
@@ -3007,7 +3041,7 @@ function openTournament(name) {
 
 // ===== 出欠・配車（予定の大会） =====
 // 保護者がスマホから、子どもの参加・欠席・未定と、配車（車を出せる／荷物を積めるか／乗合希望）を入力する（全員が入力できる）
-let attendance = {};        // { 大会id: { '選手名': { s:'y'|'n'|'u', car:0|1, seats:同乗できる子ども, load:'y'|'n'(荷物 可/否), ride:0|1, riders:乗せてほしい人数, t:時刻 } } }
+let attendance = {};        // { 大会id: { '選手名': { s:'y'|'n'|'u', car:0|1, seats:同乗できる子ども, load:'y'|'n'(荷物 可/否), ride:0|1, riders:乗せてほしい人数, direct:0|1(現地へ直接行く), t:時刻 } } }
 let attendanceRef = null;
 let attCtx = null;          // 開いている出欠シートの大会id
 
@@ -3027,7 +3061,7 @@ function carLimitOf(t) {
 }
 function attSummary(tid) {
   const data = attendance[tid] || {};
-  const sum = { y: 0, n: 0, u: 0, none: 0, cars: 0, seats: 0, loadY: 0, loadN: 0, loadNone: 0, rides: 0, riders: 0 };
+  const sum = { y: 0, n: 0, u: 0, none: 0, cars: 0, seats: 0, loadY: 0, loadN: 0, loadNone: 0, rides: 0, riders: 0, direct: 0 };
   attPlayers().forEach(n => {
     const r = data[n];
     if (!r || !r.s) { sum.none++; return; }
@@ -3038,6 +3072,7 @@ function attSummary(tid) {
       if (r.load === 'y') sum.loadY++; else if (r.load === 'n') sum.loadN++; else sum.loadNone++;
     }
     if (r.ride) { sum.rides++; sum.riders += Number(r.riders) || 1; }
+    if (r.direct && r.s === 'y') sum.direct++;
   });
   return sum;
 }
@@ -3070,14 +3105,14 @@ function attSet(i, s) {   // 同じボタンをもう一度押すと「未回答
   if (!attCtx) return;
   const { name, cur } = attCurrent(i); if (!name) return;
   if (cur.s === s) { saveAttendance(attCtx, name, null); renderAttendance(); refreshAttendanceViews(); return; }
-  if (s === 'y') attCommit(name, { s, car: cur.car || 0, seats: cur.seats || 0, load: cur.load, ride: cur.ride || 0, riders: cur.riders || 0 });
-  else attCommit(name, { s, car: 0, seats: 0, ride: 0, riders: 0 });   // 参加でなければ配車の入力は消える
+  if (s === 'y') attCommit(name, { s, car: cur.car || 0, seats: cur.seats || 0, load: cur.load, ride: cur.ride || 0, riders: cur.riders || 0, direct: cur.direct || 0 });
+  else attCommit(name, { s, car: 0, seats: 0, ride: 0, riders: 0, direct: 0 });   // 参加でなければ配車の入力は消える
 }
 function attCar(i) {      // 車を出せる（乗合希望とはどちらか一方）
   if (!attCtx) return;
   const { name, cur } = attCurrent(i); if (!name || cur.s !== 'y') return;
   if (cur.car) attCommit(name, { ...cur, car: 0, seats: 0, load: undefined });
-  else attCommit(name, { ...cur, car: 1, seats: cur.seats || 3, ride: 0, riders: 0 });
+  else attCommit(name, { ...cur, car: 1, seats: cur.seats || 3, ride: 0, riders: 0, direct: 0 });
 }
 function attSeats(i, d) {
   if (!attCtx) return;
@@ -3093,7 +3128,13 @@ function attRide(i) {     // 乗合希望（乗せてほしい）
   if (!attCtx) return;
   const { name, cur } = attCurrent(i); if (!name || cur.s !== 'y') return;
   if (cur.ride) attCommit(name, { ...cur, ride: 0, riders: 0 });
-  else attCommit(name, { ...cur, ride: 1, riders: cur.riders || 1, car: 0, seats: 0, load: undefined });
+  else attCommit(name, { ...cur, ride: 1, riders: cur.riders || 1, car: 0, seats: 0, load: undefined, direct: 0 });
+}
+function attDirect(i) {   // 現地へ直接行く（配車にも乗合にも入らない）
+  if (!attCtx) return;
+  const { name, cur } = attCurrent(i); if (!name || cur.s !== 'y') return;
+  if (cur.direct) attCommit(name, { ...cur, direct: 0 });
+  else attCommit(name, { ...cur, direct: 1, car: 0, seats: 0, load: undefined, ride: 0, riders: 0 });
 }
 function attRiders(i, d) {
   if (!attCtx) return;
@@ -3114,7 +3155,7 @@ function attLoadText(s) {
 }
 function attRideText(s) {
   const short = s.riders > s.seats ? s.riders - s.seats : 0;
-  return `🙋 乗合希望 ${s.rides}組（${s.riders}名）${short ? `　※同乗できる人数があと${short}名分足りません` : ''}`;
+  return `🙋 乗合希望 ${s.rides}組（${s.riders}名）${short ? `　※同乗できる人数があと${short}名分足りません` : ''}${s.direct ? `　🏃 直接行く ${s.direct}名` : ''}`;
 }
 const attShort = s => s.riders > s.seats;
 
@@ -3133,8 +3174,9 @@ function renderAttendance() {
       <div>${attCarText(s, limit)}</div>
       ${attLoadText(s) ? `<div>${attLoadText(s)}</div>` : ''}
       <div class="${attShort(s) ? 'short' : ''}">${attRideText(s)}</div>
+      ${cpAvailable(t.id) ? `<button type="button" class="cp-jump" onclick="cpJump()">${carpool[t.id] ? '🚗 配車表を見る ↓' : '🚗 配車表へ ↓'}</button>` : ''}
     </div>
-    <div class="att-hint">「同乗できる子ども」は、自分の子のほかに乗せてあげられる人数です。「乗合希望」は、車を出せず乗せてほしいご家庭が、乗せてほしい人数を入れてください（車を出す場合は選べません）。同じボタンをもう一度押すと、未回答に戻ります。</div>
+    <div class="att-hint">「同乗できる子ども」は、自分の子のほかに乗せてあげられる人数です。「乗合希望」は、車を出せず乗せてほしいご家庭が、乗せてほしい人数を入れてください（車を出す場合は選べません）。「直接行く」は、配車に入らず現地へ直接行くときに押してください。同じボタンをもう一度押すと、未回答に戻ります。</div>
     ${names.map((n, i) => {
       const r = data[n] || {}, st = r.s || '', no = playerNumber(n);
       return `<div class="att-row${st ? ' s-' + st : ''}">
@@ -3147,6 +3189,7 @@ function renderAttendance() {
         ${st === 'y' ? `<div class="att-car">
           <button class="chip car${r.car ? ' on' : ''}" onclick="attCar(${i})">🚗 車を出せる</button>
           <button class="chip ride${r.ride ? ' on' : ''}" onclick="attRide(${i})">🙋 乗合希望</button>
+          <button class="chip direct${r.direct ? ' on' : ''}" onclick="attDirect(${i})">🏃 直接行く</button>
         </div>
         ${r.car ? `<div class="att-sub">
           <span class="att-seats">同乗できる子ども <button onclick="attSeats(${i},-1)">−</button><b>${r.seats || 0}</b><button onclick="attSeats(${i},1)">＋</button> 名</span>
@@ -3157,19 +3200,20 @@ function renderAttendance() {
           <span class="att-seats">乗せてほしい人数 <button onclick="attRiders(${i},-1)">−</button><b>${r.riders || 1}</b><button onclick="attRiders(${i},1)">＋</button> 名</span>
         </div>` : ''}` : ''}
       </div>`;
-    }).join('')}`;
+    }).join('')}
+    ${cpHtml(t.id)}`;
   sheet.scrollTop = keep;
 }
 function openAttendance(tid) {
   const t = findEvent(tid);
   if (!t) return;
-  attCtx = tid;
+  attCtx = tid; cpDraft = null;
   document.getElementById('attTitle').textContent = `出欠・配車　${t.name}`;
   renderAttendance();
   document.getElementById('attModal').classList.add('show');
   document.querySelector('#attModal .modal').scrollTop = 0;
 }
-function closeAttendance() { document.getElementById('attModal').classList.remove('show'); attCtx = null; }
+function closeAttendance() { document.getElementById('attModal').classList.remove('show'); attCtx = null; cpDraft = null; }
 
 const loadLabel = r => r.load === 'y' ? '荷物 可' : r.load === 'n' ? '荷物 否' : '荷物 未回答';
 function buildAttendanceText(t) {
@@ -3185,6 +3229,8 @@ function buildAttendanceText(t) {
   x += `\n配車：${sum.cars}台${limit != null ? `（上限${limit}台）` : ''}／同乗できる子ども ${sum.seats}名\n`;
   if (drivers.length) x += `車を出せる：${drivers.map(n => `${n}（同乗${data[n].seats || 0}名／${loadLabel(data[n])}）`).join('、')}\n`;
   x += `乗合希望：${riders.length ? riders.map(n => `${n}（${data[n].riders || 1}名）`).join('、') : 'なし'}\n`;
+  const directs = names.filter(n => (data[n] || {}).s === 'y' && (data[n] || {}).direct);
+  if (directs.length) x += `直接行く：${directs.join('、')}\n`;
   if (attShort(sum)) x += `※同乗できる人数があと${sum.riders - sum.seats}名分足りません\n`;
   x += `\nまだの方は、アプリの出欠ボタンから入力をお願いします。`;
   return x;
@@ -3209,6 +3255,7 @@ function attBlockHtml(t) {
       <div class="nc-att-car${over ? ' over' : ''}">🚗 車を出せる ${s.cars}台${limit != null ? `／上限 ${limit}台` : ''}${over ? '（超過）' : ''}</div>
       ${attLoadText(s) ? `<div class="nc-att-car">${attLoadText(s)}</div>` : ''}
       <div class="nc-att-car${attShort(s) ? ' over' : ''}">${attRideText(s)}</div>
+      ${carpool[t.id] ? `<div class="nc-att-car">🚗 配車表ができています（${(carpool[t.id].cars || []).length}台）</div>` : ''}
       <div class="nc-foot att" onclick="event.stopPropagation();openAttendance('${t.id}')">出欠・配車を入力する <span>▶</span></div>
     </div>`;
 }
@@ -3230,11 +3277,188 @@ function attendanceCardHtml(t) {
       ${none.length ? `<div class="ag"><span class="ag-l none">未回答 ${none.length}</span><span class="ag-n">${none.join('、')}</span></div>` : ''}
       ${drivers.length ? `<div class="ag"><span class="ag-l car">車を出せる ${drivers.length}</span><span class="ag-n">${drivers.map(n => `${n}（同乗${data[n].seats || 0}名・${loadLabel(data[n])}）`).join('、')}</span></div>` : ''}
       ${riders.length ? `<div class="ag"><span class="ag-l ride">乗合希望 ${riders.length}</span><span class="ag-n">${riders.map(n => `${n}（${data[n].riders || 1}名）`).join('、')}</span></div>` : ''}
+      ${carpool[t.id] ? `<div class="att-carline">🚗 配車表ができています（${(carpool[t.id].cars || []).length}台）</div>` : ''}
       <div class="att-carline${over ? ' over' : ''}">${attCarText(s, limit)}</div>
       ${attLoadText(s) ? `<div class="att-carline">${attLoadText(s)}</div>` : ''}
       <div class="att-carline${attShort(s) ? ' over' : ''}">${attRideText(s)}</div>
       <button class="btn btn-red" style="margin-top:12px" onclick="openAttendance('${t.id}')">出欠・配車を入力する</button>
     </div>`;
+}
+
+// ===== 配車表（近くに住む家どうしの組と、車を出す順番から作る） =====
+const cpEsc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+// 組・車を出す順番・乗せられる人数（自分の子のほかに乗せられる子ども。「3〜4人」は 3, 4）は年度ごとにここで決める。
+// 名前は下の名前のふりがなで書く（選手一覧のふりがなと照らし合わせる）。with：車のない組が乗せてもらう組
+const CARPOOL_GROUPS = {
+  '2026 U-9': [
+    { g: 'A', drivers: [['えいしゅう', 7], ['ひろと', 3, 4]], kids: ['あいと', 'そういちろう'] },
+    { g: 'B', drivers: [['はくと', 3, 4], ['ゆら', 3, 4]], kids: ['はるま', 'りと'] },
+    { g: 'C', drivers: [['がく', 3, 4], ['つむぎ', 3, 4]], kids: ['そう'] },
+    { g: 'D', drivers: [], kids: ['れお'], with: 'A' },
+    { g: 'E', drivers: [], kids: ['さくた'], with: 'C' }
+  ]
+};
+let carpool = {};          // { 大会id: { n:駐車台数, cars:[{ d:運転する家の選手名, k:[乗る子ども] }], t } }（作るのは編集モードだけ、見るのは全員）
+let carpoolRef = null;
+let cpDraft = null;        // まだ保存していない配車案 { tid, n, cars, left }
+const CP_CHOICES = [3, 4, 5, 6];
+
+function loadLocalCarpool() {
+  try { carpool = JSON.parse(localStorage.getItem(`yhg9_carpool_${currentYear}`)) || {}; } catch (e) { carpool = {}; }
+}
+function cpGroups() {
+  const nm = {};
+  players.forEach(p => { const y = (String(p).match(/（(.+?)）/) || [])[1]; if (y) nm[y.trim().split(/\s+/).pop()] = shortName(p); });
+  return (CARPOOL_GROUPS[currentYear] || []).map(x => ({
+    g: x.g, with: x.with || '',
+    drivers: x.drivers.map(([y, s, m]) => ({ name: nm[y], seats: s, max: m || s })).filter(d => d.name),
+    kids: x.kids.map(y => nm[y]).filter(Boolean)
+  }));
+}
+const cpGroupOf = (name, groups) => groups.find(x => x.drivers.some(d => d.name === name) || x.kids.includes(name)) || null;
+const cpAvailable = tid => !!carpool[tid] || (isEditor && cpGroups().length > 0);
+
+// 駐車できる台数 n のときの配車案
+function cpMake(tid, n) {
+  const groups = cpGroups(), data = attendance[tid] || {};
+  const kids = attPlayers().filter(p => { const r = data[p] || {}; return r.s !== 'n' && !r.direct; });   // 欠席・直接行くは乗せない
+  const seatsOf = (p, s, m) => { const r = data[p] || {}; return r.car && r.seats ? [Number(r.seats), Number(r.seats)] : [s, m]; };
+  // 車を出す順番：各組の1番 → 各組の2番 …（その子が欠席・直接行く・乗合希望なら飛ばす）。組にない家で「車を出せる」の人は最後
+  const cands = [];
+  const ranks = Math.max(0, ...groups.map(x => x.drivers.length));
+  for (let r = 0; r < ranks; r++) groups.forEach(x => {
+    const d = x.drivers[r];
+    if (d && kids.includes(d.name) && !(data[d.name] || {}).ride) { const [s, m] = seatsOf(d.name, d.seats, d.max); cands.push({ name: d.name, g: x.g, s, m }); }
+  });
+  attPlayers().forEach(p => {
+    const r = data[p] || {};
+    if (r.car && kids.includes(p) && !cands.some(c => c.name === p)) { const x = cpGroupOf(p, groups); cands.push({ name: p, g: x ? x.g : '', s: Number(r.seats) || 0, m: Number(r.seats) || 0 }); }
+  });
+  const cars = cands.slice(0, n).map(c => ({ d: c.name, g: c.g, s: c.s, m: c.m, k: [] }));
+  const left = [];
+  const free = (c, useMax) => (useMax ? c.m : c.s) - c.k.length;
+  kids.filter(k => !cars.some(c => c.d === k)).forEach(k => {
+    const x = cpGroupOf(k, groups);
+    const home = x ? (x.with || x.g) : '';
+    const pick = (own, useMax) => cars.filter(c => (!own || c.g === home) && free(c, useMax) > 0).sort((a, b) => free(b, useMax) - free(a, useMax))[0];
+    const c = pick(true, false) || pick(true, true) || pick(false, false) || pick(false, true);
+    if (c) c.k.push(k); else left.push(k);
+  });
+  cars.sort((a, b) => (a.g || '~').localeCompare(b.g || '~'));   // 表は組ごとに並べる（同じ組の中は車を出す順番）
+  return { tid, n, cars: cars.map(c => ({ d: c.d, k: c.k })), left };
+}
+function cpSeatInfo(name) {   // 乗せられる人数（出欠で答えた人数があればそちら）
+  const r = (attendance[attCtx] || {})[name] || {};
+  if (r.car && r.seats) return [Number(r.seats), Number(r.seats)];
+  for (const x of cpGroups()) { const d = x.drivers.find(v => v.name === name); if (d) return [d.seats, d.max]; }
+  return [null, null];
+}
+function cpPlan(tid) { return (cpDraft && cpDraft.tid === tid) ? cpDraft : carpool[tid] || null; }
+function cpOthers(tid, plan) {   // 配車表に入っていない子（直接行く・欠席・席がない）
+  const data = attendance[tid] || {}, inPlan = new Set();
+  (plan.cars || []).forEach(c => { inPlan.add(c.d); (c.k || []).forEach(k => inPlan.add(k)); });
+  const names = attPlayers();
+  return {
+    direct: names.filter(n => (data[n] || {}).s === 'y' && (data[n] || {}).direct),
+    absent: names.filter(n => (data[n] || {}).s === 'n'),
+    left: names.filter(n => !inPlan.has(n) && (data[n] || {}).s !== 'n' && !(data[n] || {}).direct)
+  };
+}
+function cpHtml(tid) {
+  if (!cpAvailable(tid)) return '';
+  const plan = cpPlan(tid), draft = !!(cpDraft && cpDraft.tid === tid), ed = isEditor, groups = cpGroups();
+  const t = findEvent(tid), limit = t ? carLimitOf(t) : null;
+  let h = `<div class="cp" id="cpSec"><div class="cp-head">🚗 配車表${plan ? (draft ? '<span class="cp-tag draft">案（まだ保存していません）</span>' : '<span class="cp-tag">決定</span>') : ''}</div>`;
+  if (ed) {
+    const cur = plan ? plan.n : null;
+    h += `<div class="cp-sub">駐車できる台数を選ぶと、近くの家どうしの組と車を出す順番から、配車案を作ります。欠席と「直接行く」の子は入りません。子どもの名前を押すと、別の車へ動かせます。</div>
+      <div class="cp-n"><span>駐車</span>${CP_CHOICES.map(n => `<button type="button" class="${cur === n ? 'on' : ''}" onclick="cpGen(${n})">${n}台</button>`).join('')}${limit != null && !CP_CHOICES.includes(limit) ? `<button type="button" class="${cur === limit ? 'on' : ''}" onclick="cpGen(${limit})">${limit}台</button>` : ''}</div>`;
+  } else if (plan) {
+    h += `<div class="cp-sub">駐車 ${plan.n}台の配車です。変わるときはコーチ・マネージャーから連絡します。</div>`;
+  }
+  if (plan) {
+    const cars = plan.cars || [];
+    if (!cars.length) h += `<div class="cp-warn">車を出せる家がありません。出欠の「車を出せる」を確かめてください。</div>`;
+    cars.forEach((c, ci) => {
+      const kids = c.k || [], [s, m] = cpSeatInfo(c.d), x = cpGroupOf(c.d, groups);
+      const full = s != null && kids.length > s;
+      const cnt = s == null ? `同乗 ${kids.length}名` : `同乗 ${kids.length}/${s === m ? s : s + '〜' + m}名`;
+      h += `<div class="cp-car"><div class="cp-drv"><span class="cp-no">${ci + 1}</span><span>${cpEsc(c.d)} の家の車</span>${x ? `<span class="cp-g">${x.g}組</span>` : ''}<span class="cp-cnt${full ? ' full' : ''}">${cnt}</span></div>
+        <div class="cp-kids">${kids.length ? kids.map((k, ki) => ed
+          ? `<select class="cp-kid" aria-label="${cpEsc(k)}の乗る車" onchange="cpMove(${ci},${ki},this.value)">${cars.map((c2, cj) => `<option value="${cj}"${cj === ci ? ' selected' : ''}>${cj === ci ? cpEsc(k) : `→ ${cj + 1} ${cpEsc(c2.d)}の車へ`}</option>`).join('')}</select>`
+          : `<span class="cp-kid">${cpEsc(k)}</span>`).join('') : '<span class="cp-none">同乗なし（自分の子だけ）</span>'}</div></div>`;
+    });
+    const o = cpOthers(tid, plan);
+    if (o.left.length) h += `<div class="cp-warn">まだ車が決まっていない子：${o.left.map(cpEsc).join('、')}${ed ? '<br>台数を増やすか、作り直してください。' : ''}</div>`;
+    h += `<div class="cp-other">${o.direct.length ? `🏃 直接行く：${o.direct.map(cpEsc).join('、')}<br>` : ''}${o.absent.length ? `❌ 欠席：${o.absent.map(cpEsc).join('、')}` : ''}</div>`;
+    if (ed && draft) h += `<button type="button" class="btn btn-red" onclick="cpSave()">この配車表で決める（保存）</button>`;
+    h += `<button type="button" class="copy-btn" onclick="cpShare()">配車表をLINE用テキストにする</button>`;
+    if (ed && draft && carpool[tid]) h += `<button type="button" class="btn btn-outline" onclick="cpCancel()">保存してある配車表にもどす</button>`;
+    if (ed && !draft && carpool[tid]) h += `<button type="button" class="btn btn-outline" style="color:var(--red)" onclick="cpDelete()">配車表を消す</button>`;
+  } else if (ed) {
+    h += `<div class="cp-none">まだ配車表はありません。上の台数を押してください。</div>`;
+  }
+  return h + `</div>`;
+}
+function cpJump() { const el = document.getElementById('cpSec'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+function cpRerender() { renderAttendance(); }
+function cpGen(n) {
+  if (!isEditor || !attCtx) return;
+  cpDraft = cpMake(attCtx, n); cpRerender();
+  setTimeout(cpJump, 30);
+}
+function cpMove(ci, ki, to) {
+  if (!isEditor || !attCtx) return;
+  const base = cpPlan(attCtx); if (!base) return;
+  const p = { tid: attCtx, n: base.n, cars: (base.cars || []).map(c => ({ d: c.d, k: [...(c.k || [])] })) };
+  to = Number(to);
+  if (!p.cars[ci] || !p.cars[to] || to === ci) return;
+  const [k] = p.cars[ci].k.splice(ki, 1);
+  if (k) p.cars[to].k.push(k);
+  cpDraft = p; cpRerender();
+}
+function cpWrite(tid, v) {
+  if (v) carpool[tid] = v; else delete carpool[tid];
+  if (db) {
+    const ref = db.ref(`${getDbKey(currentYear)}/carpool/${tid}`);
+    (v ? ref.set(v) : ref.remove()).catch(err => { console.warn(err); toast(/PERMISSION/i.test(String(err && (err.code || err.message))) ? '保存できませんでした。編集モードに入りなおしてください' : '保存に失敗しました'); });
+  } else {
+    try { localStorage.setItem(`yhg9_carpool_${currentYear}`, JSON.stringify(carpool)); } catch (e) {}
+  }
+  saveDataCache();
+}
+function cpSave() {
+  if (!isEditor || !cpDraft || cpDraft.tid !== attCtx) return;
+  const v = { n: cpDraft.n, cars: cpDraft.cars.map(c => ({ d: c.d, k: (c.k || []).filter(Boolean) })), t: Date.now() };
+  cpWrite(attCtx, v); cpDraft = null;
+  renderAttendance(); refreshAttendanceViews(); toast('配車表を保存しました');
+}
+function cpCancel() { cpDraft = null; renderAttendance(); }
+function cpDelete() {
+  if (!isEditor || !attCtx || !confirm('配車表を消しますか？')) return;
+  cpWrite(attCtx, null); cpDraft = null;
+  renderAttendance(); refreshAttendanceViews(); toast('配車表を消しました');
+}
+function cpText(tid) {
+  const t = findEvent(tid), plan = cpPlan(tid); if (!t || !plan) return '';
+  const main = scheduleMain(t), o = cpOthers(tid, plan), circled = '①②③④⑤⑥⑦⑧⑨⑩';
+  let x = `【配車】${t.name}\n`;
+  if (main) x += `${main.label}${main.venue ? '　' + main.venue : ''}\n`;
+  x += `駐車 ${plan.n}台\n`;
+  (plan.cars || []).forEach((c, i) => {
+    x += `\n🚗${circled[i] || (i + 1)} ${c.d} の家の車\n　同乗：${(c.k || []).length ? c.k.join('、') : 'なし'}\n`;
+  });
+  if (o.direct.length) x += `\n🏃 直接行く：${o.direct.join('、')}\n`;
+  if (o.absent.length) x += `${o.direct.length ? '' : '\n'}❌ 欠席：${o.absent.join('、')}\n`;
+  if (o.left.length) x += `\n※まだ車が決まっていない子：${o.left.join('、')}\n`;
+  x += `\n乗せる・乗せてもらうご家庭どうしで、待ち合わせの時間と場所を決めてください。変更があれば連絡をお願いします。`;
+  return x;
+}
+function cpShare() {
+  const text = cpText(attCtx); if (!text) return;
+  closeAttendance();
+  document.getElementById('shareText').textContent = text;
+  document.getElementById('shareModal').classList.add('show');
 }
 
 // ===== フォーメーション（予定の大会：先発メンバーと配置） =====
